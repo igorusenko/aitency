@@ -1,0 +1,490 @@
+@use 'tailwindcss';
+
+:root{
+  --bg: #0b0f17;
+  --panel: #101827;
+  --panel-2:#0f1624;
+  --muted:#9fb0c3;
+  --text:#e7eef7;
+  --border: rgba(255,255,255,.08);
+  --accent:#7c5cff;
+  --good:#22c55e;
+  --warn:#f59e0b;
+  --bad:#ef4444;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius: 14px;
+  --radius-sm: 10px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html, body {
+    @apply h-full;
+  }
+
+  body {
+    @apply m-0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background: radial-gradient(1000px 600px at 10% 10%, rgba(124,92,255,.18), transparent 60%),
+      radial-gradient(900px 500px at 90% 30%, rgba(34,197,94,.10), transparent 55%),
+      #0b0f17;
+    color: var(--text);
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+}
+
+.hidden {
+  @apply hidden;
+}
+
+
+.sidebar {
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
+  @apply border-r p-[18px] sticky top-0 h-screen flex flex-col gap-[18px];
+  border-color: var(--border);
+}
+
+.brand {
+  @apply flex items-center gap-3 p-[10px] border rounded-[14px];
+  border-color: var(--border);
+  background: rgba(16,24,39,.55);
+}
+
+.logo {
+  @apply w-[42px] h-[42px] rounded-xl grid place-items-center font-extrabold;
+  letter-spacing: 0.5px;
+  background: rgba(124,92,255,.16);
+  border: 1px solid rgba(124,92,255,.3);
+}
+
+.brand-name {
+  @apply font-extrabold;
+}
+
+.brand-sub {
+  @apply text-xs mt-0.5;
+  color: var(--muted);
+}
+
+.nav {
+  @apply flex flex-col gap-2 p-1.5 w-full;
+}
+
+.nav-item {
+  @apply flex items-center gap-3 p-3 rounded-xl border border-transparent;
+  color: var(--muted);
+}
+
+.nav-dot {
+  @apply w-2.5 h-2.5 rounded-full;
+  background: rgba(255,255,255,.15);
+}
+
+.nav-item.active {
+  color: var(--text);
+  background: rgba(124,92,255,.10);
+  border-color: rgba(124,92,255,.25);
+}
+
+.nav-item.active .nav-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 6px rgba(124,92,255,.16);
+}
+
+.sidebar-footer {
+  @apply mt-auto flex flex-col gap-2.5 p-2.5 border rounded-[14px];
+  border-color: var(--border);
+  background: rgba(16,24,39,.45);
+}
+
+.env-pill {
+  @apply self-start py-1.5 px-2.5 rounded-full text-xs border;
+  color: var(--muted);
+  border-color: var(--border);
+  background: rgba(255,255,255,.03);
+}
+
+.main {
+  @apply p-[18px_22px_28px];
+}
+
+.topbar {
+  @apply flex items-center justify-between gap-3.5 mb-[18px];
+}
+
+.search {
+  @apply relative;
+  width: min(680px, 100%);
+}
+
+.search input {
+  @apply w-full p-3 pl-3.5 rounded-2xl border outline-none;
+  border-color: var(--border);
+  color: var(--text);
+  background: rgba(16,24,39,.55);
+}
+
+.search input::placeholder {
+  color: rgba(159,176,195,.65);
+}
+
+.search-results {
+  @apply absolute top-12 right-0 border rounded-2xl overflow-hidden z-20;
+  border-color: var(--border);
+  background: rgba(16,24,39,.95);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.search-results .sr-item {
+  @apply p-2.5 px-3 flex justify-between gap-3 cursor-pointer;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.search-results .sr-item:last-child {
+  @apply border-b-0;
+}
+
+.search-results .sr-item:hover {
+  background: rgba(255,255,255,.04);
+}
+
+.sr-left {
+  @apply flex flex-col gap-0.5;
+}
+
+.sr-title {
+  @apply font-bold text-[13px];
+}
+
+.sr-sub {
+  @apply text-xs;
+  color: var(--muted);
+}
+
+.sr-tag {
+  @apply text-[11px] border py-1 px-2 rounded-full self-start whitespace-nowrap;
+  color: var(--muted);
+  border-color: var(--border);
+}
+
+.topbar-actions {
+  @apply flex items-center gap-3;
+}
+
+.icon-btn {
+  @apply border p-2.5 px-3 rounded-xl cursor-pointer;
+  border-color: var(--border);
+  color: var(--text);
+  background: rgba(16,24,39,.55);
+}
+
+.icon-btn:hover {
+  background: rgba(255,255,255,.04);
+}
+
+.badge {
+  @apply inline-grid place-items-center min-w-5 h-5 px-1.5 rounded-full text-xs ml-2;
+  background: rgba(239,68,68,.16);
+  border: 1px solid rgba(239,68,68,.35);
+}
+
+.user {
+  @apply flex items-center gap-2.5 p-2 px-2.5 rounded-2xl border;
+  border-color: var(--border);
+  background: rgba(16,24,39,.45);
+}
+
+.avatar {
+  @apply w-[34px] h-[34px] rounded-xl grid place-items-center font-extrabold;
+  background: rgba(34,197,94,.12);
+  border: 1px solid rgba(34,197,94,.25);
+}
+
+.user-name {
+  @apply font-bold text-[13px];
+}
+
+.user-sub {
+  @apply text-xs mt-px;
+  color: var(--muted);
+}
+
+.view {
+  @apply flex flex-col gap-3.5;
+}
+
+.h1 {
+  @apply text-lg font-black;
+  letter-spacing: 0.2px;
+}
+
+.sub {
+  @apply text-[13px] mt-1;
+  color: var(--muted);
+}
+
+.grid {
+  @apply grid gap-3;
+}
+
+.grid.cols-3 {
+  @apply grid-cols-3;
+}
+
+.grid.cols-2 {
+  @apply grid-cols-2;
+}
+
+.card {
+  @apply border rounded-[14px] p-3.5;
+  border-color: var(--border);
+  background: rgba(16,24,39,.55);
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+}
+
+.card-header {
+  @apply flex justify-between items-start gap-2.5 mb-2.5;
+}
+
+.card-title {
+  @apply font-black text-[13px];
+}
+
+.card-note {
+  @apply text-xs;
+  color: var(--muted);
+}
+
+.stat {
+  @apply flex items-end justify-between gap-3.5;
+}
+
+.stat .value {
+  @apply text-[26px] font-black;
+  letter-spacing: 0.2px;
+}
+
+.stat .label {
+  @apply text-xs mt-1;
+  color: var(--muted);
+}
+
+.pill {
+  @apply inline-flex items-center gap-2 py-1.5 px-2.5 rounded-full text-xs border;
+  color: var(--muted);
+  border-color: var(--border);
+  background: rgba(255,255,255,.03);
+}
+
+.pill.good {
+  @apply border-[rgba(34,197,94,.35)] text-[#b9f7ce];
+  background: rgba(34,197,94,.10);
+}
+
+.pill.warn {
+  @apply border-[rgba(245,158,11,.35)] text-[#ffe3b0];
+  background: rgba(245,158,11,.10);
+}
+
+.pill.bad {
+  @apply border-[rgba(239,68,68,.35)] text-[#ffc1c1];
+  background: rgba(239,68,68,.10);
+}
+
+.btn {
+  @apply border border-[rgba(124,92,255,.30)] p-2.5 px-3 rounded-xl cursor-pointer font-bold;
+  color: var(--text);
+  background: rgba(124,92,255,.14);
+}
+
+.btn:hover {
+  background: rgba(124,92,255,.20);
+}
+
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.btn-ghost {
+  @apply border;
+  border-color: var(--border);
+  color: var(--muted);
+  background: rgba(255,255,255,.03);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: rgba(255,255,255,.05);
+}
+
+.btn-row {
+  @apply flex gap-2.5 flex-wrap;
+}
+
+.table {
+  @apply w-full border-collapse overflow-hidden rounded-xl border;
+  border-color: var(--border);
+  background: rgba(15,22,36,.45);
+}
+
+.table th, .table td {
+  @apply p-2.5 border-b border-[rgba(255,255,255,.06)] text-left text-[13px];
+}
+
+.table th {
+  @apply text-xs font-extrabold;
+  color: var(--muted);
+}
+
+.table tr:last-child td {
+  @apply border-b-0;
+}
+
+.table tr:hover td {
+  background: rgba(255,255,255,.03);
+}
+
+.t-mono {
+  @apply text-xs;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: rgba(231,238,247,.9);
+}
+
+.right {
+  @apply text-right;
+}
+
+.row-actions {
+  @apply flex gap-2 justify-end;
+}
+
+.link-btn {
+  @apply py-1.5 px-2.5 rounded-[10px] border cursor-pointer font-bold text-xs;
+  border-color: var(--border);
+  color: var(--text);
+  background: rgba(255,255,255,.03);
+}
+
+.link-btn:hover {
+  background: rgba(255,255,255,.06);
+}
+
+.drawer {
+  @apply fixed inset-0 z-50;
+}
+
+.drawer-backdrop {
+  @apply absolute inset-0;
+  background: rgba(0,0,0,.55);
+}
+
+.drawer-panel {
+  @apply absolute right-0 top-0 bottom-0 flex flex-col border-l;
+  border-color: var(--border);
+  width: min(560px, 100%);
+  background: rgba(16,24,39,.98);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.drawer-header {
+  @apply p-3.5 flex items-center justify-between gap-3 border-b border-[rgba(255,255,255,.07)];
+}
+
+.drawer-title {
+  @apply font-black;
+}
+
+.drawer-body {
+  @apply p-3.5 overflow-auto;
+}
+
+.kv {
+  @apply grid gap-2.5 py-2.5 border-b border-[rgba(255,255,255,.06)];
+  grid-template-columns: 160px 1fr;
+}
+
+.kv:last-child {
+  @apply border-b-0;
+}
+
+.k {
+  @apply text-xs;
+  color: var(--muted);
+}
+
+.v {
+  @apply text-[13px];
+}
+
+.pre {
+  @apply text-xs p-3 border border-[rgba(255,255,255,.08)] rounded-xl overflow-auto whitespace-pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: rgba(0,0,0,.25);
+  line-height: 1.35;
+}
+
+.toast {
+  @apply fixed left-1/2 bottom-[18px] -translate-x-1/2 border rounded-full py-2.5 px-3.5 z-[60] text-[13px];
+  border-color: var(--border);
+  color: var(--text);
+  background: rgba(16,24,39,.96);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+.form {
+  @apply grid gap-3;
+  grid-template-columns: 1fr 1fr;
+}
+
+.field {
+  @apply flex flex-col gap-1.5;
+}
+
+.field label {
+  @apply text-xs font-extrabold;
+  color: var(--muted);
+}
+
+.field input, .field select {
+  @apply p-2.5 rounded-xl border outline-none;
+  border-color: var(--border);
+  color: var(--text);
+  background: rgba(16,24,39,.55);
+}
+
+.field .hint {
+  @apply text-xs;
+  color: var(--muted);
+}
+
+.section-title {
+  @apply font-black my-2 mb-2.5;
+}
+@media (max-width: 980px) {
+  .app {
+    @apply grid-cols-1;
+  }
+
+  .sidebar {
+    @apply relative h-auto;
+  }
+
+  .grid.cols-3 {
+    @apply grid-cols-1;
+  }
+
+  .grid.cols-2 {
+    @apply grid-cols-1;
+  }
+
+  .form {
+    @apply grid-cols-1;
+  }
+}

@@ -1,0 +1,343 @@
+<div class="app">
+
+  <main class="main">
+    <header class="topbar">
+      <div class="search">
+        <input id="global-search" type="search" placeholder="Search: customer / automation / run-id…" autocomplete="off"/>
+        <div id="search-results" class="search-results hidden"></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="btn-notifications" class="icon-btn" title="Notifications">
+          <span class="icon">🔔</span>
+          <span id="notif-badge" class="badge hidden">0</span>
+        </button>
+        <div class="user">
+          <div class="avatar">AT</div>
+          <div class="user-meta">
+            <div class="user-name">Admin</div>
+            <div class="user-sub">admin@aitency.demo</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="view" class="view">
+
+      <div>
+        <div class="h1">Overview</div>
+        <div class="sub">Stats + integration health + recent activity (demo).</div>
+      </div>
+
+      <div class="grid cols-3">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Successful runs</div>
+              <div class="card-note">Period: 24h</div>
+            </div>
+            <span class="pill warn">24h</span>
+          </div>
+          <div class="stat">
+            <div>
+              <div class="value">29</div>
+              <div class="label">of 36 runs</div>
+            </div>
+            <div class="btn-row">
+              <a class="btn btn-ghost" href="#/overview?period=24h">24h</a>
+              <a class="btn btn-ghost" href="#/overview?period=7d">7d</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Failed runs</div>
+              <div class="card-note">Period: 24h</div>
+            </div>
+            <span class="pill bad">Attention</span>
+          </div>
+          <div class="stat">
+            <div>
+              <div class="value">7</div>
+              <div class="label">requires review</div>
+            </div>
+            <button class="btn" data-action="view-full-log">View full log</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Integrations</div>
+              <div class="card-note">Connected vs error</div>
+            </div>
+            <span class="pill warn">1 issue(s)</span>
+          </div>
+          <div class="stat">
+            <div>
+              <div class="value">5/6</div>
+              <div class="label">1 in error state</div>
+            </div>
+            <button class="btn" data-action="open-integrations">View</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Recent activity</div>
+            <div class="card-note">Click any row to open the log drawer</div>
+          </div>
+          <button class="btn btn-ghost" data-action="view-full-log">See full log</button>
+        </div>
+
+        <table class="table">
+          <thead>
+          <tr>
+            <th style="width:170px;">Time</th>
+            <th>Source</th>
+            <th>Details</th>
+            <th class="right" style="width:120px;">Status</th>
+            <th class="right" style="width:120px;">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr data-activity-id="act_1001">
+            <td>2025-12-16 10:20</td>
+            <td>AI Booking Management Agent</td>
+            <td>NovaDent Clinic • run_1001 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1001">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1002">
+            <td>2025-12-16 10:08</td>
+            <td>AI Lead Generation Automation</td>
+            <td>Limassol Acoustics • run_1002 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1002">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1003">
+            <td>2025-12-16 09:44</td>
+            <td>AI Sales Department Automation</td>
+            <td>NovaDent Clinic • run_1003 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1003">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1004">
+            <td>2025-12-16 09:26</td>
+            <td>AI Booking Management Agent</td>
+            <td>NovaDent Clinic • run_1004 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1004">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1005">
+            <td>2025-12-16 09:00</td>
+            <td>AI Lead Generation Automation</td>
+            <td>Limassol Acoustics • run_1005 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1005">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1006">
+            <td>2025-12-16 08:41</td>
+            <td>AI Customer Support Automation</td>
+            <td>Limassol Acoustics • run_1006 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1006">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1007">
+            <td>2025-12-16 08:23</td>
+            <td>AI Lead Generation Automation</td>
+            <td>Portgate Offices • run_1007 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1007">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_int1">
+            <td>2025-12-16 08:15</td>
+            <td>Odoo</td>
+            <td>Odoo token expired</td>
+            <td class="right"><span class="pill warn">WARN</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_int1">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1008">
+            <td>2025-12-16 08:09</td>
+            <td>AI Lead Generation Automation</td>
+            <td>NovaDent Clinic • run_1008 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1008">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1009">
+            <td>2025-12-16 07:49</td>
+            <td>AI Sales Department Automation</td>
+            <td>Limassol Acoustics • run_1009 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1009">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1010">
+            <td>2025-12-16 07:21</td>
+            <td>AI Customer Support Automation</td>
+            <td>NovaDent Clinic • run_1010 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1010">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1011">
+            <td>2025-12-16 07:10</td>
+            <td>AI Customer Support Automation</td>
+            <td>NovaDent Clinic • run_1011 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1011">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1012">
+            <td>2025-12-16 06:50</td>
+            <td>AI Lead Generation Automation</td>
+            <td>Portgate Offices • run_1012 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1012">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1013">
+            <td>2025-12-16 06:29</td>
+            <td>AI Booking Management Agent</td>
+            <td>NovaDent Clinic • run_1013 • Rate limit hit</td>
+            <td class="right"><span class="pill bad">BAD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1013">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1014">
+            <td>2025-12-16 06:08</td>
+            <td>AI Booking Management Agent</td>
+            <td>Portgate Offices • run_1014 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1014">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1015">
+            <td>2025-12-16 05:50</td>
+            <td>AI Sales Department Automation</td>
+            <td>NovaDent Clinic • run_1015 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1015">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1016">
+            <td>2025-12-16 05:27</td>
+            <td>AI Customer Support Automation</td>
+            <td>NovaDent Clinic • run_1016 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1016">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-activity-id="act_1017">
+            <td>2025-12-16 05:02</td>
+            <td>AI Sales Department Automation</td>
+            <td>Portgate Offices • run_1017 • Completed normally</td>
+            <td class="right"><span class="pill good">GOOD</span></td>
+            <td class="right">
+              <div class="row-actions">
+                <button class="link-btn" data-action="open-log" data-activity-id="act_1017">Open</button>
+              </div>
+            </td>
+          </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="drawer" class="drawer hidden" aria-hidden="true">
+  <div class="drawer-backdrop" data-close="true"></div>
+  <div class="drawer-panel">
+    <div class="drawer-header">
+      <div class="drawer-title" id="drawer-title">Details</div>
+      <button class="icon-btn" id="drawer-close" aria-label="Close">✕</button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast hidden" role="status" aria-live="polite"></div>

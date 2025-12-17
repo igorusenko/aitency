@@ -1,0 +1,171 @@
+$icon-size: 40px;
+
+:host {
+  height: 100vh;
+}
+
+.side-menu-logo {
+  height: calc(68px - 32px);
+  a {
+    height: 31px;
+  }
+}
+
+.sidebar {
+  transition: width 0.3s ease, padding 0.3s ease;
+
+  display: flex;
+  padding: 16px 16px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 0 0;
+  align-self: stretch;
+  overflow: hidden;
+
+  @media screen and (max-width: 991px) {
+    background-color: white;
+  }
+
+}
+
+.sidebar.collapsed {
+  transition: width 0.3s ease, padding 0.3s ease;
+  width: 60px;
+  padding: 16px 4px;
+  align-items: center;
+
+  .router-nav-item-container{
+    width: $icon-size;
+    min-width: $icon-size;
+    height: $icon-size;
+    min-height: $icon-size;
+  }
+
+  .router-nav-item{
+    transition: height 0.3s ease;
+    padding: 0;
+    height: $icon-size;
+  }
+
+  .router-nav-children-item {
+    display: none;
+  }
+}
+
+.router-nav-item-container {
+  background-color: #F6F6F6;
+  border-radius: 24px;
+  width: 100%;
+}
+
+.router-nav-item {
+  transition: height 0.3s ease;
+  display: flex;
+  width: 100%;
+  height: 48px;
+  font-size: 16px !important;
+  font-weight: 600;
+  padding: 4px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  border-radius: 24px;
+  background-color: #F6F6F6;
+
+  &.active-route {
+    .icon-container {
+      background-color: #00BF84;
+      transition: background-color 0.2s linear;
+    }
+  }
+
+  .justify-end{
+    position: relative;
+    z-index: 2;
+
+    app-icon{
+      display: flex !important;
+      width: 24px !important;
+      height: 24px !important;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+    }
+  }
+
+}
+
+.router-nav-item span {
+  font-size: 16px;
+}
+
+.router-nav-children-item{
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  height: auto;
+  min-height: 33px;
+  padding: 8px 12px;
+  transition: all 0.2s linear;
+  margin-left: 2px;
+  margin-right: 2px;
+  border-radius: 4px;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover{
+      background-color: #F6F6F6;
+    }
+  }
+  &:first-child{
+    margin-top: 8px;
+  }
+
+  &:last-child{
+    margin-bottom: 12px;
+  }
+
+  app-icon{
+    position: relative;
+    top: -1px;
+  }
+
+  @apply flex-row flex justify-start items-center;
+}
+
+.icon-container {
+  display: flex;
+  width: $icon-size;
+  min-width: $icon-size;
+  height: $icon-size;
+  min-height: $icon-size;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+}
+
+.mobile-black-overlay {
+  display: none;
+}
+
+@media (max-width: 991px) {
+
+  .sidebar {
+    left: 0;
+    transition: width 0.3s ease, padding 0.3s ease, left 0.3s ease;
+    top: - 68px;
+    position: absolute;
+    height: 100vh;
+  }
+
+  .sidebar.collapsed {
+    width: 60px;
+    padding: 16px 4px;
+    left: - 60px;
+  }
+  .mobile-black-overlay {
+    top: - 68px;
+
+    @apply w-screen h-screen flex z-10 absolute;
+  }
+}

@@ -1,0 +1,15 @@
+:host {
+  //max-height: h-vars.$header;
+  //height: h-vars.$header;
+  //background-color: colors.$light;
+  @apply w-full;
+}
+
+.content-container{
+  display: flex;
+  height: 100vh;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @apply relative;
+}
