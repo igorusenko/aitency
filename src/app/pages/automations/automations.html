@@ -1,1 +1,230 @@
-<p>automations works!</p>
+<div class="container mx-auto p-6 max-w-7xl">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Логи Voice Assistant</h1>
+    <p class="text-gray-600">Просмотр диалогов между пользователями и ИИ агентом</p>
+  </div>
+
+  <!-- Фильтры и настройки -->
+  <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div class="flex gap-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Формат</label>
+        <select
+          [(ngModel)]="format"
+          (change)="loadLogs()"
+          class="text-black w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          <option value="dialog">Диалог</option>
+          <option value="pretty">Подробно</option>
+          <option value="raw">Сырые</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Количество строк</label>
+        <input
+          type="number"
+          [(ngModel)]="lines"
+          (change)="loadLogs()"
+          min="10"
+          max="1000"
+          class="text-black w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Тип события</label>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            [(ngModel)]="filterType"
+            (keyup.enter)="loadLogs()"
+            placeholder="Оставьте пустым для всех"
+            class="text-black flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          @if (filterType) {
+            <button
+              (click)="filterType = null; loadLogs()"
+              class="px-3 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-md hover:bg-gray-50">
+              ✕
+            </button>
+          }
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Session ID</label>
+        <div class="flex gap-2">
+          <select
+            [(ngModel)]="filterSessionId"
+            (change)="loadLogs()"
+            class="text-black flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option [ngValue]="null">Все сессии</option>
+            @if (logs && logs.available_session_ids && logs.available_session_ids.length > 0) {
+              @for (sessionId of logs.available_session_ids; track sessionId) {
+                <option [ngValue]="sessionId">{{ sessionId }}</option>
+              }
+            }
+          </select>
+          @if (filterSessionId) {
+            <button
+              (click)="filterSessionId = null; loadLogs()"
+              class="px-3 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-md hover:bg-gray-50">
+              ✕
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="flex items-end">
+        <button
+          (click)="loadLogs()"
+          [disabled]="loading"
+          class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+          @if (loading) {
+            <span>Загрузка...</span>
+          } @else {
+            <span>Обновить</span>
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ошибка -->
+  @if (error) {
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
+      <strong>Ошибка:</strong> {{ error }}
+    </div>
+  }
+
+  <!-- Статистика -->
+  @if (logs && !loading) {
+    <div class="bg-white rounded-lg shadow-md p-4 mb-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-blue-600">{{ logs.stats.out_total }}</div>
+          <div class="text-sm text-gray-600">Всего логов (out)</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-green-600">{{ logs.stats.out_parsed }}</div>
+          <div class="text-sm text-gray-600">Распарсено (out)</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-red-600">{{ logs.stats.err_total }}</div>
+          <div class="text-sm text-gray-600">Ошибок (err)</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-purple-600">{{ logs.stats.err_parsed }}</div>
+          <div class="text-sm text-gray-600">Распарсено (err)</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Логи -->
+  @if (loading) {
+    <div class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <p class="mt-4 text-gray-600">Загрузка логов...</p>
+    </div>
+  }
+
+  @if (logs && !loading) {
+    <div class="space-y-6">
+      <!-- Out логи -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-blue-50 px-6 py-4 border-b border-blue-200">
+          <h2 class="text-xl font-semibold text-gray-900">Логи приложения (out.log)</h2>
+        </div>
+        <div class="p-6">
+          @if (logs.logs.out.length === 0) {
+            <p class="text-gray-500 text-center py-8">Нет логов</p>
+          } @else {
+            <div class="space-y-4">
+              @for (entry of logs.logs.out; track $index) {
+                @if (isLogEntry(entry)) {
+                  <!-- Режим диалога -->
+                  @if (format === 'dialog') {
+                    <div class="border-l-4 pl-4 py-2"
+                         [ngClass]="{
+                           'border-blue-500 bg-blue-50': entry.user,
+                           'border-green-500 bg-green-50': entry.assistant
+                         }">
+                      @if (entry.user) {
+                        <div class="mb-2">
+                          <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-semibold text-blue-700">👤 Пользователь</span>
+                            <span class="text-xs text-gray-500">{{ formatTimestamp(entry.timestamp) }}</span>
+                          </div>
+                          <p class="text-gray-900">{{ entry.user }}</p>
+                        </div>
+                      }
+                      @if (entry.assistant) {
+                        <div>
+                          <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xs font-semibold text-green-700">🤖 Ассистент</span>
+                            <span class="text-xs text-gray-500">{{ formatTimestamp(entry.timestamp) }}</span>
+                            @if (entry.sessionId) {
+                              <span class="text-xs text-gray-400 font-mono">Session: {{ entry.sessionId }}</span>
+                            }
+                          </div>
+                          <p class="text-gray-900">{{ entry.assistant }}</p>
+                        </div>
+                      }
+                    </div>
+                  } @else {
+                    <!-- Режим pretty -->
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                      <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold text-gray-700">{{ entry.type }}</span>
+                        <span class="text-xs text-gray-500">{{ formatTimestamp(entry.timestamp) }}</span>
+                      </div>
+                      @if (entry.user_question) {
+                        <div class="mt-2 p-2 bg-blue-50 rounded border-l-2 border-blue-400">
+                          <div class="text-xs font-semibold text-blue-700 mb-1">👤 Вопрос пользователя:</div>
+                          <p class="text-gray-900">{{ entry.user_question }}</p>
+                        </div>
+                      }
+                      @if (entry.assistant_answer) {
+                        <div class="mt-2 p-2 bg-green-50 rounded border-l-2 border-green-400">
+                          <div class="text-xs font-semibold text-green-700 mb-1">🤖 Ответ ассистента:</div>
+                          <p class="text-gray-900">{{ entry.assistant_answer }}</p>
+                        </div>
+                      }
+                      @if (entry.response_id) {
+                        <div class="mt-2 text-xs text-gray-500">
+                          Response ID: <code class="bg-gray-200 px-1 rounded">{{ entry.response_id }}</code>
+                        </div>
+                      }
+                    </div>
+                  }
+                } @else {
+                  <!-- Сырые логи -->
+                  <div class="bg-gray-50 rounded p-2 font-mono text-sm text-gray-700">
+                    {{ entry }}
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Err логи -->
+      @if (logs.logs.err.length > 0) {
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-red-50 px-6 py-4 border-b border-red-200">
+            <h2 class="text-xl font-semibold text-gray-900">Ошибки (err.log)</h2>
+          </div>
+          <div class="p-6">
+            <div class="space-y-2">
+              @for (entry of logs.logs.err; track $index) {
+                <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                  <p class="text-red-900 font-mono text-sm">{{ entry }}</p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
