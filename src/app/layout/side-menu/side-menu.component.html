@@ -2,28 +2,23 @@
      [ngClass]="{'collapsed': sideMenuService.isSideMenuCollapsed()}"
      tabindex="0" (click)="$event.stopPropagation()">
   <aside>
-    <div class="brand">
-      <div class="logo">AI</div>
-      <div class="brand-text">
-        <div class="brand-name">AItency</div>
-        <div class="brand-sub">Control Panel (Demo)</div>
+    <div>
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div class="brand-text">
+          <div class="brand-name">AItency</div>
+          <div class="brand-sub">Control Panel (Demo)</div>
+        </div>
       </div>
-    </div>
 
-    <nav class="nav">
-      <a class="nav-item active" href="#/overview" data-route="overview">
-        <span class="nav-dot"></span><span>Overview</span>
-      </a>
-      <a class="nav-item" href="#/automations" data-route="automations">
-        <span class="nav-dot"></span><span>Automations</span>
-      </a>
-      <a class="nav-item" href="#/inbox" data-route="inbox">
-        <span class="nav-dot"></span><span>Inbox</span>
-      </a>
-      <a class="nav-item" href="#/settings" data-route="settings">
-        <span class="nav-dot"></span><span>Settings</span>
-      </a>
-    </nav>
+      <nav class="nav">
+        @for (item of items; track item) {
+          <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
+            <span class="nav-dot"></span><span>{{item.title}}</span>
+          </a>
+        }
+      </nav>
+    </div>
 
     <div class="sidebar-footer">
       <div class="env-pill" title="Demo mode uses local mock data">Demo • v1</div>

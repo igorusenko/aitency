@@ -24,7 +24,16 @@ export class SideMenuService implements OnDestroy {
   /*
    * Signal holding the list of items displayed in the side menu.
    */
-  sideMenuItems = signal<SideMenuItem[]>([]);
+  sideMenuItems = signal<SideMenuItem[]>([
+    {
+      path: 'home',
+      title: 'Overview',
+    },
+    {
+      path: 'automations',
+      title: 'Automations',
+    }
+  ]);
 
   private destroy$ = new Subject<void>();
 

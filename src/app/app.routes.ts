@@ -13,6 +13,12 @@ export const routes: Routes = [
         title: 'Home',
         loadComponent: () =>
           import('./pages/home/home').then((m) => m.Home),
+      },
+      {
+        path: 'automations',
+        title: 'Automations',
+        loadComponent: () =>
+          import('./pages/automations/automations').then((m) => m.Automations),
       }
     ]
   }
