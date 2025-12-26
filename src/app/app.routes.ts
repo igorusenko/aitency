@@ -21,5 +21,11 @@ export const routes: Routes = [
           import('./pages/automations/automations').then((m) => m.Automations),
       }
     ]
+  },
+  {
+    path: 'login',
+    title: 'Login',
+    loadComponent: () =>
+      import('./pages/login/login').then((m) => m.Login),
   }
 ];

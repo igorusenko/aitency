@@ -1,0 +1,12 @@
+:host {
+  & {
+    @apply h-full flex items-center justify-center;
+  }
+
+  .login {
+    @apply flex items-center border border-transparent;
+    color: var(--text);
+    background: rgba(124,92,255,.10);
+    border-color: rgba(124,92,255,.25);
+  }
+}
