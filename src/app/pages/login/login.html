@@ -1,3 +1,23 @@
-<div class="login">
-  Aboba
+<div class="login-wrapper gap-4">
+  <img src="https://aitency.com/wp-content/uploads/2025/01/AITENCY-Logo.svg" alt="">
+  <div class="login p-6">
+    <form [formGroup]="loginForm" class="flex flex-col gap-4 w-full sm:w-56">
+      <div class="flex flex-col gap-1">
+        <input pInputText placeholder="Username" name="username" formControlName="login"
+               [invalid]="control('login').invalid && control('login').touched" required />
+        @if (control('login').invalid && control('login').touched) {
+          <p-message severity="error" size="small" variant="simple">Username is required.</p-message>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <input pInputText placeholder="Password" name="password" formControlName="password"
+               [invalid]="control('password').invalid && control('password').touched" required />
+        @if (control('password').invalid && control('password').touched) {
+          <p-message severity="error" size="small" variant="simple">Password is required.</p-message>
+        }
+      </div>
+      <button pButton severity="primary" type="submit"><span pButtonLabel>Submit</span></button>
+    </form>
+  </div>
+
 </div>

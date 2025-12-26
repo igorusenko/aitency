@@ -3,10 +3,18 @@
     @apply h-full flex items-center justify-center;
   }
 
-  .login {
-    @apply flex items-center border border-transparent;
-    color: var(--text);
-    background: rgba(124,92,255,.10);
-    border-color: rgba(124,92,255,.25);
+  .login-wrapper {
+    @apply flex flex-col items-center;
+    .login {
+      @apply flex items-center border border-transparent rounded-[16px] min-w-[512px];
+      color: var(--text);
+      background: rgba(124,92,255,.10);
+      border-color: rgba(124,92,255,.25);
+
+      form {
+        @apply flex-1;
+      }
+    }
   }
+
 }
