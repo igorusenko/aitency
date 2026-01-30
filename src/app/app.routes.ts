@@ -24,6 +24,18 @@ export const routes: Routes = [
         title: 'Automations',
         loadComponent: () =>
           import('./pages/automations/automations').then((m) => m.Automations),
+      },
+      {
+        path: 'automations/:id',
+        title: 'Automation details',
+        loadComponent: () =>
+          import('./pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
+      },
+      {
+        path: 'users',
+        title: 'Users',
+        loadComponent: () =>
+          import('./pages/users/users').then((m) => m.Users),
       }
     ]
   },

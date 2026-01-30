@@ -32,6 +32,10 @@ export class SideMenuService implements OnDestroy {
     {
       path: 'automations',
       title: 'Automations',
+    },
+    {
+      path: 'users',
+      title: 'Users',
     }
   ]);
 

@@ -1,4 +1,13 @@
-<p-table [value]="automations" [paginator]="true" [rows]="5" [tableStyle]="{ 'min-width': '50rem' }" [rowsPerPageOptions]="[5, 10, 20]">
+<p-table
+  [value]="automations"
+  [paginator]="true"
+  [rows]="5"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [rowHover]="true"
+  (onRowSelect)="selectRow($event)"
+  selectionMode="single"
+>
   <ng-template #header>
     <tr>
       <th pSortableColumn="id" style="width:20%">
@@ -24,7 +33,7 @@
     </tr>
   </ng-template>
   <ng-template #body let-customer>
-    <tr>
+    <tr class="cursor-pointer" [pSelectableRow]="customer">
       <td>{{ customer.id }}</td>
       <td>{{ customer.isActive }}</td>
       <td>{{ customer.isDemo }}</td>
