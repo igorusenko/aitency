@@ -9,6 +9,11 @@ export const routes: Routes = [
     loadComponent: loadLayout,
     children: [
       {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
+      {
         path: 'home',
         title: 'Home',
         loadComponent: () =>

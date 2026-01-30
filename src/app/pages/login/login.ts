@@ -3,6 +3,7 @@ import {ButtonModule} from 'primeng/button';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MessageModule} from 'primeng/message';
 import {InputTextModule} from 'primeng/inputtext';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,8 @@ import {InputTextModule} from 'primeng/inputtext';
     MessageModule,
     FormsModule,
     InputTextModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
