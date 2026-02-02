@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CsrfService {
@@ -8,16 +9,15 @@ export class CsrfService {
 
   constructor(private http: HttpClient) {}
 
-  loadCsrfToken(): Promise<void> {
-    // Делаем GET-запрос на сервер для получения CSRF токена
-    return firstValueFrom(this.http.get<{ csrfToken: string }>('/api/csrf'))
-      .then(res => {
-        this.csrfToken = res.csrfToken;
-        console.log('CSRF token loaded:', this.csrfToken);
-      })
-      .catch(err => {
-        console.error('Failed to load CSRF token', err);
-      });
+  async loadCsrfToken(): Promise<void> {
+    try {
+      const res = await firstValueFrom(
+        this.http.get<{ token: string; }>(`${environment.apiUrl}/auth/csrf-token`)
+      );
+      this.csrfToken = res.token;
+    } catch (err) {
+      console.error('Failed to load CSRF token', err);
+    }
   }
 
   get token() {

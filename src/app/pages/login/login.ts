@@ -3,10 +3,12 @@ import {ButtonModule} from 'primeng/button';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MessageModule} from 'primeng/message';
 import {InputTextModule} from 'primeng/inputtext';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {AuthService} from '../../core/services/auth.service';
-import {concatMap} from 'rxjs';
+import {CsrfService} from '../../core/services/csrf.service';
+import {CsrfStore} from '../../core/services/csrf.store';
 import {UserService} from '../../core/services/user.service';
+import {concatMap, from, tap} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +26,8 @@ import {UserService} from '../../core/services/user.service';
 export class Login implements OnInit {
   authService = inject(AuthService);
   userService = inject(UserService);
+  csrfService = inject(CsrfService);
+  csrfStore = inject(CsrfStore);
   router = inject(Router);
   loginForm: FormGroup
 
@@ -43,13 +47,13 @@ export class Login implements OnInit {
 
   login(): void {
     const {email, password} = this.loginForm.value;
-    this.authService.login(email, password)
-      .pipe(concatMap(x => {
-        return this.userService.getCurrentUser()
-      }))
-      .subscribe(user => {
-        this.router.navigate(['/home'])
-    });
+    this.authService.login(email, password).pipe(
+      concatMap(() => this.userService.getCurrentUser()),
+      concatMap(() => from(this.csrfService.loadCsrfToken())),
+      tap(() => {
+        const t = this.csrfService.token;
+        if (t) this.csrfStore.csrfToken.set(t);
+      })
+    ).subscribe(() => this.router.navigate(['/home']));
   }
-
 }
