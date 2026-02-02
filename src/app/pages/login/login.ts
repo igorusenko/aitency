@@ -4,7 +4,7 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {MessageModule} from 'primeng/message';
 import {InputTextModule} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -41,9 +41,6 @@ export class Login implements OnInit {
   login(): void {
     const {email, password} = this.loginForm.value;
     this.authService.login(email, password).subscribe(x => {
-      if (x.accessToken) {
-        cookieStore.set('accessToken', x.accessToken);
-      }
       this.router.navigate(['/home'])
     });
   }

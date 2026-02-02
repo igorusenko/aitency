@@ -1,44 +1,46 @@
-<p-table
-  [value]="automations.items"
-  [paginator]="true"
-  [rows]="5"
-  [tableStyle]="{ 'min-width': '50rem' }"
-  [rowsPerPageOptions]="[5, 10, 20]"
-  [rowHover]="true"
-  (onRowSelect)="selectRow($event)"
-  selectionMode="single"
->
-  <ng-template #header>
-    <tr>
-      <th pSortableColumn="id" style="width:20%">
-        <div class="flex items-center gap-2">
-          Id
-          <p-sortIcon field="id" />
-        </div>
-      </th>
-      <th style="width:20%">isActive</th>
-      <th style="width:20%">isDemo</th>
-      <th pSortableColumn="serverId" style="width:20%">
-        <div class="flex items-center gap-2">
-          serverId
-          <p-sortIcon field="serverId" />
-        </div>
-      </th>
-      <th pSortableColumn="userId" style="width:20%">
-        <div class="flex items-center gap-2">
-          userId
-          <p-sortIcon field="userId" />
-        </div>
-      </th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-customer>
-    <tr class="cursor-pointer" [pSelectableRow]="customer">
-      <td>{{ customer.id }}</td>
-      <td>{{ customer.isActive }}</td>
-      <td>{{ customer.isDemo }}</td>
-      <td>{{ customer.serverId }}</td>
-      <td>{{ customer.userId }}</td>
-    </tr>
-  </ng-template>
-</p-table>
+@if ($automations | async; as automations) {
+  <p-table
+    [value]="automations.items"
+    [paginator]="true"
+    [rows]="5"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [rowHover]="true"
+    (onRowSelect)="selectRow($event)"
+    selectionMode="single"
+  >
+    <ng-template #header>
+      <tr>
+        <th pSortableColumn="id" style="width:20%">
+          <div class="flex items-center gap-2">
+            Id
+            <p-sortIcon field="id" />
+          </div>
+        </th>
+        <th style="width:20%">isActive</th>
+        <th style="width:20%">isDemo</th>
+        <th pSortableColumn="serverId" style="width:20%">
+          <div class="flex items-center gap-2">
+            serverId
+            <p-sortIcon field="serverId" />
+          </div>
+        </th>
+        <th pSortableColumn="userId" style="width:20%">
+          <div class="flex items-center gap-2">
+            userId
+            <p-sortIcon field="userId" />
+          </div>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-customer>
+      <tr class="cursor-pointer" [pSelectableRow]="customer">
+        <td>{{ customer.id }}</td>
+        <td>{{ customer.isActive }}</td>
+        <td>{{ customer.isDemo }}</td>
+        <td>{{ customer.serverId }}</td>
+        <td>{{ customer.userId }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+}

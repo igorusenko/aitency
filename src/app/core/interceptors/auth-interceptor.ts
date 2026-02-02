@@ -1,6 +1,6 @@
 import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {catchError, throwError} from 'rxjs';
 import {Router} from '@angular/router';
 import {CsrfStore} from '../services/csrf.store';
@@ -27,41 +27,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
+        router.navigate(['/login']);
         csrfService.loadCsrfToken().then((data: any) => {
           csrfStore.csrfToken.set(data.token);
-          router.navigate(['/login']);
         });
       }
       return throwError(() => error);
     })
   );
-
-  // const authService = inject(AuthService);
-  // const router = inject(Router);
-  //
-  // // пропускаем публичные эндпоинты
-  // if (SKIP_AUTH_URLS.some(url => req.url.includes(url))) {
-  //   return next(req);
-  // }
-  //
-  // const token = authService.getToken();
-  //
-  // const authReq = token
-  //   ? req.clone({
-  //     setHeaders: { Authorization: `Bearer ${token}` },
-  //   })
-  //   : req.clone({ withCredentials: true });
-  //
-  // return next(authReq).pipe(
-  //   catchError((error: HttpErrorResponse) => {
-  //     // 401 = токен истёк или невалидный
-  //     if (error.status === 401) {
-  //       // чистим токен из сервиса
-  //       authService.clearToken();
-  //       // редирект на login
-  //       router.navigate(['/login']);
-  //     }
-  //     return throwError(() => error);
-  //   })
-  // );
 };

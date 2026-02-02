@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {PanelModule} from 'primeng/panel';
 import {Menu} from 'primeng/menu';
-import {AutomationsService} from '../../../services/automations.service';
+import {AutomationsService} from '../../../core/services/automations.service';
 import {ActivatedRoute} from '@angular/router';
 import {Observable} from 'rxjs';
 import {IAutomation} from '../../../core/interfaces/automations/automation-interface';
@@ -33,10 +33,7 @@ export class AutomationDetails implements OnInit {
       icon: 'pi pi-times'
     }
   ]
-
-  get automationInfo(): Observable<IAutomation> {
-    return this.automationService.getAutomation(this.route.snapshot.params['id']);
-  }
+  $automationInfo = this.automationService.getAutomation(this.route.snapshot.params['id'])
 
   ngOnInit() {
 

@@ -25,6 +25,11 @@ export const CustomPreset = definePreset(Aura, {
       root: {
         background: '#1b1b3a'
       }
+    },
+    panel: {
+      root: {
+        background: '#1b1b3a'
+      }
     }
   }
 });
