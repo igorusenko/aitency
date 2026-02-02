@@ -20,10 +20,7 @@
       </nav>
     </div>
 
-    <div class="sidebar-footer">
-      <div class="env-pill" title="Demo mode uses local mock data">Demo • v1</div>
-      <button id="btn-reset" class="btn btn-ghost">Reset demo data</button>
-    </div>
+    <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
   </aside>
 @if (!sideMenuService.isSideMenuCollapsed()) {
   <div tabindex="0" class="mobile-black-overlay" (click)="sideMenuService.isSideMenuCollapsed.set(true)"></div>

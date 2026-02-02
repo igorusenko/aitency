@@ -14,9 +14,21 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
   req = req.clone({ withCredentials: true });
-
+  // Если POST, PUT, ...
   if (['POST','PUT','DELETE','PATCH'].includes(req.method)) {
     const token = csrfStore.csrfToken();
+
+    console.log('Старый CSRF токен = ', token)
+
+    csrfService.loadCsrfToken().then((data: any) => {
+      // Здесь в data уже ошибка
+      csrfStore.csrfToken.set(data.token);
+    });
+
+    console.log('Новый CSRF токен = ', csrfStore.csrfToken());
+
+    console.log('Одинаковые? ', token === csrfStore.csrfToken())
+
     if (token.length > 0) {
       req = req.clone({
         headers: req.headers.set('X-CSRF-TOKEN', token),

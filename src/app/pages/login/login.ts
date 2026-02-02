@@ -5,6 +5,8 @@ import {MessageModule} from 'primeng/message';
 import {InputTextModule} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../core/services/auth.service';
+import {concatMap} from 'rxjs';
+import {UserService} from '../../core/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,7 @@ import {AuthService} from '../../core/services/auth.service';
 })
 export class Login implements OnInit {
   authService = inject(AuthService);
+  userService = inject(UserService);
   router = inject(Router);
   loginForm: FormGroup
 
@@ -40,8 +43,12 @@ export class Login implements OnInit {
 
   login(): void {
     const {email, password} = this.loginForm.value;
-    this.authService.login(email, password).subscribe(x => {
-      this.router.navigate(['/home'])
+    this.authService.login(email, password)
+      .pipe(concatMap(x => {
+        return this.userService.getCurrentUser()
+      }))
+      .subscribe(user => {
+        this.router.navigate(['/home'])
     });
   }
 

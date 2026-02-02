@@ -1,8 +1,9 @@
-import {Component, effect, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, effect, inject, OnInit, ViewEncapsulation} from '@angular/core';
 import { SideMenuService } from './side-menu.service';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SideMenuItem } from './side-menu.helper';
+import {AuthService} from '../../core/services/auth.service';
 
 /*
  * The side menu component. Template for the side menu.
@@ -15,6 +16,7 @@ import { SideMenuItem } from './side-menu.helper';
   styleUrl: './side-menu.component.scss',
 })
 export class SideMenuComponent implements OnInit {
+  authService = inject(AuthService);
   public readonly MOBILE_BREAKPOINT = 992;
   public isMobileView = false;
   items: SideMenuItem[] = [];
