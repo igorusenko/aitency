@@ -3,10 +3,13 @@ import {PanelModule} from 'primeng/panel';
 import {Menu} from 'primeng/menu';
 import {AutomationsService} from '../../../services/automations.service';
 import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
+import {IAutomation} from '../../../core/interfaces/automations/automation-interface';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-automation-details',
-  imports: [PanelModule,Menu],
+  imports: [PanelModule, Menu, AsyncPipe],
   templateUrl: './automation-details.html',
   styleUrl: './automation-details.scss',
 })
@@ -31,9 +34,11 @@ export class AutomationDetails implements OnInit {
     }
   ]
 
+  get automationInfo(): Observable<IAutomation> {
+    return this.automationService.getAutomation(this.route.snapshot.params['id']);
+  }
+
   ngOnInit() {
-    this.automationService.getAutomation(this.route.snapshot.params['id']).subscribe(automation => {
-      console.log(automation)
-    })
+
   }
 }

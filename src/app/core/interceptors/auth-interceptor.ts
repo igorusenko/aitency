@@ -3,36 +3,65 @@ import {inject} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {catchError, throwError} from 'rxjs';
 import {Router} from '@angular/router';
+import {CsrfStore} from '../services/csrf.store';
+import {CsrfService} from '../services/csrf.service';
 
 const SKIP_AUTH_URLS = ['/auth/login', '/auth/register'];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const csrfStore = inject(CsrfStore);
+  const csrfService = inject(CsrfService);
   const router = inject(Router);
 
-  // пропускаем публичные эндпоинты
-  if (SKIP_AUTH_URLS.some(url => req.url.includes(url))) {
-    return next(req);
+  req = req.clone({ withCredentials: true });
+
+  if (['POST','PUT','DELETE','PATCH'].includes(req.method)) {
+    const token = csrfStore.csrfToken();
+    if (token.length > 0) {
+      req = req.clone({
+        headers: req.headers.set('X-CSRF-TOKEN', token),
+      });
+    }
   }
 
-  const token = authService.getToken();
-
-  const authReq = token
-    ? req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    })
-    : req.clone({ withCredentials: true });
-
-  return next(authReq).pipe(
+  return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // 401 = токен истёк или невалидный
       if (error.status === 401) {
-        // чистим токен из сервиса
-        authService.clearToken();
-        // редирект на login
-        router.navigate(['/login']);
+        csrfService.loadCsrfToken().then((data: any) => {
+          csrfStore.csrfToken.set(data.token);
+          router.navigate(['/login']);
+        });
       }
       return throwError(() => error);
     })
   );
+
+  // const authService = inject(AuthService);
+  // const router = inject(Router);
+  //
+  // // пропускаем публичные эндпоинты
+  // if (SKIP_AUTH_URLS.some(url => req.url.includes(url))) {
+  //   return next(req);
+  // }
+  //
+  // const token = authService.getToken();
+  //
+  // const authReq = token
+  //   ? req.clone({
+  //     setHeaders: { Authorization: `Bearer ${token}` },
+  //   })
+  //   : req.clone({ withCredentials: true });
+  //
+  // return next(authReq).pipe(
+  //   catchError((error: HttpErrorResponse) => {
+  //     // 401 = токен истёк или невалидный
+  //     if (error.status === 401) {
+  //       // чистим токен из сервиса
+  //       authService.clearToken();
+  //       // редирект на login
+  //       router.navigate(['/login']);
+  //     }
+  //     return throwError(() => error);
+  //   })
+  // );
 };

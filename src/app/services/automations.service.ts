@@ -2,6 +2,8 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.development';
+import {IPaginatedList} from '../core/interfaces/paginated-list-interface';
+import {IAutomation} from '../core/interfaces/automations/automation-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -10,13 +12,13 @@ export class AutomationsService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
-  getAutomations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/automation`);
+  getAutomations(): Observable<IPaginatedList<IAutomation>> {
+    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automation`);
   }
 
-  getAutomation(id: string): Observable<any> {
+  getAutomation(id: string): Observable<IAutomation> {
     const params = new HttpParams()
       .set('userId', id)
-    return this.http.get<any>(`${this.apiUrl}/automation/${id}`, {params});
+    return this.http.get<IAutomation>(`${this.apiUrl}/automation/${id}`, {params});
   }
 }
