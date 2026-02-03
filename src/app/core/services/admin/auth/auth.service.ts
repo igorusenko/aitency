@@ -23,4 +23,8 @@ export class AuthService {
       this.router.navigate(['/login']);
     })
   }
+
+  isAuthenticated(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/validate`)
+  }
 }

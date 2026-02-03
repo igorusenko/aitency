@@ -11,6 +11,9 @@ import { providePrimeNG } from 'primeng/config';
 import {CustomPreset} from '../theme';
 import {authInterceptor} from './core/interceptors/auth-interceptor';
 import {CsrfService} from './core/services/admin/csrf/csrf.service';
+import {catchError, concatMap, of} from 'rxjs';
+import {AuthService} from './core/services/admin/auth/auth.service';
+import {UserService} from './core/services/admin/user/user.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +28,12 @@ export const appConfig: ApplicationConfig = {
     }),
     provideAppInitializer(() => {
       const csrfService = inject(CsrfService);
+      const userService = inject(UserService);
       return csrfService.loadCsrfToken()
+        .pipe(
+          concatMap(() => userService.getCurrentUser()),
+          catchError(( ) => of(null))
+        )
     })
   ]
 };
