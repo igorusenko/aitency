@@ -1,26 +1,20 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import {firstValueFrom, Observable, take, tap} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {CsrfStore} from './csrf.store';
 
 @Injectable({ providedIn: 'root' })
 export class CsrfService {
-  private csrfToken: string | null = null;
-
+  csrfStore = inject(CsrfStore)
   constructor(private http: HttpClient) {}
 
-  loadCsrfToken(): Promise<void> {
-    // Делаем GET-запрос на сервер для получения CSRF токена
-    return firstValueFrom(this.http.get<{ csrfToken: string }>('/api/csrf'))
-      .then(res => {
-        this.csrfToken = res.csrfToken;
-        console.log('CSRF token loaded:', this.csrfToken);
-      })
-      .catch(err => {
-        console.error('Failed to load CSRF token', err);
-      });
-  }
-
-  get token() {
-    return this.csrfToken;
+  loadCsrfToken(): Observable<any> {
+   return this.http.get<{ token: string }>(`${environment.apiUrl}/auth/csrf-token`).pipe(
+     tap(data => {
+       this.csrfStore.csrfToken.set(data.token);
+     }),
+      take(1)
+    )
   }
 }

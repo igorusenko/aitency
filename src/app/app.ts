@@ -8,11 +8,6 @@ import {UserService} from './core/services/user.service';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App implements OnInit {
-  userService = inject(UserService);
+export class App {
   protected readonly title = signal('aitency');
-
-  ngOnInit() {
-    this.userService.getCurrentUser().subscribe(user => {})
-  }
 }
