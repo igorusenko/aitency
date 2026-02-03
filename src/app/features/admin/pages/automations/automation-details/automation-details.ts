@@ -1,15 +1,15 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {PanelModule} from 'primeng/panel';
 import {Menu} from 'primeng/menu';
-import {AutomationsService} from '../../../../../core/services/automations.service';
-import {ActivatedRoute} from '@angular/router';
+import {AutomationsService} from '../../../../../core/services/admin/automation/automations.service';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {Observable} from 'rxjs';
 import {IAutomation} from '../../../../../core/interfaces/automations/automation-interface';
 import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-automation-details',
-  imports: [PanelModule, Menu, AsyncPipe],
+  imports: [PanelModule, Menu, AsyncPipe, RouterLink],
   templateUrl: './automation-details.html',
   styleUrl: './automation-details.scss',
 })

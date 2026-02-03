@@ -3,7 +3,7 @@ import { SideMenuService } from './side-menu.service';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SideMenuItem } from './side-menu.helper';
-import {AuthService} from '../../core/services/auth.service';
+import {AuthService} from '../../core/services/admin/auth/auth.service';
 
 /*
  * The side menu component. Template for the side menu.

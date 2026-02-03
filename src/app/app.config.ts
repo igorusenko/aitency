@@ -10,7 +10,7 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import {CustomPreset} from '../theme';
 import {authInterceptor} from './core/interceptors/auth-interceptor';
-import {CsrfService} from './core/services/csrf.service';
+import {CsrfService} from './core/services/admin/csrf/csrf.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

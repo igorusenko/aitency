@@ -14,6 +14,14 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'demo/:id',
+        title: 'Demo',
+        loadComponent: () =>
+          import('./features/voice-assistant/voice-assistant').then(
+            (m) => m.VoiceAssistant
+          ),
+      },
+      {
         path: 'home',
         title: 'VoiceAssistant',
         loadComponent: () =>
