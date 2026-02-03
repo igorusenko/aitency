@@ -1,18 +1,18 @@
 import {
-  ApplicationConfig,
-  inject,
+  ApplicationConfig, inject,
   provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import {HttpClient, provideHttpClient, withInterceptors} from '@angular/common/http';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
-import { CustomPreset } from '../theme';
-import { authInterceptor } from './core/interceptors/auth-interceptor';
-import { CsrfService } from './core/services/csrf.service';
-import { CsrfStore } from './core/services/csrf.store';
+import {CustomPreset} from '../theme';
+import {authInterceptor} from './core/interceptors/auth-interceptor';
+import {firstValueFrom, tap} from 'rxjs';
+import {environment} from '../environments/environment';
+import {CsrfStore} from './core/services/csrf.store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,12 +25,16 @@ export const appConfig: ApplicationConfig = {
         preset: CustomPreset,
       }
     }),
-    provideAppInitializer(async () => {
-      const csrfService = inject(CsrfService);
+    provideAppInitializer(() => {
+      const http = inject(HttpClient)
       const csrfStore = inject(CsrfStore);
-      await csrfService.loadCsrfToken();
-      const token = csrfService.token;
-      if (token) csrfStore.csrfToken.set(token);
+      return firstValueFrom(
+        http
+          .get(`${environment.apiUrl}/auth/csrf-token`)
+          .pipe(tap((data: any) => {
+            csrfStore.csrfToken.set(data.token)
+          }))
+      );
     })
   ]
 };
