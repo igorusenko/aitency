@@ -1,0 +1,60 @@
+<header class="header">
+  <div class="logo">AItency<span>Demo</span></div>
+  <nav class="nav">
+    <a href="https://aitency.com/">VoiceAssistant</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-text">
+      <h1>
+        AI Booking & Automation Demo<br />
+      </h1>
+
+      <p>
+        This interactive demo simulates how an AI Booking Agent handles patient bookings,
+        recall reminders, and call automation.
+      </p>
+
+    </div>
+
+  </section>
+
+  <!-- CHAT -->
+  <section id="chat-demo" class="panel panel-grid">
+    <div class="panel-column">
+      <h2>AI VOICE AGENT</h2>
+
+      <div class="chat-window">
+        <app-voice-assistant></app-voice-assistant>
+      </div>
+    </div>
+
+    <!-- SYSTEM ACTIVITY -->
+    <div id="system-activity" class="panel-column">
+      <h2>System Activity Monitor</h2>
+
+      <div class="systems-grid">
+        @for (system of assistantService.systems; track system.title) {
+          <div
+            class="system-card"
+            [class.active]="system.active"
+          >
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <h3>{{ system.title }}</h3>
+              <p>{{ system.description }}</p>
+            </div>
+            <p class="status">
+            {{ system.status }}
+          </p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <p>© {{ currentYear }} AItency – AI Business Automation Demo.</p>
+</footer>

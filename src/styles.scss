@@ -1,4 +1,6 @@
-@use 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root{
   --bg: #0b0f17;
@@ -39,11 +41,6 @@
     @apply text-inherit no-underline;
   }
 }
-
-.hidden {
-  @apply hidden;
-}
-
 
 .sidebar {
   background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0));
@@ -228,10 +225,6 @@
 .sub {
   @apply text-[13px] mt-1;
   color: var(--muted);
-}
-
-.grid {
-  @apply grid gap-3;
 }
 
 .grid.cols-3 {

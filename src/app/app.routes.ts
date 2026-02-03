@@ -15,27 +15,27 @@ export const routes: Routes = [
       },
       {
         path: 'home',
-        title: 'Home',
+        title: 'VoiceAssistant',
         loadComponent: () =>
-          import('./pages/home/home').then((m) => m.Home),
+          import('./features/admin/pages/home/home').then((m) => m.Home),
       },
       {
         path: 'automations',
         title: 'Automations',
         loadComponent: () =>
-          import('./pages/automations/automations').then((m) => m.Automations),
+          import('./features/admin/pages/automations/automations').then((m) => m.Automations),
       },
       {
         path: 'automations/:id',
         title: 'Automation details',
         loadComponent: () =>
-          import('./pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
+          import('./features/admin/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
       },
       {
         path: 'users',
         title: 'Users',
         loadComponent: () =>
-          import('./pages/users/users').then((m) => m.Users),
+          import('./features/admin/pages/users/users').then((m) => m.Users),
       }
     ]
   },
@@ -43,6 +43,6 @@ export const routes: Routes = [
     path: 'login',
     title: 'Login',
     loadComponent: () =>
-      import('./pages/login/login').then((m) => m.Login),
+      import('./features/admin/pages/login/login').then((m) => m.Login),
   }
 ];
