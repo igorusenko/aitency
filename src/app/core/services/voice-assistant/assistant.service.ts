@@ -1,9 +1,13 @@
-import {effect, Injectable, signal, WritableSignal} from '@angular/core';
+import {effect, inject, Injectable, signal, WritableSignal} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AssistantService {
+  private readonly http = inject(HttpClient);
   calendarProcessing: WritableSignal<boolean> = signal(false);
   bookingProcessing: WritableSignal<boolean> = signal(false);
   priceInquiryProcessing: WritableSignal<boolean> = signal(false);
@@ -101,5 +105,13 @@ export class AssistantService {
       const handoffToHumanIndex = this.systems.findIndex(system => system.key === 'handoff_to_human')
       this.systems[handoffToHumanIndex].active = this.handoffToHumanProcessing();
     });
+  }
+
+  getVoices(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${environment.openAiApiKey}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.get('https://api.openai.com/v1/voices', { headers })
   }
 }

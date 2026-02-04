@@ -1,4 +1,4 @@
-@if ($automationInfo | async; as info) {
+@if (this.route.snapshot.params['id'] !== 'new' ? ($automationInfo | async) : false; as info) {
 <div class="flex flex-col gap-4">
   <p-panel [toggleable]="true">
     <ng-template #header>
@@ -67,5 +67,48 @@
 
   <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/demo', info.id]">Go to demo</button>
 </div>
+} @else {
+  <div class="flex flex-col gap-4">
+    <p>Create automation</p>
+    <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">
 
+      <div class="flex flex-col gap-1">
+        <input pInputText type="text" id="serverId" placeholder="Server ID" formControlName="serverId" [invalid]="isInvalid('serverId')" />
+        @if (isInvalid('serverId')) {
+          <p-message severity="error" size="small" variant="simple">Server ID is required.</p-message>
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-checkbox [formControlName]="'isActive'" [binary]="true" [inputId]="'isActive'" [invalid]="isInvalid('isActive')" />
+        <label [for]="'isActive'">Active</label>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-checkbox [formControlName]="'isDemo'" [binary]="true" [inputId]="'isDemo'" [invalid]="isInvalid('isDemo')" />
+        <label [for]="'isDemo'">Demo</label>
+      </div>
+
+      <div formGroupName="config">
+<!--        @if ($assistantVoices | async; as voices) {-->
+        <div class="flex flex-col gap-1">
+          <p-select formControlName="voice" [options]="voices" [invalid]="isInvalid('voice')" optionLabel="name" placeholder="Select a Voice"/>
+          @if (isInvalid('voice')) {
+            <p-message severity="error" size="small" variant="simple">Voice is required.</p-message>
+          }
+          </div>
+<!--        }-->
+
+        <div class="flex flex-col gap-1">
+          <p-input-number inputId="integeronly" mode="decimal" [minFractionDigits]="2" formControlName="volume" [invalid]="isInvalid('volume')" [maxlength]="1" [max]="2"/>
+          @if (isInvalid('volume')) {
+            <p-message severity="error" size="small" variant="simple">Voice is required.</p-message>
+          }
+        </div>
+
+      </div>
+
+      <button id="btn-reset" class="btn btn-ghost" type="submit">Create automation</button>
+    </form>
+  </div>
 }

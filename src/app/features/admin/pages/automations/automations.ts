@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {AutomationsService} from '../../../../core/services/admin/automation/automations.service';
 import {TableModule, TableRowSelectEvent} from 'primeng/table';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IPaginatedList} from '../../../../core/interfaces/paginated-list-interface';
 import {IAutomation} from '../../../../core/interfaces/automations/automation-interface';
 import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-automations',
-  imports: [CommonModule, FormsModule, TableModule],
+  imports: [CommonModule, FormsModule, TableModule, RouterLink],
   standalone: true,
   templateUrl: './automations.html',
   styleUrl: './automations.scss',

@@ -1,5 +1,5 @@
 export interface IAutomation {
-  id: string;
+  id?: string;
   isActive: boolean;
   isDemo: boolean;
   serverId: string;
