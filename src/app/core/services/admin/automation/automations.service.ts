@@ -23,4 +23,8 @@ export class AutomationsService {
       .set('userId', id)
     return this.http.get<IAutomation>(`${this.apiUrl}/automation/${id}`, {params});
   }
+
+  createAutomation(automation: IAutomation): Observable<any> {
+    return this.http.post<IAutomation>(`${this.apiUrl}/automation`, automation);
+  }
 }
