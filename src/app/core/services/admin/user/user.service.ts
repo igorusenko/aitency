@@ -13,7 +13,8 @@ export class UserService {
   private readonly apiUrl = environment.apiUrl;
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/user`);
+    return this.http.get<any[]>(`${this.apiUrl}/user`)
+      .pipe(tap(users => this.userStore.users.set(users)));
   }
 
   getCurrentUser(): Observable<any> {

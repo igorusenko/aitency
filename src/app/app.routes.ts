@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import {automationInfoUserResolver} from './core/resolvers/user/automation-info-user-resolver';
-import {automationInfoAdminResolver} from './core/resolvers/admin/automation-info-admin-resolver';
-import {automationsResolver} from './core/resolvers/common/automations-resolver';
+import {automationsResolver} from './core/resolvers/automation/automations-resolver';
+import {automationResolver} from './core/resolvers/automation/automation-info-user-resolver';
+import {usersResolver} from './core/resolvers/user/users-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -42,20 +42,21 @@ export const routes: Routes = [
         title: 'Automation details',
         loadComponent: () =>
           import('./features/admin/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
-        resolve: {automation: automationInfoUserResolver}
+        resolve: {automation: automationResolver}
       },
       {
         path: 'automations/edit/:id',
         title: 'Automation edit',
         loadComponent: () =>
           import('./features/admin/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
-        resolve: {automation: automationInfoAdminResolver}
+        resolve: {automation: automationResolver}
       },
       {
         path: 'users',
         title: 'Users',
         loadComponent: () =>
           import('./features/admin/pages/users/users').then((m) => m.Users),
+        resolve: {users: usersResolver}
       }
     ]
   },
