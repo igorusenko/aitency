@@ -17,18 +17,17 @@
             <p-sortIcon field="id" />
           </div>
         </th>
-        <th style="width:20%">isActive</th>
-        <th style="width:20%">isDemo</th>
+        <th style="width:20%">Active</th>
+        <th style="width:20%">Demo</th>
         <th pSortableColumn="serverId" style="width:20%">
           <div class="flex items-center gap-2">
-            serverId
+            Server ID
             <p-sortIcon field="serverId" />
           </div>
         </th>
-        <th pSortableColumn="userId" style="width:20%">
+        <th pSortableColumn="actions" style="width:20%">
           <div class="flex items-center gap-2">
-            userId
-            <p-sortIcon field="userId" />
+            Actions
           </div>
         </th>
       </tr>
@@ -39,9 +38,11 @@
         <td>{{ customer.isActive }}</td>
         <td>{{ customer.isDemo }}</td>
         <td>{{ customer.serverId }}</td>
-        <td>{{ customer.userId }}</td>
+        <td (click)="$event.stopPropagation()">
+          <p-button [routerLink]="['edit', customer.id]">Edit automation</p-button>
+        </td>
       </tr>
     </ng-template>
   </p-table>
-  <button id="btn-reset" class="btn btn-ghost mt-4 w-full" [routerLink]="['new']">Create automation</button>
+  <button id="btn-reset" class="btn btn-ghost mt-4 w-full" [routerLink]="['edit', 'new']">Create automation</button>
 }

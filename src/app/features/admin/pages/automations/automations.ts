@@ -7,10 +7,11 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IPaginatedList} from '../../../../core/interfaces/paginated-list-interface';
 import {IAutomation} from '../../../../core/interfaces/automations/automation-interface';
 import {Observable} from 'rxjs';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-automations',
-  imports: [CommonModule, FormsModule, TableModule, RouterLink],
+  imports: [CommonModule, FormsModule, TableModule, RouterLink, Button],
   standalone: true,
   templateUrl: './automations.html',
   styleUrl: './automations.scss',

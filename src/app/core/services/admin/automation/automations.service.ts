@@ -21,7 +21,7 @@ export class AutomationsService {
   getAutomation(id: string): Observable<IAutomation> {
     const params = new HttpParams()
       .set('userId', id)
-    return this.http.get<IAutomation>(`${this.apiUrl}/automation/${id}`, {params});
+    return this.http.get<IAutomation>(`${this.apiUrl}/automation/admin/${id}`, {params});
   }
 
   createAutomation(automation: IAutomation): Observable<any> {

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import {automationInfoUserResolver} from './core/resolvers/user/automation-info-user-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -38,6 +39,13 @@ export const routes: Routes = [
         title: 'Automation details',
         loadComponent: () =>
           import('./features/admin/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
+        resolve: {automation: automationInfoUserResolver}
+      },
+      {
+        path: 'automations/edit/:id',
+        title: 'Automation edit',
+        loadComponent: () =>
+          import('./features/admin/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
       },
       {
         path: 'users',
