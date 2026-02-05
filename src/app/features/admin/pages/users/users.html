@@ -32,7 +32,7 @@
           <td>{{ user.contactPerson || '-' }}</td>
           <td>{{ user.email || '-' }}</td>
           <td>{{ user.isActive || '-' }}</td>
-          <td>{{ user.registrationDate || '-' }}</td>
+          <td>{{ user.registrationDate || '-' | date }}</td>
           <td (click)="$event.stopPropagation()">
             <div class="flex gap-2">
               <p-button [routerLink]="['edit', user.id]">Edit</p-button>
