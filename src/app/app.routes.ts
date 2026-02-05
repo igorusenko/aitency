@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import {automationInfoUserResolver} from './core/resolvers/user/automation-info-user-resolver';
+import {automationInfoAdminResolver} from './core/resolvers/admin/automation-info-admin-resolver';
+import {automationsResolver} from './core/resolvers/common/automations-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -33,6 +35,7 @@ export const routes: Routes = [
         title: 'Automations',
         loadComponent: () =>
           import('./features/admin/pages/automations/automations').then((m) => m.Automations),
+        resolve: {automations: automationsResolver}
       },
       {
         path: 'automations/:id',
@@ -46,6 +49,7 @@ export const routes: Routes = [
         title: 'Automation edit',
         loadComponent: () =>
           import('./features/admin/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
+        resolve: {automation: automationInfoAdminResolver}
       },
       {
         path: 'users',

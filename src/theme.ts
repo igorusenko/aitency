@@ -23,7 +23,8 @@ export const CustomPreset = definePreset(Aura, {
     },
     paginator: {
       root: {
-        background: '#1b1b3a'
+        background: '#1b1b3a',
+        borderRadius: '0'
       }
     },
     panel: {

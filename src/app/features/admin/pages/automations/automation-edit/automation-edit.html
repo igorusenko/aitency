@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-  <p>Create automation</p>
+  <p>{{editMode ? 'Update' : 'Create'}} Automation</p>
   <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">
 
     <!--      <p-floatlabel>-->
@@ -82,6 +82,6 @@
 
     </div>
 
-    <button id="btn-reset" class="btn btn-ghost" type="submit">Create automation</button>
+    <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
   </form>
 </div>

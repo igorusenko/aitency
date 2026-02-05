@@ -1,48 +1,53 @@
-@if ($automations | async; as automations) {
-  <p-table
-    [value]="automations.items"
-    [paginator]="true"
-    [rows]="5"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    [rowHover]="true"
-    (onRowSelect)="selectRow($event)"
-    selectionMode="single"
-  >
-    <ng-template #header>
-      <tr>
-        <th pSortableColumn="id" style="width:20%">
-          <div class="flex items-center gap-2">
-            Id
-            <p-sortIcon field="id" />
-          </div>
-        </th>
-        <th style="width:20%">Active</th>
-        <th style="width:20%">Demo</th>
-        <th pSortableColumn="serverId" style="width:20%">
-          <div class="flex items-center gap-2">
-            Server ID
-            <p-sortIcon field="serverId" />
-          </div>
-        </th>
-        <th pSortableColumn="actions" style="width:20%">
-          <div class="flex items-center gap-2">
-            Actions
-          </div>
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-customer>
-      <tr class="cursor-pointer" [pSelectableRow]="customer">
-        <td>{{ customer.id }}</td>
-        <td>{{ customer.isActive }}</td>
-        <td>{{ customer.isDemo }}</td>
-        <td>{{ customer.serverId }}</td>
-        <td (click)="$event.stopPropagation()">
-          <p-button [routerLink]="['edit', customer.id]">Edit automation</p-button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  <button id="btn-reset" class="btn btn-ghost mt-4 w-full" [routerLink]="['edit', 'new']">Create automation</button>
-}
+<div class="flex flex-col gap-4">
+  @if (automationAdminStore.automations()?.items?.length! > 0) {
+    <p-table
+      [value]="automationAdminStore.automations()?.items!"
+      [paginator]="true"
+      [rows]="5"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [rowHover]="true"
+      (onRowSelect)="selectRow($event)"
+      selectionMode="single"
+    >
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="id" style="width:20%">
+            <div class="flex items-center gap-2">
+              Id
+              <p-sortIcon field="id" />
+            </div>
+          </th>
+          <th style="width:20%">Active</th>
+          <th style="width:20%">Demo</th>
+          <th pSortableColumn="serverId" style="width:20%">
+            <div class="flex items-center gap-2">
+              Server ID
+              <p-sortIcon field="serverId" />
+            </div>
+          </th>
+          <th pSortableColumn="actions" style="width:20%">
+            <div class="flex items-center gap-2">
+              Actions
+            </div>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-automation>
+        <tr class="cursor-pointer" [pSelectableRow]="automation">
+          <td>{{ automation.id }}</td>
+          <td>{{ automation.isActive }}</td>
+          <td>{{ automation.isDemo }}</td>
+          <td>{{ automation.serverId }}</td>
+          <td (click)="$event.stopPropagation()">
+            <div class="flex gap-2">
+              <p-button [routerLink]="['edit', automation.id]">Edit</p-button>
+              <p-button severity="danger" (click)="deleteAutomation(automation.id)">Delete</p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+  <button id="btn-reset" class="btn btn-ghost w-full" [routerLink]="['edit', 'new']">Create automation</button>
+</div>
