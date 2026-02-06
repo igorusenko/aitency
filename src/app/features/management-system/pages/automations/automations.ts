@@ -10,6 +10,7 @@ import {Observable} from 'rxjs';
 import {Button} from 'primeng/button';
 import {MessageService} from 'primeng/api';
 import {AutomationsStore} from '../../../../core/stores/automations.store';
+import {UserStore} from '../../../../core/services/admin/user/user.store';
 
 @Component({
   selector: 'app-automations',
@@ -24,6 +25,7 @@ export class Automations implements OnInit {
   automationAdminService = inject(AutomationAdminService);
   automationAdminStore = inject(AutomationsStore);
   messageService = inject(MessageService);
+  userStore = inject(UserStore);
 
   constructor() {}
 

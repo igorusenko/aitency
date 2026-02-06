@@ -41,4 +41,8 @@ export class UserService {
   deleteUser(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/user/${id}`);
   }
+
+  getUserPassword(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/user/${this.userStore.userById().id}/password`)
+  }
 }

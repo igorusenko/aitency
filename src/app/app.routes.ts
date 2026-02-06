@@ -50,7 +50,7 @@ export const routes: Routes = [
         title: 'Automation edit',
         loadComponent: () =>
           import('./features/management-system/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
-        resolve: {automation: automationResolver}
+        resolve: {automation: automationResolver, users: usersResolver}
       },
       {
         path: 'users',

@@ -48,6 +48,10 @@
         </tr>
       </ng-template>
     </p-table>
+  } @else {
+    You don't have any automation yet
   }
-  <button id="btn-reset" class="btn btn-ghost w-full" [routerLink]="['edit', 'new']">Create automation</button>
+  @if (userStore.currentUser().role === 'Admin') {
+    <button id="btn-reset" class="btn btn-ghost w-full" [routerLink]="['edit', 'new']">Create automation</button>
+  }
 </div>

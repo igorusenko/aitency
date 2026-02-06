@@ -2,21 +2,24 @@ import {Component, inject} from '@angular/core';
 import {UserStore} from '../../../../../core/services/admin/user/user.store';
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
-import {DatePipe} from '@angular/common';
+import {AsyncPipe, DatePipe} from '@angular/common';
+import {UserService} from '../../../../../core/services/admin/user/user.service';
 
 @Component({
   selector: 'app-user-details',
   imports: [
     Menu,
     Panel,
-    DatePipe
+    DatePipe,
+    AsyncPipe
   ],
   templateUrl: './user-details.html',
   styleUrl: './user-details.scss',
 })
 export class UserDetails {
   readonly userStore = inject(UserStore);
-
+  readonly userService = inject(UserService);
+  userPassword$ = this.userService.getUserPassword()
   items = [
     {
       label: 'Refresh',

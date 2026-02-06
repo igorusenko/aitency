@@ -16,19 +16,25 @@
         </div>
         <div class="flex items-center gap-2">
           <p>Email:</p>
-          <p>{{userStore.userById().email || '-'}}</p>
+          <p class="text-green-400">{{userStore.userById().email || '-'}}</p>
         </div>
         <div class="flex items-center gap-2">
           <p>Registration date:</p>
           <p>{{userStore.userById().registrationDate | date }}</p>
         </div>
+        @if (userPassword$ | async; as password) {
+          <div class="flex items-center gap-2">
+            <p>Password:</p>
+            <p class="text-green-400">{{password.password}}</p>
+          </div>
+        }
         <div class="flex items-center gap-2">
-          <p>User address:</p>
+          <p>Address:</p>
           <p>{{userStore.userById().address || '-'}}</p>
         </div>
         <div class="flex items-center gap-2">
-          <p>User billing:</p>
-          <p>{{userStore.userById().billing || '-'}}</p>
+          <p>Billing:</p>
+          <p>{{userStore.userById().billing?.account || '-'}}</p>
         </div>
         <div class="flex items-center gap-2">
           <p>Company name:</p>

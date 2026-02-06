@@ -7,3 +7,8 @@ export interface IUser {
   billing: string,
   isActive: boolean
 }
+
+export interface IAppendUserModel {
+  automationId: string,
+  userIds: Array<string>;
+}

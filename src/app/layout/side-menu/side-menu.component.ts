@@ -4,6 +4,7 @@ import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SideMenuItem } from './side-menu.helper';
 import {AuthService} from '../../core/services/admin/auth/auth.service';
+import {UserStore} from '../../core/services/admin/user/user.store';
 
 /*
  * The side menu component. Template for the side menu.
@@ -17,6 +18,7 @@ import {AuthService} from '../../core/services/admin/auth/auth.service';
 })
 export class SideMenuComponent implements OnInit {
   authService = inject(AuthService);
+  userStore = inject(UserStore);
   public readonly MOBILE_BREAKPOINT = 992;
   public isMobileView = false;
   items: SideMenuItem[] = [];
