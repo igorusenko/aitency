@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment.development';
 import {Observable, tap} from 'rxjs';
 import {UserStore} from './user.store';
+import {IUser} from '../../../interfaces/users/user';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +28,17 @@ export class UserService {
   getUserById(id: string) {
     return this.http.get<any>(`${this.apiUrl}/user/${id}`)
       .pipe(tap(user => this.userStore.userById.set(user)));
+  }
+
+  createUser(user: IUser): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/user`, user);
+  }
+
+  updateUser(user: IUser): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/user`, user);
+  }
+
+  deleteUser(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/user/${id}`);
   }
 }

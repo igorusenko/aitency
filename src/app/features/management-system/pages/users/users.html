@@ -27,7 +27,7 @@
         <tr class="cursor-pointer" [pSelectableRow]="user">
           <td>{{ user.id }}</td>
           <td>{{ user.address || '-' }}</td>
-          <td>{{ user.billing || '-' }}</td>
+          <td>{{ user.billing?.account || '-' }}</td>
           <td>{{ user.companyName || '-' }}</td>
           <td>{{ user.contactPerson || '-' }}</td>
           <td>{{ user.email || '-' }}</td>

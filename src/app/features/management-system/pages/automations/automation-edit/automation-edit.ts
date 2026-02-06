@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, Signal} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, Signal} from '@angular/core';
 import {Checkbox} from "primeng/checkbox";
 import {FloatLabel} from "primeng/floatlabel";
 import {InputNumber} from "primeng/inputnumber";
@@ -28,7 +28,7 @@ import {IAutomation} from '../../../../../core/interfaces/automations/automation
   templateUrl: './automation-edit.html',
   styleUrl: './automation-edit.scss',
 })
-export class AutomationEdit implements OnInit{
+export class AutomationEdit implements OnInit, OnDestroy {
   automationAdminService = inject(AutomationAdminService)
   assistantService = inject(AssistantService);
   router = inject(Router);
@@ -96,9 +96,14 @@ export class AutomationEdit implements OnInit{
   }
 
   automationChanged(): void {
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Automation Created Successfully!', life: 2000 });
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Automation Updated Successfully!', life: 2000 });
     this.automationForm.reset();
     this.formSubmitted = false;
     this.router.navigate(['/automations'])
+  }
+
+  ngOnDestroy() {
+    this.automationForm.reset();
+    this.formSubmitted = false;
   }
 }

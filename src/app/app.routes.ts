@@ -65,6 +65,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/management-system/pages/users/user-details/user-details').then((m) => m.UserDetails),
         resolve: {user: userResolver}
+      },
+      {
+        path: 'users/edit/:id',
+        title: 'User Edit',
+        loadComponent: () =>
+          import('./features/management-system/pages/users/user-edit/user-edit').then((m) => m.UserEdit),
+        resolve: {user: userResolver}
       }
     ]
   },
