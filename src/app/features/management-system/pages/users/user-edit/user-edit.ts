@@ -44,7 +44,7 @@ export class UserEdit implements OnInit, OnDestroy {
       address: new FormControl(this.userStore.userById()?.address ?? null, [Validators.required]),
       contactPerson: new FormControl(this.userStore.userById()?.contactPerson ?? null, [Validators.required]),
       billing: this.fb.group({
-        account: new FormControl(this.userStore.userById()?.billing.account ?? null, [Validators.required]),
+        account: new FormControl(this.userStore.userById()?.billing?.account ?? null, [Validators.required]),
       })
     })
   }

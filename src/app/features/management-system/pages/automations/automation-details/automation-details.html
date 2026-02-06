@@ -23,17 +23,19 @@
           <p>ID:</p>
           <p>{{automation.id}}</p>
         </div>
+        @if (userStore.currentUser().role === 'Admin') {
         <div class="flex items-center gap-2">
           <p>User ID:</p>
           <p>{{automation.userId}}</p>
         </div>
         <div class="flex items-center gap-2">
-          <p>Active:</p>
-          <p>{{automation.isActive}}</p>
-        </div>
-        <div class="flex items-center gap-2">
           <p>Server ID:</p>
           <p>{{automation.serverId}}</p>
+        </div>
+        }
+        <div class="flex items-center gap-2">
+          <p>Active:</p>
+          <p>{{automation.isActive}}</p>
         </div>
       </div>
 

@@ -13,9 +13,11 @@
 
       <nav class="nav">
         @for (item of items; track item) {
-          <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
-            <span class="nav-dot"></span><span>{{item.title}}</span>
-          </a>
+          @if (roleCompatability(item.roles)) {
+            <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
+              <span class="nav-dot"></span><span>{{item.title}}</span>
+            </a>
+          }
         }
       </nav>
     </div>

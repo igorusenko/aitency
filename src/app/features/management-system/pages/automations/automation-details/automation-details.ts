@@ -5,6 +5,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {map} from 'rxjs';
 import {ReactiveFormsModule} from '@angular/forms';
 import {toSignal} from '@angular/core/rxjs-interop';
+import {UserStore} from '../../../../../core/services/admin/user/user.store';
 
 @Component({
   selector: 'app-automation-details',
@@ -13,6 +14,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   styleUrl: './automation-details.scss',
 })
 export class AutomationDetails {
+  userStore = inject(UserStore);
   automation = toSignal(
     inject(ActivatedRoute).data.pipe(
       map(data => data['automation'])

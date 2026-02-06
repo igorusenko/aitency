@@ -28,14 +28,17 @@ export class SideMenuService implements OnDestroy {
     {
       path: 'home',
       title: 'Overview',
+      roles: ['Default', 'Admin']
     },
     {
       path: 'automations',
       title: 'Automations',
+      roles: ['Default', 'Admin']
     },
     {
       path: 'users',
       title: 'Users',
+      roles: ['Admin']
     }
   ]);
 

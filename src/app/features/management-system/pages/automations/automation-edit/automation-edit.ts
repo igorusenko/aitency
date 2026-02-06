@@ -143,6 +143,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.automationForm.reset();
+    this.automationStore.automation.set(undefined)
     this.formSubmitted = false;
   }
 }

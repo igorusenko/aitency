@@ -101,49 +101,51 @@
     <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
   </form>
 
-  <h1>Users</h1>
-  <p-table
-    [value]="userStore.users()?.items!"
-    [paginator]="true"
-    [rows]="5"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    [rowHover]="true"
-    selectionMode="single"
-  >
-    <ng-template #header>
-      <tr>
-        <th>Id</th>
-        <th>Address</th>
-        <th>Billing</th>
-        <th>Company name</th>
-        <th>Contact Person</th>
-        <th>Email</th>
-        <th>Actvie</th>
-        <th>Registration date</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template #body let-user>
-      <tr class="cursor-pointer" [pSelectableRow]="user">
-        <td>{{ user.id }}</td>
-        <td>{{ user.address || '-' }}</td>
-        <td>{{ user.billing?.account || '-' }}</td>
-        <td>{{ user.companyName || '-' }}</td>
-        <td>{{ user.contactPerson || '-' }}</td>
-        <td>{{ user.email || '-' }}</td>
-        <td>{{ user.isActive || '-' }}</td>
-        <td>{{ user.registrationDate || '-' | date }}</td>
-        <td (click)="$event.stopPropagation()">
-          <div class="flex gap-2">
-            @if (isUserAttached(user.id)) {
-              <p-button severity="danger" (click)="detachUsers(user.id)">Detach</p-button>
-            } @else {
-              <p-button (click)="appendUsers(user.id)">Append</p-button>
-            }
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+  @if (automationStore.automation()?.id) {
+    <h1>Users</h1>
+    <p-table
+      [value]="userStore.users()?.items!"
+      [paginator]="true"
+      [rows]="5"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [rowHover]="true"
+      selectionMode="single"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Id</th>
+          <th>Address</th>
+          <th>Billing</th>
+          <th>Company name</th>
+          <th>Contact Person</th>
+          <th>Email</th>
+          <th>Actvie</th>
+          <th>Registration date</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-user>
+        <tr class="cursor-pointer" [pSelectableRow]="user">
+          <td>{{ user.id }}</td>
+          <td>{{ user.address || '-' }}</td>
+          <td>{{ user.billing?.account || '-' }}</td>
+          <td>{{ user.companyName || '-' }}</td>
+          <td>{{ user.contactPerson || '-' }}</td>
+          <td>{{ user.email || '-' }}</td>
+          <td>{{ user.isActive || '-' }}</td>
+          <td>{{ user.registrationDate || '-' | date }}</td>
+          <td (click)="$event.stopPropagation()">
+            <div class="flex gap-2">
+              @if (isUserAttached(user.id)) {
+                <p-button severity="danger" (click)="detachUsers(user.id)">Detach</p-button>
+              } @else {
+                <p-button (click)="appendUsers(user.id)">Append</p-button>
+              }
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </div>

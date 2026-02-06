@@ -37,6 +37,10 @@ export class SideMenuComponent implements OnInit {
     this.sideMenuService.isSideMenuCollapsed.set(!this.sideMenuService.isSideMenuCollapsed());
   }
 
+  roleCompatability(roles: Array<string>): boolean {
+    return roles.includes(this.userStore.currentUser().role)
+  }
+
   ngOnInit(): void {
     if (window.innerWidth < this.MOBILE_BREAKPOINT) {
       this.isMobileView = true;
