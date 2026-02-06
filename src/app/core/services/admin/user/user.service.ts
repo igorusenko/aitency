@@ -23,4 +23,9 @@ export class UserService {
         this.userStore.currentUser.set(user);
       }));
   }
+
+  getUserById(id: string) {
+    return this.http.get<any>(`${this.apiUrl}/user/${id}`)
+      .pipe(tap(user => this.userStore.userById.set(user)));
+  }
 }

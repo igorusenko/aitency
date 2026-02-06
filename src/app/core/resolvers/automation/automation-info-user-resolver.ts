@@ -6,7 +6,8 @@ import {UserService} from '../../services/admin/user/user.service';
 import {UserStore} from '../../services/admin/user/user.store';
 import {AutomationAdminService} from '../../services/admin/automation/automation-admin.service';
 
-export const automationResolver: ResolveFn<IAutomation> = (route, state) => {
+export const automationResolver: ResolveFn<IAutomation | boolean> = (route, state) => {
+  if (route.params['id'] === 'new') return true
   const automationUserService = inject(AutomationUserService);
   const automationAdminService = inject(AutomationAdminService);
   const userStore = inject(UserStore);

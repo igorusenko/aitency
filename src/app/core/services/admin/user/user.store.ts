@@ -6,4 +6,5 @@ import {Injectable, signal, WritableSignal} from '@angular/core';
 export class UserStore {
   currentUser: WritableSignal<any> = signal(undefined);
   users: WritableSignal<any> = signal(undefined);
+  userById: WritableSignal<any> = signal(undefined);
 }

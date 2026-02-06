@@ -1,0 +1,44 @@
+<div class="flex flex-col gap-4">
+  <p-panel [toggleable]="true">
+    <ng-template #header>
+      <div class="flex items-center gap-2">
+        <span class="font-bold">User Info</span>
+      </div>
+    </ng-template>
+    <ng-template #icons>
+      <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+    </ng-template>
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-2">
+        <div class="flex items-center gap-2">
+          <p>ID:</p>
+          <p>{{userStore.userById().id}}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>Email:</p>
+          <p>{{userStore.userById().email || '-'}}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>Registration date:</p>
+          <p>{{userStore.userById().registrationDate | date }}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>User address:</p>
+          <p>{{userStore.userById().address || '-'}}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>User billing:</p>
+          <p>{{userStore.userById().billing || '-'}}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>Company name:</p>
+          <p>{{userStore.userById().companyName || '-'}}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p>Contact person:</p>
+          <p>{{userStore.userById().contactPerson || '-'}}</p>
+        </div>
+      </div>
+    </div>
+  </p-panel>
+</div>
