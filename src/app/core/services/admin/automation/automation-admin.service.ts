@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
-import {environment} from '../../../../../environments/environment.development';
+import {environment} from '../../../../../environments/environment';
 import {IPaginatedList} from '../../../interfaces/paginated-list-interface';
 import {IAutomation} from '../../../interfaces/automations/automation-interface';
 import {UserService} from '../user/user.service';

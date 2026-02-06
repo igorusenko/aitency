@@ -106,12 +106,4 @@ export class AssistantService {
       this.systems[handoffToHumanIndex].active = this.handoffToHumanProcessing();
     });
   }
-
-  getVoices(): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${environment.openAiApiKey}`,
-      'Content-Type': 'application/json'
-    });
-    return this.http.get('https://api.openai.com/v1/voices', { headers })
-  }
 }

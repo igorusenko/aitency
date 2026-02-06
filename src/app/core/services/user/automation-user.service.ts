@@ -1,9 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UserService} from '../admin/user/user.service';
 import {Observable, tap} from 'rxjs';
 import {IAutomation} from '../../interfaces/automations/automation-interface';
-import {environment} from '../../../../environments/environment.development';
+import {environment} from '../../../../environments/environment';
 import {AutomationsStore} from '../../stores/automations.store';
 
 @Injectable({

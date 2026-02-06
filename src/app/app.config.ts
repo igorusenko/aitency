@@ -12,7 +12,6 @@ import {CustomPreset} from '../theme';
 import {authInterceptor} from './core/interceptors/auth-interceptor';
 import {CsrfService} from './core/services/admin/csrf/csrf.service';
 import {catchError, concatMap, of} from 'rxjs';
-import {AuthService} from './core/services/admin/auth/auth.service';
 import {UserService} from './core/services/admin/user/user.service';
 import {MessageService} from 'primeng/api';
 
