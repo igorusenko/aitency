@@ -1,0 +1,49 @@
+<div class="login-wrapper gap-4">
+  <img src="https://aitency.com/wp-content/uploads/2025/01/AITENCY-Logo.svg" alt="">
+  <div class="login p-6">
+    <form [formGroup]="registerForm" (ngSubmit)="register()" class="flex flex-col gap-4 w-full sm:w-56">
+      <h3 class="text-center text-xl">Register</h3>
+
+      <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+          <input class="w-full" pInputText type="text" id="fullName" formControlName="fullName" autocomplete="off" [invalid]="isInvalidControl('fullName')" />
+          <label for="fullName">Full name</label>
+        </p-floatlabel>
+        @if (isInvalidControl('fullName')) {
+          <p-message severity="error" size="small" variant="simple">Full name is required.</p-message>
+        }
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <p-floatlabel variant="on">
+          <input class="w-full" pInputText type="text" id="email" formControlName="email" autocomplete="off" [invalid]="isInvalidControl('email')" />
+          <label for="email">Email</label>
+        </p-floatlabel>
+        @if (isInvalidControl('email')) {
+          <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
+        }
+      </div>
+
+      <div class="flex items-center gap-2">
+        <p-checkbox [formControlName]="'terms'" [binary]="true" [inputId]="'terms'" [invalid]="isInvalidControl('terms')" />
+        <label [for]="'terms'">Terms & Privacy</label>
+        @if (isInvalidControl('terms')) {
+          <p-message severity="error" size="small" variant="simple">Terms is required.</p-message>
+        }
+      </div>
+<!--      <div class="flex flex-col gap-1">-->
+<!--        <input pInputText placeholder="Password" name="password" formControlName="password"-->
+<!--               [invalid]="control('password').invalid && control('password').touched" required />-->
+<!--        @if (control('password').invalid && control('password').touched) {-->
+<!--          <p-message severity="error" size="small" variant="simple">Password is required.</p-message>-->
+<!--        }-->
+<!--      </div>-->
+      <button pButton severity="primary" type="submit"><span pButtonLabel>Register</span></button>
+      <div class="flex justify-between">
+        <p>Already have an account?</p>
+        <a [routerLink]="['/login']">Login</a>
+      </div>
+    </form>
+  </div>
+
+</div>

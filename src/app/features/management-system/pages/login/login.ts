@@ -16,6 +16,7 @@ import {UserService} from '../../../../core/services/admin/user/user.service';
     FormsModule,
     InputTextModule,
     ReactiveFormsModule,
+    RouterLink,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -25,13 +26,11 @@ export class Login implements OnInit {
   authService = inject(AuthService);
   userService = inject(UserService);
   router = inject(Router);
-  loginForm: FormGroup
-
-  constructor(private formBuilder: FormBuilder) {
-  }
+  fb = inject(FormBuilder);
+  loginForm: FormGroup;
 
   ngOnInit() {
-    this.loginForm = this.formBuilder.group({
+    this.loginForm = this.fb.group({
       email: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),
     });

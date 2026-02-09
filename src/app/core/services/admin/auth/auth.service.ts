@@ -18,6 +18,10 @@ export class AuthService {
     })
   }
 
+  register(): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/sign-up`, {})
+  }
+
   logout(): void {
     this.http.post<any>(`${this.apiUrl}/auth/sign-out`, {}).subscribe(x => {
       this.router.navigate(['/login']);
