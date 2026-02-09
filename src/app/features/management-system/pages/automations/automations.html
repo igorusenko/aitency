@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-4">
   @if (automationAdminStore.automations()?.items?.length! > 0) {
     <p-table
+      class="p-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
       [value]="automationAdminStore.automations()?.items!"
       [paginator]="true"
       [rows]="5"
@@ -38,8 +39,13 @@
       <ng-template #body let-automation>
         <tr class="cursor-pointer" [pSelectableRow]="automation">
           <td>{{ automation.id }}</td>
-          <td>{{ automation.isActive }}</td>
-          <td>{{ automation.isDemo }}</td>
+          <td class="right">
+            <span class="pill" [ngClass]="[automation.isActive ? 'good' : 'warn']">{{ (automation.isActive ? 'Active' : 'Disabled') | uppercase }}</span>
+          </td>
+<!--          <td>{{ automation.isActive }}</td>-->
+          <td>
+            <span class="pill" [ngClass]="[automation.isDemo ? 'warn' : 'good']">{{ (automation.isDemo ? 'Demo' : 'Production') | uppercase }}</span>
+          </td>
           <td>{{ automation.serverId }}</td>
           @if (userStore.currentUser().role === 'Admin') {
           <td (click)="$event.stopPropagation()">

@@ -5,14 +5,14 @@ export const CustomPreset = definePreset(Aura, {
   components: {
     datatable: {
       headerCell: {
-        background: '#1b1b3a',
+        background: 'transparent',
         borderColor: 'rgba(255,255,255,.08)',
         color: 'white',
         hoverBackground: '#21213e',
         hoverColor: 'white',
       },
       row: {
-        background: '#1b1b3a',
+        background: 'transparent',
         color: 'white',
         hoverBackground: '#21213e',
         hoverColor: 'white',
@@ -23,7 +23,7 @@ export const CustomPreset = definePreset(Aura, {
     },
     paginator: {
       root: {
-        background: '#1b1b3a',
+        background: 'transparent',
         borderRadius: '0'
       }
     },

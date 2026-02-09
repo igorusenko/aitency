@@ -14,6 +14,7 @@ import {CsrfService} from './core/services/admin/csrf/csrf.service';
 import {catchError, concatMap, of} from 'rxjs';
 import {UserService} from './core/services/admin/user/user.service';
 import {MessageService} from 'primeng/api';
+import {AuthService} from './core/services/admin/auth/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,8 +31,10 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const csrfService = inject(CsrfService);
       const userService = inject(UserService);
+      const authService = inject(AuthService);
       return csrfService.loadCsrfToken()
         .pipe(
+          concatMap(() => authService.validateAccessToken()),
           concatMap(() => userService.getCurrentUser()),
           catchError(( ) => of(null))
         )

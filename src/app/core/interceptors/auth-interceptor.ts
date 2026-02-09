@@ -10,7 +10,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const csrfService = inject(CsrfService);
   const router = inject(Router);
   req = req.clone({ withCredentials: true });
-
   if (['POST','PUT','DELETE','PATCH'].includes(req.method)) {
    return csrfService.loadCsrfToken()
      .pipe(
@@ -32,8 +31,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 export const authErrorHandler =
   (router: Router) =>
     (error: HttpErrorResponse) => {
-      if (error.status === 401) {
-        // router.navigate(['/login']);
+
+      if (error.status === 401 && router.url !== '/create-password') {
+        router.navigate(['/login']);
       }
 
       return throwError(() => error);

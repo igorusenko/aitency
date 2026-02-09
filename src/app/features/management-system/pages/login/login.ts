@@ -7,6 +7,7 @@ import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../core/services/admin/auth/auth.service';
 import {concatMap} from 'rxjs';
 import {UserService} from '../../../../core/services/admin/user/user.service';
+import {FloatLabel} from 'primeng/floatlabel';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import {UserService} from '../../../../core/services/admin/user/user.service';
     InputTextModule,
     ReactiveFormsModule,
     RouterLink,
+    FloatLabel,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -32,7 +34,7 @@ export class Login implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
     });
   }
@@ -51,6 +53,11 @@ export class Login implements OnInit {
       .subscribe(user => {
         this.router.navigate(['/home'])
     });
+  }
+
+  isInvalidControl(controlName: string) {
+    const control = this.loginForm.get(controlName);
+    return control?.invalid && (control.touched || this.formSubmitted);
   }
 
 }

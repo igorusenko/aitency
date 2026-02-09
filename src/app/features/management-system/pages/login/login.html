@@ -3,20 +3,27 @@
   <div class="login p-6">
     <form [formGroup]="loginForm" (ngSubmit)="login()" class="flex flex-col gap-4 w-full sm:w-56">
       <h3 class="text-center text-xl">Login</h3>
+
       <div class="flex flex-col gap-1">
-        <input pInputText placeholder="Username" name="username" formControlName="email"
-               [invalid]="control('email').invalid && control('email').touched" required />
-        @if (control('email').invalid && control('email').touched) {
-          <p-message severity="error" size="small" variant="simple">Username is required.</p-message>
+        <p-floatlabel variant="on">
+          <input class="w-full" pInputText type="text" id="email" formControlName="email" autocomplete="off" [invalid]="isInvalidControl('email')" />
+          <label for="email">Email</label>
+        </p-floatlabel>
+        @if (isInvalidControl('email')) {
+          <p-message severity="error" size="small" variant="simple">Email is required. Must be correct.</p-message>
         }
       </div>
+
       <div class="flex flex-col gap-1">
-        <input pInputText placeholder="Password" name="password" formControlName="password"
-               [invalid]="control('password').invalid && control('password').touched" required />
-        @if (control('password').invalid && control('password').touched) {
-          <p-message severity="error" size="small" variant="simple">Password is required.</p-message>
+        <p-floatlabel variant="on">
+          <input class="w-full" pInputText type="password" id="password" formControlName="password" autocomplete="off" [invalid]="isInvalidControl('password')" />
+          <label for="password">Password</label>
+        </p-floatlabel>
+        @if (isInvalidControl('password')) {
+          <p-message severity="error" size="small" variant="simple">Full name is required.</p-message>
         }
       </div>
+
       <button pButton severity="primary" type="submit"><span pButtonLabel>Submit</span></button>
       <div class="flex justify-between">
         <p>Don’t have an account yet?</p>

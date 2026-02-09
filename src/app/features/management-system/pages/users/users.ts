@@ -3,7 +3,7 @@ import {Button} from 'primeng/button';
 import {TableModule, TableRowSelectEvent} from 'primeng/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {UserStore} from '../../../../core/services/admin/user/user.store';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass, UpperCasePipe} from '@angular/common';
 import {UserService} from '../../../../core/services/admin/user/user.service';
 import {MessageService} from 'primeng/api';
 
@@ -13,7 +13,9 @@ import {MessageService} from 'primeng/api';
     Button,
     TableModule,
     RouterLink,
-    DatePipe
+    DatePipe,
+    UpperCasePipe,
+    NgClass
   ],
   templateUrl: './users.html',
   styleUrl: './users.scss',

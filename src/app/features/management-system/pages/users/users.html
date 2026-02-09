@@ -1,6 +1,7 @@
 <div class="flex flex-col gap-4">
   @if (usersStore.users()?.items?.length! > 0) {
     <p-table
+      class="p-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
       [value]="usersStore.users()?.items!"
       [paginator]="true"
       [rows]="5"
@@ -31,12 +32,14 @@
           <td>{{ user.companyName || '-' }}</td>
           <td>{{ user.contactPerson || '-' }}</td>
           <td>{{ user.email || '-' }}</td>
-          <td>{{ user.isActive || '-' }}</td>
+          <td>
+            <span class="pill" [ngClass]="[user.isActive ? 'good' : 'warn']">{{ (user.isActive ? 'Active' : 'Disabled') | uppercase }}</span>
+          </td>
           <td>{{ user.registrationDate || '-' | date }}</td>
           <td (click)="$event.stopPropagation()">
             <div class="flex gap-2">
               <p-button [routerLink]="['edit', user.id]">Edit</p-button>
-              <p-button severity="danger" (click)="deleteUser(user.id)">Delete</p-button>
+              <p-button severity="danger" (click)="deleteUser(user.id)" [disabled]="user.id === usersStore.currentUser().id">Delete</p-button>
             </div>
           </td>
         </tr>
