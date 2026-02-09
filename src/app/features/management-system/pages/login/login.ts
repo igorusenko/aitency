@@ -28,6 +28,7 @@ export class Login implements OnInit {
   router = inject(Router);
   fb = inject(FormBuilder);
   loginForm: FormGroup;
+  formSubmitted: boolean = false;
 
   ngOnInit() {
     this.loginForm = this.fb.group({
@@ -42,6 +43,7 @@ export class Login implements OnInit {
 
   login(): void {
     const {email, password} = this.loginForm.value;
+    this.formSubmitted = true;
     this.authService.login(email, password)
       .pipe(concatMap(x => {
         return this.userService.getCurrentUser()

@@ -86,5 +86,11 @@ export const routes: Routes = [
     title: 'Register',
     loadComponent: () =>
       import('./features/management-system/pages/register/register').then((m) => m.Register),
+  },
+  {
+    path: 'create-password',
+    title: 'Create password',
+    loadComponent: () =>
+      import('./features/management-system/pages/register/create-password/create-password').then((m) => m.CreatePassword),
   }
 ];

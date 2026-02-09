@@ -33,7 +33,7 @@ export const authErrorHandler =
   (router: Router) =>
     (error: HttpErrorResponse) => {
       if (error.status === 401) {
-        router.navigate(['/login']);
+        // router.navigate(['/login']);
       }
 
       return throwError(() => error);
