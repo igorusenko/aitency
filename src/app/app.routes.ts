@@ -32,6 +32,12 @@ export const routes: Routes = [
           import('./features/management-system/pages/home/home').then((m) => m.Home),
       },
       {
+        path: 'profile',
+        title: 'Profile',
+        loadComponent: () =>
+          import('./features/management-system/profile/profile').then((m) => m.Profile),
+      },
+      {
         path: 'automations',
         title: 'Automations',
         loadComponent: () =>

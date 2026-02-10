@@ -31,6 +31,6 @@ export const CustomPreset = definePreset(Aura, {
       root: {
         background: '#1b1b3a'
       }
-    }
+    },
   }
 });
