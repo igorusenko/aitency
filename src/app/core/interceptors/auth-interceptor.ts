@@ -32,8 +32,8 @@ export const authErrorHandler =
   (router: Router) =>
     (error: HttpErrorResponse) => {
 
-      if (error.status === 401 && router.url !== '/create-password') {
-        router.navigate(['/login']);
+      if (error.status === 401) {
+        // router.navigate(['/login']);
       }
 
       return throwError(() => error);

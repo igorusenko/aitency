@@ -3,6 +3,7 @@ import {automationsResolver} from './core/resolvers/automation/automations-resol
 import {automationResolver} from './core/resolvers/automation/automation-info-user-resolver';
 import {usersResolver} from './core/resolvers/user/users-resolver';
 import {userResolver} from './core/resolvers/user/user-resolver';
+import {confirmEmailResolver} from './core/resolvers/register/confirm-email-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -30,12 +31,6 @@ export const routes: Routes = [
         title: 'VoiceAssistant',
         loadComponent: () =>
           import('./features/management-system/pages/home/home').then((m) => m.Home),
-      },
-      {
-        path: 'profile',
-        title: 'Profile',
-        loadComponent: () =>
-          import('./features/management-system/profile/profile').then((m) => m.Profile),
       },
       {
         path: 'automations',
@@ -94,9 +89,16 @@ export const routes: Routes = [
       import('./features/management-system/pages/register/register').then((m) => m.Register),
   },
   {
-    path: 'create-password',
+    path: 'confirm-email',
     title: 'Create password',
     loadComponent: () =>
       import('./features/management-system/pages/register/create-password/create-password').then((m) => m.CreatePassword),
-  }
+    resolve: { verify: confirmEmailResolver }
+  },
+  {
+    path: 'onboarding',
+    title: 'Onboarding',
+    loadComponent: () =>
+      import('./features/management-system/profile/profile').then((m) => m.Profile),
+  },
 ];

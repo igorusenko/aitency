@@ -7,10 +7,11 @@ import {Checkbox} from 'primeng/checkbox';
 import {Message} from 'primeng/message';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [StepperModule, Button, TabsModule, ReactiveFormsModule, Checkbox, Message, FloatLabel, InputText],
+  imports: [StepperModule, Button, TabsModule, ReactiveFormsModule, Checkbox, Message, FloatLabel, InputText, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })

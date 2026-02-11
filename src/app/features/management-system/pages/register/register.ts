@@ -9,6 +9,8 @@ import {Router, RouterLink} from '@angular/router';
 import {concatMap} from 'rxjs';
 import {Checkbox} from 'primeng/checkbox';
 import {FloatLabel} from 'primeng/floatlabel';
+import {IRegistration} from '../../../../core/interfaces/registration.interface';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-register',
@@ -31,13 +33,17 @@ export class Register implements OnInit{
   userService = inject(UserService);
   router = inject(Router);
   fb = inject(FormBuilder);
+  messageService = inject(MessageService);
   registerForm: FormGroup;
   formSubmitted: boolean = false;
+  registrationCompleted: boolean = false;
 
   ngOnInit() {
     this.registerForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      fullName: new FormControl('', [Validators.required]),
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      middleName: new FormControl(''),
       terms: new FormControl(null, Validators.requiredTrue),
     });
   }
@@ -48,14 +54,23 @@ export class Register implements OnInit{
 
   register(): void {
     this.formSubmitted = true;
-    const {email, password} = this.registerForm.value;
-    // this.authService.login(email, password)
-    //   .pipe(concatMap(x => {
-    //     return this.userService.getCurrentUser()
-    //   }))
-    //   .subscribe(user => {
-    //     this.router.navigate(['/home'])
-    //   });
+    if (this.registerForm.valid) {
+      const {email, firstName, lastName, middleName, terms} = this.registerForm.value;
+      const registrationModel: IRegistration = {
+        fullName: {
+          firstName,
+          lastName,
+          middleName
+        },
+        email,
+        termsAcceptedAt: new Date(),
+      }
+      this.authService.register(registrationModel)
+        .subscribe(resp => {
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Please check your email to complete your registration', life: 2000 });
+          this.registrationCompleted = true;
+        });
+    }
   }
 
   isInvalidControl(controlName: string) {

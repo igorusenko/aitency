@@ -3,6 +3,7 @@ import {environment} from '../../../../../environments/environment';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {IRegistration, ISetPassword} from '../../../interfaces/registration.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -18,8 +19,16 @@ export class AuthService {
     })
   }
 
-  register(): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/sign-up`, {})
+  register(registrationModel: IRegistration): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, registrationModel)
+  }
+
+  verifyPassword(token: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/set-password/verify?token=${token}`)
+  }
+
+  setPassword(setPasswordModel: ISetPassword): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/set-password`, setPasswordModel)
   }
 
   logout(): void {
