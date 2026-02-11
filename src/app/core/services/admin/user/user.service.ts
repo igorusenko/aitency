@@ -14,35 +14,35 @@ export class UserService {
   private readonly apiUrl = environment.apiUrl;
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/user`)
+    return this.http.get<any[]>(`${this.apiUrl}/users`)
       .pipe(tap(users => this.userStore.users.set(users)));
   }
 
   getCurrentUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/user/me`)
+    return this.http.get<any>(`${this.apiUrl}/users/me`)
       .pipe(tap(user => {
         this.userStore.currentUser.set(user);
       }));
   }
 
   getUserById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/user/${id}`)
+    return this.http.get<any>(`${this.apiUrl}/users/${id}`)
       .pipe(tap(user => this.userStore.userById.set(user)));
   }
 
   createUser(user: IUser): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/user`, user);
+    return this.http.post<any>(`${this.apiUrl}/users`, user);
   }
 
   updateUser(user: IUser): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/user`, user);
+    return this.http.put<any>(`${this.apiUrl}/users`, user);
   }
 
   deleteUser(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/user/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/users/${id}`);
   }
 
   getUserPassword(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/user/${this.userStore.userById().id}/password`)
+    return this.http.get<any>(`${this.apiUrl}/users/${this.userStore.userById().id}/password`)
   }
 }

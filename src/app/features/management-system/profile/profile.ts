@@ -18,16 +18,70 @@ export class Profile implements OnInit {
   fb = inject(FormBuilder);
   privateForm: FormGroup;
   companyForm: FormGroup;
+  businessForm: FormGroup;
   privateFormSubmitted: boolean = false;
   companyFormSubmitted: boolean = false;
   tabs = [
-    { title: 'Private person', value: '0', content: 'Tab 1 Content' },
-    { title: 'Company', value: '1', content: 'Tab 2 Content' },
+    { title: 'Private person', value: 0, content: 'Tab 1 Content' },
+    { title: 'Company', value: 1, content: 'Tab 2 Content' },
   ];
+  tabValue = 0;
+  stepValue = 1;
+
+  industries = [
+    'Healthcare / Medical',
+    'Dental',
+    'Aesthetics',
+    'Real Estate',
+    'Hospitality',
+    'Retail',
+    'E-commerce',
+    'Professional services',
+    'Construction',
+    'Automotive',
+    'Education',
+    'Logistics',
+    'Beauty',
+    'Wellness',
+    'Manufacturing',
+    'IT / Software',
+    'Other'
+  ];
+  companySizes = [
+    'Solo',
+    '2-10',
+    '11-50',
+    '51-200',
+    '200+',
+  ];
+  businessModels = [
+    'online',
+    'offline',
+    'hybrid',
+  ];
+  mainGoals = [
+    'Get more leads',
+    'Respond faster to inquiries',
+    'Automate support',
+    'Automate bookings',
+    'Improve reporting',
+    'Reduce workload',
+    'Other'
+  ];
+  crms = [
+    'None',
+    'HubSpot',
+    'Salesforce',
+    'Zoho',
+    'Odoo',
+    'Pipedrive',
+    'Other',
+  ]
 
   ngOnInit() {
     this.initPrivateForm();
     this.initCompanyForm();
+    this.initBusinessForm();
   }
 
   initPrivateForm(): void {
@@ -51,6 +105,17 @@ export class Profile implements OnInit {
       address: new FormControl(''),
     })
     this.onCompanyInvoiceChanged();
+  }
+
+  initBusinessForm(): void {
+    this.businessForm = this.fb.group({
+      industry: new FormControl(null, Validators.required),
+      companySize: new FormControl(null, Validators.required),
+      businessModel: new FormControl(null, Validators.required),
+      mainGoal: new FormControl(null, Validators.required),
+      monthlyInquiries: new FormControl(null),
+      crm: new FormControl(null),
+    })
   }
 
   onPrivateInvoiceChanged(): void {
@@ -102,6 +167,7 @@ export class Profile implements OnInit {
       activateCallback(2);
     }
   }
+
   nextCompanyStep(activateCallback: any): void {
     this.companyFormSubmitted = true;
     console.log(this.companyForm)
@@ -109,5 +175,9 @@ export class Profile implements OnInit {
       this.privateForm.reset();
       activateCallback(2);
     }
+  }
+
+  onStepChange(stepValue: number | undefined): void {
+    // if (stepValue === 2) this.initBusinessForm();
   }
 }

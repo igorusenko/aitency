@@ -14,7 +14,7 @@ export class AutomationUserService {
   private readonly apiUrl = environment.apiUrl;
 
   getAutomationUser(id: string): Observable<IAutomation> {
-    return this.http.get<IAutomation>(`${this.apiUrl}/automation/${id}`)
+    return this.http.get<IAutomation>(`${this.apiUrl}/automations/${id}`)
       .pipe(tap(x => this.automationsStore.automation.set(x)));
   }
 }

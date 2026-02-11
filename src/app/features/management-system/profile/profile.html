@@ -1,4 +1,4 @@
-<p-stepper [value]="1" class="basis-[50rem]" [linear]="true">
+<p-stepper [(value)]="stepValue" (valueChange)="onStepChange($event)" class="basis-[50rem]" [linear]="true">
   <p-step-list>
     <p-step [value]="1">Onboarding I</p-step>
     <p-step [value]="2">Onboarding II</p-step>
@@ -8,7 +8,7 @@
       <ng-template #content let-activateCallback="activateCallback">
         <div class="flex flex-col h-48">
           <div class="card">
-            <p-tabs value="0">
+            <p-tabs [(value)]="tabValue">
               <p-tablist>
                 @for (tab of tabs; track tab.value) {
                   <p-tab [value]="tab.value">{{ tab.title }}</p-tab>
@@ -18,7 +18,7 @@
                 @for (tab of tabs; let i = $index; track tab.value) {
                   <p-tabpanel [value]="tab.value">
                     @switch (tab.value) {
-                      @case ('0') {
+                      @case (0) {
                         <form action="" [formGroup]="privateForm" class="flex flex-col gap-4">
                           <div class="flex items-center gap-2">
                             <p-checkbox [formControlName]="'invoice'" [binary]="true" [inputId]="'invoice'"/>
@@ -78,59 +78,67 @@
                           }
                         </form>
 
-                        <div class="flex pt-4 justify-end">
-                          <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextPrivateStep(activateCallback)" />
+                        <div class="flex pt-4 justify-between">
+                          <div class="flex pt-4 justify-end">
+                            <p-button label="Skip for now" severity="secondary"/>
+                          </div>
+
+                          <div class="flex pt-4 justify-end">
+                            <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextPrivateStep(activateCallback)" />
+                          </div>
                         </div>
                       }
-                      @case ('1') {
-                        <form action="" [formGroup]="companyForm" class="flex flex-col gap-4">
+                      @case (1) {
+                        @if (companyForm) {
+                          <form action="" [formGroup]="companyForm" class="flex flex-col gap-4">
 
-                          <div class="flex items-center gap-2">
-                            <p-checkbox [formControlName]="'invoice'" [binary]="true" [inputId]="'invoice-company'"/>
-                            <label [for]="'invoice-company'">I need an invoice</label>
-                          </div>
+                            <div class="flex items-center gap-2">
+                              <p-checkbox [formControlName]="'invoice'" [binary]="true" [inputId]="'invoice-company'"/>
+                              <label [for]="'invoice-company'">I need an invoice</label>
+                            </div>
 
-                          <div class="flex flex-col gap-1">
-                            <p-floatlabel variant="on">
-                              <input class="w-full" pInputText type="text" id="name" formControlName="name" autocomplete="off" [invalid]="isInvalidCompanyControl('name')" />
-                              <label for="name">Full name</label>
-                            </p-floatlabel>
-                            @if (isInvalidCompanyControl('name')) {
-                              <p-message severity="error" size="small" variant="simple">Company name is required.</p-message>
-                            }
-                          </div>
+                            <div class="flex flex-col gap-1">
+                              <p-floatlabel variant="on">
+                                <input class="w-full" pInputText type="text" id="name" formControlName="name" autocomplete="off" [invalid]="isInvalidCompanyControl('name')" />
+                                <label for="name">Full name</label>
+                              </p-floatlabel>
+                              @if (isInvalidCompanyControl('name')) {
+                                <p-message severity="error" size="small" variant="simple">Company name is required.</p-message>
+                              }
+                            </div>
 
-                          <div class="flex flex-col gap-1">
-                            <p-floatlabel variant="on">
-                              <input class="w-full" pInputText type="text" id="website" formControlName="website" autocomplete="off" [invalid]="isInvalidCompanyControl('website')" />
-                              <label for="website">Website</label>
-                            </p-floatlabel>
-                            @if (isInvalidCompanyControl('website')) {
-                              <p-message severity="error" size="small" variant="simple">Website is required.</p-message>
-                            }
-                          </div>
+                            <div class="flex flex-col gap-1">
+                              <p-floatlabel variant="on">
+                                <input class="w-full" pInputText type="text" id="website" formControlName="website" autocomplete="off" [invalid]="isInvalidCompanyControl('website')" />
+                                <label for="website">Website</label>
+                              </p-floatlabel>
+                              @if (isInvalidCompanyControl('website')) {
+                                <p-message severity="error" size="small" variant="simple">Website is required.</p-message>
+                              }
+                            </div>
 
-                          <div class="flex flex-col gap-1">
-                            <p-floatlabel variant="on">
-                              <input class="w-full" pInputText type="text" id="tax" formControlName="tax" autocomplete="off" [invalid]="isInvalidCompanyControl('tax')" />
-                              <label for="tax">Tax</label>
-                            </p-floatlabel>
-                            @if (isInvalidCompanyControl('tax')) {
-                              <p-message severity="error" size="small" variant="simple">Tax is required.</p-message>
+                            <div class="flex flex-col gap-1">
+                              <p-floatlabel variant="on">
+                                <input class="w-full" pInputText type="text" id="tax" formControlName="tax" autocomplete="off" [invalid]="isInvalidCompanyControl('tax')" />
+                                <label for="tax">Tax</label>
+                              </p-floatlabel>
+                              @if (isInvalidCompanyControl('tax')) {
+                                <p-message severity="error" size="small" variant="simple">Tax is required.</p-message>
+                              }
+                            </div>
+                            @if (companyForm.value.invoice) {
+                              <div class="flex flex-col gap-1">
+                                <p-floatlabel variant="on">
+                                  <input class="w-full" pInputText type="text" id="address" formControlName="address" autocomplete="off" [invalid]="isInvalidCompanyControl('address')" />
+                                  <label for="address">Address</label>
+                                </p-floatlabel>
+                                @if (isInvalidCompanyControl('address')) {
+                                  <p-message severity="error" size="small" variant="simple">Company address is required.</p-message>
+                                }
+                              </div>
                             }
-                          </div>
-                          @if (companyForm.value.invoice) {
-                          <div class="flex flex-col gap-1">
-                            <p-floatlabel variant="on">
-                              <input class="w-full" pInputText type="text" id="address" formControlName="address" autocomplete="off" [invalid]="isInvalidCompanyControl('address')" />
-                              <label for="address">Address</label>
-                            </p-floatlabel>
-                            @if (isInvalidCompanyControl('address')) {
-                              <p-message severity="error" size="small" variant="simple">Company address is required.</p-message>
-                            }
-                          </div>
-                          }
-                        </form>
+                          </form>
+                        }
 
                         <div class="flex pt-4 justify-end">
                           <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCompanyStep(activateCallback)" />
@@ -149,10 +157,17 @@
     <p-step-panel [value]="2">
       <ng-template #content let-activateCallback="activateCallback">
         <div class="flex flex-col h-48">
-          <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">Content II</div>
+          <div class="card">
+            <form [formGroup]="businessForm" class="flex flex-col gap-4">
+
+            </form>
+          </div>
         </div>
         <div class="flex pt-6 justify-between">
-          <p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
+          <div class="flex gap-2">
+            <p-button label="Back" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
+            <p-button label="Skip for now" severity="secondary" />
+          </div>
           <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(3)" />
         </div>
       </ng-template>

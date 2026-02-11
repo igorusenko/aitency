@@ -17,33 +17,33 @@ export class AutomationAdminService {
   private readonly apiUrl = environment.apiUrl;
 
   getAutomations(): Observable<IPaginatedList<IAutomation>> {
-    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automation`).pipe(
+    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automations`).pipe(
       tap(automationsList => this.automationsStore.automations.set(automationsList))
     );
   }
 
   getAutomationAdmin(id: string): Observable<IAutomation> {
-    return this.http.get<IAutomation>(`${this.apiUrl}/automation/admin/${id}`)
+    return this.http.get<IAutomation>(`${this.apiUrl}/automations/admin/${id}`)
       .pipe(tap(x => this.automationsStore.automation.set(x)));
   }
 
   createAutomation(automation: IAutomation): Observable<any> {
-    return this.http.post<IAutomation>(`${this.apiUrl}/automation`, automation);
+    return this.http.post<IAutomation>(`${this.apiUrl}/automations`, automation);
   }
 
   updateAutomation(automation: IAutomation): Observable<any> {
-    return this.http.put<IAutomation>(`${this.apiUrl}/automation`, automation);
+    return this.http.put<IAutomation>(`${this.apiUrl}/automations`, automation);
   }
 
   deleteAutomation(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/automation/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/automations/${id}`);
   }
 
   appendUsers(appendModel: IAppendUserModel): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/automation/users/append`, appendModel);
+    return this.http.patch(`${this.apiUrl}/automations/users/append`, appendModel);
   }
 
   detachUsers(appendModel: IAppendUserModel): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/automation/users/detach`, appendModel);
+    return this.http.patch(`${this.apiUrl}/automations/users/detach`, appendModel);
   }
 }
