@@ -13,7 +13,6 @@ import {MessageService} from 'primeng/api';
     Button,
     TableModule,
     RouterLink,
-    DatePipe,
     UpperCasePipe,
     NgClass
   ],

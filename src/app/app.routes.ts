@@ -4,6 +4,7 @@ import {automationResolver} from './core/resolvers/automation/automation-info-us
 import {usersResolver} from './core/resolvers/user/users-resolver';
 import {userResolver} from './core/resolvers/user/user-resolver';
 import {confirmEmailResolver} from './core/resolvers/register/confirm-email-resolver';
+import {confirmResetPasswordResolver} from './core/resolvers/register/confirm-reset-password-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -96,9 +97,22 @@ export const routes: Routes = [
     resolve: { verify: confirmEmailResolver }
   },
   {
+    path: 'forgot-password',
+    title: 'Forgot password',
+    loadComponent: () =>
+      import('./features/management-system/pages/forgot-password/forgot-password').then((m) => m.ForgotPassword),
+  },
+  {
+    path: 'reset-password',
+    title: 'Reset password',
+    loadComponent: () =>
+      import('./features/management-system/pages/register/create-password/create-password').then((m) => m.CreatePassword),
+    resolve: { verify: confirmResetPasswordResolver }
+  },
+  {
     path: 'onboarding',
     title: 'Onboarding',
     loadComponent: () =>
-      import('./features/management-system/profile/profile').then((m) => m.Profile),
+      import('./features/management-system/onboarding/onboarding').then((m) => m.Onboarding),
   },
 ];

@@ -10,12 +10,12 @@ import {InputText} from 'primeng/inputtext';
 import {RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'app-profile',
+  selector: 'app-onboarding',
   imports: [StepperModule, Button, TabsModule, ReactiveFormsModule, Checkbox, Message, FloatLabel, InputText, RouterLink],
-  templateUrl: './profile.html',
-  styleUrl: './profile.scss',
+  templateUrl: './onboarding.html',
+  styleUrl: './onboarding.scss',
 })
-export class Profile implements OnInit {
+export class Onboarding implements OnInit {
   fb = inject(FormBuilder);
   privateForm: FormGroup;
   companyForm: FormGroup;

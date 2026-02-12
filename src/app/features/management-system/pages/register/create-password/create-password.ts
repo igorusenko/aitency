@@ -47,7 +47,7 @@ export class CreatePassword implements OnInit {
     return this.registerCompleteForm.get(controlName);
   }
 
-  login(): void {
+  confirmPassword(): void {
     const {email, password} = this.registerCompleteForm.value;
     console.log(this.registerCompleteForm)
     this.formSubmitted = true;
@@ -81,12 +81,21 @@ export class CreatePassword implements OnInit {
         password,
         confirmPassword
       }
-      this.authService.setPassword(setPasswordModel)
-        .pipe(concatMap(x => this.userService.getCurrentUser()))
-        .subscribe(x => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration completed!', life: 2000 });
-          this.router.navigate(['/onboarding']);
-      })
+      if (this.route.snapshot.routeConfig?.path === 'reset-password') {
+        this.authService.resetPassword(setPasswordModel)
+          .subscribe(x => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password has been successfully updated!', life: 2000 });
+            this.router.navigate(['/login']);
+          })
+      }
+      else {
+        this.authService.setPassword(setPasswordModel)
+          .pipe(concatMap(x => this.userService.getCurrentUser()))
+          .subscribe(x => {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Registration completed!', life: 2000 });
+            this.router.navigate(['/onboarding']);
+          })
+      }
     }
   }
 

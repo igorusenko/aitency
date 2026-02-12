@@ -5,7 +5,7 @@ import {Toast} from 'primeng/toast';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterModule, SideMenuComponent, Toast],
+  imports: [RouterModule, SideMenuComponent],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
   standalone: true,

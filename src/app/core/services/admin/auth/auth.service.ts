@@ -27,8 +27,20 @@ export class AuthService {
     return this.http.get<any>(`${this.apiUrl}/auth/set-password/verify?token=${token}`)
   }
 
+  verifyResetPassword(token: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/reset-password/verify?token=${token}`)
+  }
+
   setPassword(setPasswordModel: ISetPassword): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/set-password`, setPasswordModel)
+  }
+
+  resetPassword(setPasswordModel: ISetPassword): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/reset-password`, setPasswordModel)
+  }
+
+  forgotPassword(forgotModel: { email: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/forgot-password`, forgotModel)
   }
 
   logout(): void {
