@@ -36,7 +36,7 @@ export class Register implements OnInit{
   messageService = inject(MessageService);
   registerForm: FormGroup;
   formSubmitted: boolean = false;
-  registrationCompleted: boolean = false;
+  checkEmail: boolean = false;
 
   ngOnInit() {
     this.registerForm = this.fb.group({
@@ -68,7 +68,7 @@ export class Register implements OnInit{
       this.authService.register(registrationModel)
         .subscribe(resp => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Please check your email to complete your registration', life: 2000 });
-          this.registrationCompleted = true;
+          this.checkEmail = true;
         });
     }
   }

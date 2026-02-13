@@ -1,6 +1,5 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {UserService} from './core/services/admin/user/user.service';
 import {Toast} from 'primeng/toast';
 
 @Component({

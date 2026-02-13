@@ -7,6 +7,7 @@ import {Message} from 'primeng/message';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {RouterLink} from '@angular/router';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-forgot-password',
@@ -25,6 +26,8 @@ import {RouterLink} from '@angular/router';
 export class ForgotPassword implements OnInit {
   authService = inject(AuthService);
   fb = inject(FormBuilder);
+  messageService = inject(MessageService);
+  checkEmail: boolean = false;
   forgotPasswordForm: FormGroup;
   formSubmitted: boolean = false;
 
@@ -47,7 +50,8 @@ export class ForgotPassword implements OnInit {
     this.formSubmitted = true;
     if (this.forgotPasswordForm.valid)
       this.authService.forgotPassword(this.forgotPasswordForm.value).subscribe(() => {
-
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Please check your email to reset your password', life: 2000 });
+        this.checkEmail = true;
       })
   }
 }
