@@ -10,11 +10,11 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import {CustomPreset} from '../theme';
 import {authInterceptor} from './core/interceptors/auth-interceptor';
-import {CsrfService} from './core/services/admin/csrf/csrf.service';
+import {CsrfService} from './core/services/management-system/csrf/csrf.service';
 import {catchError, concatMap, of} from 'rxjs';
-import {UserService} from './core/services/admin/user/user.service';
+import {UserService} from './core/services/management-system/user/user.service';
 import {MessageService} from 'primeng/api';
-import {AuthService} from './core/services/admin/auth/auth.service';
+import {AuthService} from './core/services/management-system/auth/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

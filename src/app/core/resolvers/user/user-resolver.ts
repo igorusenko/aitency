@@ -1,6 +1,6 @@
 import { ResolveFn } from '@angular/router';
 import {inject} from '@angular/core';
-import {UserService} from '../../services/admin/user/user.service';
+import {UserService} from '../../services/management-system/user/user.service';
 import {Observable} from 'rxjs';
 
 export const userResolver: ResolveFn<Observable<any> | boolean> = (route, state) => {

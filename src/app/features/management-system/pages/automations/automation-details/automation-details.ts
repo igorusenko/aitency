@@ -5,7 +5,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {map} from 'rxjs';
 import {ReactiveFormsModule} from '@angular/forms';
 import {toSignal} from '@angular/core/rxjs-interop';
-import {UserStore} from '../../../../../core/services/admin/user/user.store';
+import {UserStore} from '../../../../../core/services/management-system/user/user.store';
 
 @Component({
   selector: 'app-automation-details',

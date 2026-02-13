@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {AutomationAdminService} from '../../../../core/services/admin/automation/automation-admin.service';
+import {AutomationAdminService} from '../../../../core/services/management-system/automation/automation-admin.service';
 import {TableModule, TableRowSelectEvent} from 'primeng/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IPaginatedList} from '../../../../core/interfaces/paginated-list-interface';
@@ -10,7 +10,7 @@ import {Observable} from 'rxjs';
 import {Button} from 'primeng/button';
 import {MessageService} from 'primeng/api';
 import {AutomationsStore} from '../../../../core/stores/automations.store';
-import {UserStore} from '../../../../core/services/admin/user/user.store';
+import {UserStore} from '../../../../core/services/management-system/user/user.store';
 
 @Component({
   selector: 'app-automations',

@@ -5,7 +5,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {Message} from 'primeng/message';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../../../core/services/admin/auth/auth.service';
+import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {RouterLink} from '@angular/router';
 
 @Component({
@@ -13,7 +13,6 @@ import {RouterLink} from '@angular/router';
   imports: [
     ButtonDirective,
     ButtonLabel,
-    Checkbox,
     FloatLabel,
     InputText,
     Message,

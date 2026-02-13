@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {UserStore} from '../../../../core/services/admin/user/user.store';
+import {UserStore} from '../../../../core/services/management-system/user/user.store';
 
 @Component({
   selector: 'app-home',

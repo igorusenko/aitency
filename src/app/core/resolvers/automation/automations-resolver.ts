@@ -1,6 +1,6 @@
 import { ResolveFn } from '@angular/router';
 import {inject} from '@angular/core';
-import {AutomationAdminService} from '../../services/admin/automation/automation-admin.service';
+import {AutomationAdminService} from '../../services/management-system/automation/automation-admin.service';
 import {IPaginatedList} from '../../interfaces/paginated-list-interface';
 import {IAutomation} from '../../interfaces/automations/automation-interface';
 

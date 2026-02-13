@@ -4,9 +4,9 @@ import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, V
 import {MessageModule} from 'primeng/message';
 import {InputTextModule} from 'primeng/inputtext';
 import {Router, RouterLink} from '@angular/router';
-import {AuthService} from '../../../../core/services/admin/auth/auth.service';
+import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {concatMap} from 'rxjs';
-import {UserService} from '../../../../core/services/admin/user/user.service';
+import {UserService} from '../../../../core/services/management-system/user/user.service';
 import {FloatLabel} from 'primeng/floatlabel';
 
 @Component({

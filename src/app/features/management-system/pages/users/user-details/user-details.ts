@@ -1,9 +1,9 @@
 import {Component, inject} from '@angular/core';
-import {UserStore} from '../../../../../core/services/admin/user/user.store';
+import {UserStore} from '../../../../../core/services/management-system/user/user.store';
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
 import {AsyncPipe, DatePipe} from '@angular/common';
-import {UserService} from '../../../../../core/services/admin/user/user.service';
+import {UserService} from '../../../../../core/services/management-system/user/user.service';
 
 @Component({
   selector: 'app-user-details',
