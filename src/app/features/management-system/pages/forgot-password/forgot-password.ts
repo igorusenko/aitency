@@ -8,17 +8,16 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {RouterLink} from '@angular/router';
 import {MessageService} from 'primeng/api';
+import {Input} from '../../../../shared/input/input';
 
 @Component({
   selector: 'app-forgot-password',
   imports: [
     ButtonDirective,
     ButtonLabel,
-    FloatLabel,
-    InputText,
-    Message,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    Input
   ],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',
@@ -39,11 +38,6 @@ export class ForgotPassword implements OnInit {
     this.forgotPasswordForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     })
-  }
-
-  isInvalidControl(controlName: string) {
-    const control = this.forgotPasswordForm.get(controlName);
-    return control?.invalid && (control.touched || this.formSubmitted);
   }
 
   forgotPassword(): void {

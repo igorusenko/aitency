@@ -5,6 +5,7 @@ import {usersResolver} from './core/resolvers/user/users-resolver';
 import {userResolver} from './core/resolvers/user/user-resolver';
 import {confirmEmailResolver} from './core/resolvers/register/confirm-email-resolver';
 import {confirmResetPasswordResolver} from './core/resolvers/register/confirm-reset-password-resolver';
+import {isAuthenticatedGuard} from './core/guard/authenticated-guard';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: loadLayout,
+    canActivateChild: [isAuthenticatedGuard],
     children: [
       {
         path: '',

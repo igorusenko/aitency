@@ -38,7 +38,7 @@
           <td (click)="$event.stopPropagation()">
             <div class="flex gap-2">
               <p-button [routerLink]="['edit', user.id]">Edit</p-button>
-              <p-button severity="danger" (click)="deleteUser(user.id)" [disabled]="user.id === usersStore.currentUser().id">Delete</p-button>
+<!--              <p-button severity="danger" (click)="deleteUser(user.id)" [disabled]="user.id === usersStore.currentUser().id">Delete</p-button>-->
             </div>
           </td>
         </tr>

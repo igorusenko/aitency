@@ -1,16 +1,14 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ButtonDirective, ButtonLabel} from "primeng/button";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputText} from "primeng/inputtext";
 import {Message} from "primeng/message";
 import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {UserService} from '../../../../core/services/management-system/user/user.service';
 import {Router, RouterLink} from '@angular/router';
-import {concatMap} from 'rxjs';
-import {Checkbox} from 'primeng/checkbox';
-import {FloatLabel} from 'primeng/floatlabel';
 import {IRegistration} from '../../../../core/interfaces/registration.interface';
 import {MessageService} from 'primeng/api';
+import {Input} from '../../../../shared/input/input';
+import {Checkbox} from '../../../../shared/checkbox/checkbox';
 
 @Component({
   selector: 'app-register',
@@ -18,12 +16,11 @@ import {MessageService} from 'primeng/api';
     ButtonDirective,
     ButtonLabel,
     FormsModule,
-    InputText,
-    Message,
     ReactiveFormsModule,
     RouterLink,
     Checkbox,
-    FloatLabel
+    Input,
+    Checkbox
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',

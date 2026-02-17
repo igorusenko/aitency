@@ -8,6 +8,7 @@ import {AuthService} from '../../../../core/services/management-system/auth/auth
 import {concatMap} from 'rxjs';
 import {UserService} from '../../../../core/services/management-system/user/user.service';
 import {FloatLabel} from 'primeng/floatlabel';
+import {Input} from '../../../../shared/input/input';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ import {FloatLabel} from 'primeng/floatlabel';
     InputTextModule,
     ReactiveFormsModule,
     RouterLink,
-    FloatLabel,
+    Input,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
@@ -35,7 +36,7 @@ export class Login implements OnInit {
   ngOnInit() {
     this.loginForm = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
+      password: new FormControl('', [Validators.required, Validators.minLength(10)]),
     });
   }
 
@@ -46,6 +47,7 @@ export class Login implements OnInit {
   login(): void {
     const {email, password} = this.loginForm.value;
     this.formSubmitted = true;
+    if (this.loginForm.valid)
     this.authService.login(email, password)
       .pipe(concatMap(x => {
         return this.userService.getCurrentUser()

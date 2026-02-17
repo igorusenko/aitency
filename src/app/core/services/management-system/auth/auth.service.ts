@@ -49,10 +49,6 @@ export class AuthService {
     })
   }
 
-  isAuthenticated(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/auth/validate`)
-  }
-
   validateAccessToken(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/auth/validate`)
   }

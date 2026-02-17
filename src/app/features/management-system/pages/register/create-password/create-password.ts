@@ -11,6 +11,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {passwordMatchValidator} from '../../../../../core/validators/password-match.validator';
 import {ISetPassword} from '../../../../../core/interfaces/registration.interface';
 import {MessageService} from 'primeng/api';
+import {Input} from '../../../../../shared/input/input';
 
 @Component({
   selector: 'app-create-password',
@@ -18,10 +19,8 @@ import {MessageService} from 'primeng/api';
     ButtonDirective,
     ButtonLabel,
     FormsModule,
-    InputText,
-    Message,
     ReactiveFormsModule,
-    FloatLabel,
+    Input,
   ],
   templateUrl: './create-password.html',
   styleUrl: './create-password.scss',
@@ -38,44 +37,16 @@ export class CreatePassword implements OnInit {
 
   ngOnInit() {
     this.registerCompleteForm = this.fb.group({
-      password: new FormControl('', Validators.required),
+      password: new FormControl('', [Validators.required, Validators.minLength(10)]),
       confirmPassword: new FormControl('', Validators.required),
     }, { validators: passwordMatchValidator });
   }
 
-  control(controlName: string): any {
-    return this.registerCompleteForm.get(controlName);
-  }
-
-  confirmPassword(): void {
-    const {email, password} = this.registerCompleteForm.value;
-    console.log(this.registerCompleteForm)
-    this.formSubmitted = true;
-    // this.authService.login(email, password)
-    //   .pipe(concatMap(x => {
-    //     return this.userService.getCurrentUser()
-    //   }))
-    //   .subscribe(user => {
-    //     this.router.navigate(['/home'])
-    //   });
-  }
-
-  isInvalidControl(controlName: string) {
-    const control = this.registerCompleteForm.get(controlName);
-    return control?.invalid && (control.touched || this.formSubmitted);
-  }
-
-  hasMissmatchPasswordError() {
-    return (
-      this.registerCompleteForm.get('confirmPassword')?.hasError('passwordMismatch') &&
-      this.registerCompleteForm.get('confirmPassword')?.touched
-    );
-  }
-
   setPassword(): void {
+    this.formSubmitted = true;
     const { password, confirmPassword } = this.registerCompleteForm.value;
     const token = this.route.snapshot.queryParams['token'];
-    if (token) {
+    if (token && this.registerCompleteForm.valid) {
       const setPasswordModel: ISetPassword = {
         token,
         password,

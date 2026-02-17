@@ -7,53 +7,52 @@
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="flex flex-col gap-4 w-full sm:w-56">
         <h3 class="text-center text-xl">Registration</h3>
 
-        <div class="flex flex-col gap-1">
-          <p-floatlabel variant="on">
-            <input class="w-full" pInputText type="text" id="email" formControlName="email" autocomplete="off" [invalid]="isInvalidControl('email')" />
-            <label for="email">Email</label>
-          </p-floatlabel>
-          @if (isInvalidControl('email')) {
-            <p-message severity="error" size="small" variant="simple">Email is required.</p-message>
-          }
-        </div>
+        <app-input
+          [form]="registerForm"
+          [formSubmitted]="formSubmitted"
+          controlName="email"
+          title="Email"
+          type="email"
+        ></app-input>
 
-        <div class="flex flex-col gap-1">
-          <p-floatlabel variant="on">
-            <input class="w-full" pInputText type="text" id="firstName" formControlName="firstName" autocomplete="off" [invalid]="isInvalidControl('firstName')" />
-            <label for="firstName">First name</label>
-          </p-floatlabel>
-          @if (isInvalidControl('firstName')) {
-            <p-message severity="error" size="small" variant="simple">First name is required.</p-message>
-          }
-        </div>
+        <app-input
+          [form]="registerForm"
+          [formSubmitted]="formSubmitted"
+          controlName="firstName"
+          title="First name"
+          type="text"
+        ></app-input>
 
-        <div class="flex flex-col gap-1">
-          <p-floatlabel variant="on">
-            <input class="w-full" pInputText type="text" id="lastName" formControlName="lastName" autocomplete="off" [invalid]="isInvalidControl('lastName')" />
-            <label for="lastName">Last name</label>
-          </p-floatlabel>
-          @if (isInvalidControl('lastName')) {
-            <p-message severity="error" size="small" variant="simple">Last name is required.</p-message>
-          }
-        </div>
+        <app-input
+          [form]="registerForm"
+          [formSubmitted]="formSubmitted"
+          controlName="lastName"
+          title="Last name"
+          type="text"
+        ></app-input>
 
-        <div class="flex flex-col gap-1">
-          <p-floatlabel variant="on">
-            <input class="w-full" pInputText type="text" id="middleName" formControlName="middleName" autocomplete="off" [invalid]="isInvalidControl('middleName')" />
-            <label for="middleName">Middle name</label>
-          </p-floatlabel>
-          @if (isInvalidControl('middleName')) {
-            <p-message severity="error" size="small" variant="simple">Middle name is required.</p-message>
-          }
-        </div>
+        <app-input
+          [form]="registerForm"
+          [formSubmitted]="formSubmitted"
+          controlName="middleName"
+          title="Middle name"
+          type="text"
+        ></app-input>
 
-        <div class="flex items-center gap-2">
-          <p-checkbox [formControlName]="'terms'" [binary]="true" [inputId]="'terms'" [invalid]="isInvalidControl('terms')" />
-          <label [for]="'terms'">Terms & Privacy</label>
-          @if (isInvalidControl('terms')) {
-            <p-message severity="error" size="small" variant="simple">Terms is required.</p-message>
-          }
-        </div>
+        <app-checkbox
+        [form]="registerForm"
+        [formSubmitted]="formSubmitted"
+        controlName="terms"
+        title="Terms & Privacy"
+        ></app-checkbox>
+
+<!--        <div class="flex items-center gap-2">-->
+<!--          <p-checkbox [formControlName]="'terms'" [binary]="true" [inputId]="'terms'" [invalid]="isInvalidControl('terms')" />-->
+<!--          <label [for]="'terms'">Terms & Privacy</label>-->
+<!--          @if (isInvalidControl('terms')) {-->
+<!--            <p-message severity="error" size="small" variant="simple">Terms is required.</p-message>-->
+<!--          }-->
+<!--        </div>-->
         <!--      <div class="flex flex-col gap-1">-->
         <!--        <input pInputText placeholder="Password" name="password" formControlName="password"-->
         <!--               [invalid]="control('password').invalid && control('password').touched" required />-->

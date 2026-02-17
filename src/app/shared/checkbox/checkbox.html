@@ -1,0 +1,22 @@
+<div class="flex items-center gap-2" [formGroup]="form()">
+  <p-checkbox
+    [binary]="true"
+    [formControlName]="controlName()"
+    [invalid]="isInvalid()"
+    [inputId]="controlName()"
+  ></p-checkbox>
+
+  <label [for]="controlName()">
+    {{ title() }}
+  </label>
+</div>
+
+@if (isInvalid()) {
+  <p-message
+    severity="error"
+    size="small"
+    variant="simple"
+  >
+    {{ getErrorMessage() }}
+  </p-message>
+}
