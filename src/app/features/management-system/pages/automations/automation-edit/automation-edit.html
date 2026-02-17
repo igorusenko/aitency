@@ -3,100 +3,66 @@
   <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">
 
     <!--      <p-floatlabel>-->
-    <!--        <input pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />-->
+    <!--        <input-text pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />-->
     <!--        <label for="over_label">Over Label</label>-->
     <!--      </p-floatlabel>-->
 
-    <div class="flex flex-col gap-1">
-      <p-floatlabel variant="on">
-        <input class="w-full" pInputText type="text" id="serverId" formControlName="serverId" autocomplete="off" [invalid]="isInvalidAutomationControl('serverId')" />
-        <label for="serverId">Server ID</label>
-      </p-floatlabel>
-      @if (isInvalidAutomationControl('serverId')) {
-        <p-message severity="error" size="small" variant="simple">Server ID is required.</p-message>
-      }
-    </div>
+    <app-input-text
+      [form]="automationForm"
+      [formSubmitted]="formSubmitted"
+      controlName="serverId"
+      title="Server ID"
+      type="text"
+    >
+    </app-input-text>
 
-    <div class="flex items-center gap-2">
-      <p-checkbox [formControlName]="'isActive'" [binary]="true" [inputId]="'isActive'" [invalid]="isInvalidAutomationControl('isActive')" />
-      <label [for]="'isActive'">Active</label>
-    </div>
+    <app-checkbox
+      [form]="automationForm"
+      [formSubmitted]="formSubmitted"
+      controlName="isActive"
+      title="Active"
+    ></app-checkbox>
 
-    <div class="flex items-center gap-2">
-      <p-checkbox [formControlName]="'isDemo'" [binary]="true" [inputId]="'isDemo'" [invalid]="isInvalidAutomationControl('isDemo')" />
-      <label [for]="'isDemo'">Demo</label>
-    </div>
+    <app-checkbox
+      [form]="automationForm"
+      [formSubmitted]="formSubmitted"
+      controlName="isDemo"
+      title="Demo"
+    ></app-checkbox>
 
-    <div formGroupName="config" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4">
       <!--        @if ($assistantVoices | async; as voices) {-->
-      <div class="flex flex-col gap-1">
-        <p-floatlabel variant="on">
-          <p-select formControlName="voice" [options]="voices" [invalid]="isInvalidConfigControl('voice')" optionLabel="name" class="w-full"/>
-          <label for="serverId">Voice</label>
-        </p-floatlabel>
-        @if (isInvalidConfigControl('voice')) {
-          <p-message severity="error" size="small" variant="simple">Voice is required.</p-message>
-        }
-      </div>
-      <!--        }-->
+      <app-select
+        [form]="getConfigForm()"
+        [formSubmitted]="formSubmitted"
+        [options]="voices"
+        controlName="voice"
+        title="Voice"
+        optionLabel="name"
+      ></app-select>
 
-      <div class="flex flex-col gap-1">
-        <p-floatlabel variant="on">
-          <p-input-number
-            inputId="integeronly"
-            mode="decimal"
-            [minFractionDigits]="2"
-            [maxFractionDigits]="2"
-            [min]="1.0"
-            [max]="2.0"
-            formControlName="volume"
-            [invalid]="isInvalidConfigControl('volume')"
-            class="w-full"
-          />
-          <label for="serverId">Volume (1.0 - 2.0)</label>
-        </p-floatlabel>
-        @if (isInvalidConfigControl('volume')) {
-          <p-message severity="error" size="small" variant="simple">Volume is required</p-message>
-        }
-      </div>
+      <app-input-number
+        [form]="getConfigForm()"
+        [formSubmitted]="formSubmitted"
+        controlName="volume"
+        label="Volume (1.0 - 2.0)"
+        [min]="1"
+        [max]="2"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      />
 
-      <div class="flex flex-col gap-1">
-        <p-floatlabel variant="on">
-          <p-input-number
-            inputId="integeronly"
-            mode="decimal"
-            [minFractionDigits]="2"
-            [maxFractionDigits]="2"
-            [min]="1.0"
-            [max]="2.0"
-            formControlName="speed"
-            [invalid]="isInvalidConfigControl('speed')"
-            class="w-full"
-          />
-          <label for="serverId">Speed (1.0 - 2.0)</label>
-        </p-floatlabel>
-        @if (isInvalidConfigControl('speed')) {
-          <p-message severity="error" size="small" variant="simple">Speed is required</p-message>
-        }
-      </div>
-
+      <app-input-number
+        [form]="getConfigForm()"
+        [formSubmitted]="formSubmitted"
+        controlName="speed"
+        label="Speed (1.0 - 2.0)"
+        [min]="1"
+        [max]="2"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
+      />
     </div>
-<!--    <div class="flex flex-col gap-1">-->
-<!--      <p-floatlabel variant="on">-->
-<!--        <p-multi-select-->
-<!--          optionLabel="email"-->
-<!--          optionValue="id"-->
-<!--          formControlName="users"-->
-<!--          filter-->
-<!--          [fluid]="true"-->
-<!--          [options]="userStore.users().items"-->
-<!--          [disabled]="false"-->
-<!--          [showToggleAll]="false"-->
-<!--          class="w-full"-->
-<!--        />-->
-<!--        <label for="serverId">Linking Users</label>-->
-<!--      </p-floatlabel>-->
-<!--    </div>-->
 
     <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
   </form>

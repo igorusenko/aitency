@@ -7,37 +7,37 @@
       <form [formGroup]="registerForm" (ngSubmit)="register()" class="flex flex-col gap-4 w-full sm:w-56">
         <h3 class="text-center text-xl">Registration</h3>
 
-        <app-input
+        <app-input-text
           [form]="registerForm"
           [formSubmitted]="formSubmitted"
           controlName="email"
           title="Email"
           type="email"
-        ></app-input>
+        ></app-input-text>
 
-        <app-input
+        <app-input-text
           [form]="registerForm"
           [formSubmitted]="formSubmitted"
           controlName="firstName"
           title="First name"
           type="text"
-        ></app-input>
+        ></app-input-text>
 
-        <app-input
+        <app-input-text
           [form]="registerForm"
           [formSubmitted]="formSubmitted"
           controlName="lastName"
           title="Last name"
           type="text"
-        ></app-input>
+        ></app-input-text>
 
-        <app-input
+        <app-input-text
           [form]="registerForm"
           [formSubmitted]="formSubmitted"
           controlName="middleName"
           title="Middle name"
           type="text"
-        ></app-input>
+        ></app-input-text>
 
         <app-checkbox
         [form]="registerForm"
@@ -54,7 +54,7 @@
 <!--          }-->
 <!--        </div>-->
         <!--      <div class="flex flex-col gap-1">-->
-        <!--        <input pInputText placeholder="Password" name="password" formControlName="password"-->
+        <!--        <input-text pInputText placeholder="Password" name="password" formControlName="password"-->
         <!--               [invalid]="control('password').invalid && control('password').touched" required />-->
         <!--        @if (control('password').invalid && control('password').touched) {-->
         <!--          <p-message severity="error" size="small" variant="simple">Password is required.</p-message>-->

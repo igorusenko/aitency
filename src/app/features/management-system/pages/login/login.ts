@@ -7,8 +7,7 @@ import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {concatMap} from 'rxjs';
 import {UserService} from '../../../../core/services/management-system/user/user.service';
-import {FloatLabel} from 'primeng/floatlabel';
-import {Input} from '../../../../shared/input/input';
+import {InputTextComponent} from '../../../../shared/input-text/input-text';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +18,7 @@ import {Input} from '../../../../shared/input/input';
     InputTextModule,
     ReactiveFormsModule,
     RouterLink,
-    Input,
+    InputTextComponent,
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss',

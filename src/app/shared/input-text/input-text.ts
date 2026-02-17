@@ -1,23 +1,23 @@
 import {Component, computed, input, InputSignal, signal} from '@angular/core';
 import {FloatLabel} from 'primeng/floatlabel';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {InputText} from 'primeng/inputtext';
 import {Message} from 'primeng/message';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
-  selector: 'app-input',
+  selector: 'app-input-text',
   imports: [
     FloatLabel,
     FormsModule,
-    InputText,
     Message,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputText
   ],
   standalone: true,
-  templateUrl: './input.html',
-  styleUrl: './input.scss',
+  templateUrl: './input-text.html',
+  styleUrl: './input-text.scss',
 })
-export class Input {
+export class InputTextComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
   formSubmitted: InputSignal<boolean> = input.required<boolean>();
   controlName: InputSignal<string> = input.required<string>();

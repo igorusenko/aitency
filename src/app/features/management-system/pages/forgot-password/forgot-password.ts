@@ -1,14 +1,10 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ButtonDirective, ButtonLabel} from 'primeng/button';
-import {Checkbox} from 'primeng/checkbox';
-import {FloatLabel} from 'primeng/floatlabel';
-import {InputText} from 'primeng/inputtext';
-import {Message} from 'primeng/message';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../../../core/services/management-system/auth/auth.service';
 import {RouterLink} from '@angular/router';
 import {MessageService} from 'primeng/api';
-import {Input} from '../../../../shared/input/input';
+import {InputTextComponent} from '../../../../shared/input-text/input-text';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,7 +13,7 @@ import {Input} from '../../../../shared/input/input';
     ButtonLabel,
     ReactiveFormsModule,
     RouterLink,
-    Input
+    InputTextComponent
   ],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.scss',

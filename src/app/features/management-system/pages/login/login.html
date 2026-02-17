@@ -4,21 +4,21 @@
     <form [formGroup]="loginForm" (ngSubmit)="login()" class="flex flex-col gap-4 w-full sm:w-56">
       <h3 class="text-center text-xl">Login</h3>
 
-      <app-input
+      <app-input-text
       [form]="loginForm"
       [formSubmitted]="formSubmitted"
       controlName="email"
       title="Email"
       type="email"
-      ></app-input>
+      ></app-input-text>
 
-      <app-input
+      <app-input-text
         [form]="loginForm"
         [formSubmitted]="formSubmitted"
         controlName="password"
         title="Password"
         type="password"
-      ></app-input>
+      ></app-input-text>
 
       <button pButton severity="primary" type="submit"><span pButtonLabel>Submit</span></button>
       <a [routerLink]="['/forgot-password']">Forgot password?</a>

@@ -1,40 +1,36 @@
-import {Component, inject, OnDestroy, OnInit, Signal} from '@angular/core';
-import {Checkbox} from "primeng/checkbox";
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {FloatLabel} from "primeng/floatlabel";
 import {InputNumber} from "primeng/inputnumber";
-import {InputText} from "primeng/inputtext";
 import {Message} from "primeng/message";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Select} from "primeng/select";
 import {AutomationAdminService} from '../../../../../core/services/management-system/automation/automation-admin.service';
-import {AssistantService} from '../../../../../core/services/voice-assistant/assistant.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {concatMap, map, Observable, of} from 'rxjs';
-import {IAutomation} from '../../../../../core/interfaces/automations/automation-interface';
+import {concatMap} from 'rxjs';
 import {AutomationsStore} from '../../../../../core/stores/automations.store';
-import {MultiSelect} from 'primeng/multiselect';
 import {UserStore} from '../../../../../core/services/management-system/user/user.store';
 import {IAppendUserModel} from '../../../../../core/interfaces/users/user';
 import {Button} from 'primeng/button';
 import {DatePipe} from '@angular/common';
 import {TableModule} from 'primeng/table';
+import {InputTextComponent} from '../../../../../shared/input-text/input-text';
+import {Checkbox} from '../../../../../shared/checkbox/checkbox';
+import {SelectComponent} from '../../../../../shared/select/select';
+import {InputNumberComponent} from '../../../../../shared/input-number/input-number';
 
 @Component({
   selector: 'app-automation-edit',
   imports: [
     Checkbox,
-    FloatLabel,
-    InputNumber,
-    InputText,
-    Message,
     ReactiveFormsModule,
-    Select,
+    SelectComponent,
     FormsModule,
     Button,
     DatePipe,
-    TableModule
+    TableModule,
+    InputTextComponent,
+    Checkbox,
+    InputNumberComponent,
   ],
   templateUrl: './automation-edit.html',
   styleUrl: './automation-edit.scss',
@@ -79,6 +75,10 @@ export class AutomationEdit implements OnInit, OnDestroy {
         speed: new FormControl(this.automationStore.automation()?.config?.speed ?? null, [Validators.required]),
       }),
     })
+  }
+
+  getConfigForm(): FormGroup {
+    return this.automationForm.get('config') as FormGroup;
   }
 
   isInvalidAutomationControl(controlName: string) {

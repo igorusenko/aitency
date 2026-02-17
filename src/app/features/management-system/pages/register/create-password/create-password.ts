@@ -1,17 +1,14 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ButtonDirective, ButtonLabel} from 'primeng/button';
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputText} from 'primeng/inputtext';
-import {Message} from 'primeng/message';
 import {AuthService} from '../../../../../core/services/management-system/auth/auth.service';
 import {UserService} from '../../../../../core/services/management-system/user/user.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {concatMap} from 'rxjs';
-import {FloatLabel} from 'primeng/floatlabel';
 import {passwordMatchValidator} from '../../../../../core/validators/password-match.validator';
 import {ISetPassword} from '../../../../../core/interfaces/registration.interface';
 import {MessageService} from 'primeng/api';
-import {Input} from '../../../../../shared/input/input';
+import {InputTextComponent} from '../../../../../shared/input-text/input-text';
 
 @Component({
   selector: 'app-create-password',
@@ -20,7 +17,7 @@ import {Input} from '../../../../../shared/input/input';
     ButtonLabel,
     FormsModule,
     ReactiveFormsModule,
-    Input,
+    InputTextComponent,
   ],
   templateUrl: './create-password.html',
   styleUrl: './create-password.scss',

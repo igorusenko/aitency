@@ -1,0 +1,29 @@
+<div class="flex flex-col gap-1" [formGroup]="form()">
+  <p-floatlabel variant="on">
+
+    <p-select
+      class="w-full"
+      [formControlName]="controlName()"
+      [options]="options()"
+      [optionLabel]="optionLabel()"
+      [optionValue]="optionValue()"
+      [invalid]="isInvalid()"
+      [inputId]="controlName()"
+    />
+
+    <label [for]="controlName()">
+      {{ title() }}
+    </label>
+
+  </p-floatlabel>
+
+  @if (isInvalid()) {
+    <p-message
+      severity="error"
+      size="small"
+      variant="simple"
+    >
+      {{ getErrorMessage() }}
+    </p-message>
+  }
+</div>

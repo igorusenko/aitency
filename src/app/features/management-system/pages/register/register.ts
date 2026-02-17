@@ -7,7 +7,7 @@ import {UserService} from '../../../../core/services/management-system/user/user
 import {Router, RouterLink} from '@angular/router';
 import {IRegistration} from '../../../../core/interfaces/registration.interface';
 import {MessageService} from 'primeng/api';
-import {Input} from '../../../../shared/input/input';
+import {InputTextComponent} from '../../../../shared/input-text/input-text';
 import {Checkbox} from '../../../../shared/checkbox/checkbox';
 
 @Component({
@@ -19,7 +19,7 @@ import {Checkbox} from '../../../../shared/checkbox/checkbox';
     ReactiveFormsModule,
     RouterLink,
     Checkbox,
-    Input,
+    InputTextComponent,
     Checkbox
   ],
   templateUrl: './register.html',

@@ -1,0 +1,31 @@
+<div class="flex flex-col gap-1" [formGroup]="form()">
+  <p-floatlabel variant="on">
+
+    <p-input-number
+      class="w-full"
+      [formControlName]="controlName()"
+      [mode]="mode()"
+      [min]="min()"
+      [max]="max()"
+      [minFractionDigits]="minFractionDigits()"
+      [maxFractionDigits]="maxFractionDigits()"
+      [invalid]="isInvalid()"
+      [inputId]="controlName()"
+    />
+
+    <label [for]="controlName()">
+      {{ label() }}
+    </label>
+
+  </p-floatlabel>
+
+  @if (isInvalid()) {
+    <p-message
+      severity="error"
+      size="small"
+      variant="simple"
+    >
+      {{ getErrorMessage() }}
+    </p-message>
+  }
+</div>
