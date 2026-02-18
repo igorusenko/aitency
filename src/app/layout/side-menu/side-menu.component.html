@@ -6,8 +6,8 @@
       <div class="brand" [routerLink]="['/onboarding']">
         <div class="logo">AI</div>
         <div class="brand-text">
-          <div class="brand-name">{{userStore.currentUser().role}}</div>
-          <div class="brand-sub">Control Panel (Demo)</div>
+          <div class="brand-name">{{userStore.currentUser().fullName}}</div>
+          <div class="brand-sub">{{userStore.currentUser().email}}</div>
         </div>
       </div>
 
@@ -21,8 +21,12 @@
         }
       </nav>
     </div>
-
-    <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
+    <div class="flex flex-col gap-4">
+      @if (userStore.currentUser().role === 'Demo') {
+        <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/register']">Register a real account</button>
+      }
+      <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
+    </div>
   </aside>
 @if (!sideMenuService.isSideMenuCollapsed()) {
   <div tabindex="0" class="mobile-black-overlay" (click)="sideMenuService.isSideMenuCollapsed.set(true)"></div>

@@ -29,7 +29,7 @@ export const CustomPreset = definePreset(Aura, {
     },
     panel: {
       root: {
-        background: '#1b1b3a'
+        background: '#1018278c'
       }
     },
     tabs: {

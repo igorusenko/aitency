@@ -13,6 +13,10 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly apiUrl = environment.apiUrl;
 
+  demoLogin(loginData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/demo`, loginData);
+  }
+
   login(email: string, password: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/auth/sign-in`, {
       email, password

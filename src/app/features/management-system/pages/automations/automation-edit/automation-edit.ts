@@ -17,6 +17,9 @@ import {InputTextComponent} from '../../../../../shared/input-text/input-text';
 import {Checkbox} from '../../../../../shared/checkbox/checkbox';
 import {SelectComponent} from '../../../../../shared/select/select';
 import {InputNumberComponent} from '../../../../../shared/input-number/input-number';
+import {Menu} from 'primeng/menu';
+import {Panel} from 'primeng/panel';
+import {WorkspacesStore} from '../../../../../core/services/management-system/workspaces/workspaces.store';
 
 @Component({
   selector: 'app-automation-edit',
@@ -31,6 +34,8 @@ import {InputNumberComponent} from '../../../../../shared/input-number/input-num
     InputTextComponent,
     Checkbox,
     InputNumberComponent,
+    Menu,
+    Panel,
   ],
   templateUrl: './automation-edit.html',
   styleUrl: './automation-edit.scss',
@@ -38,7 +43,8 @@ import {InputNumberComponent} from '../../../../../shared/input-number/input-num
 export class AutomationEdit implements OnInit, OnDestroy {
   automationAdminService = inject(AutomationAdminService)
   automationStore = inject(AutomationsStore);
-  userStore = inject(UserStore);
+  // userStore = inject(UserStore);
+  workspacesStore = inject(WorkspacesStore);
   router = inject(Router);
   fb = inject(FormBuilder);
   messageService = inject(MessageService);
@@ -53,6 +59,23 @@ export class AutomationEdit implements OnInit, OnDestroy {
     { name: 'marin' },
     { name: 'cedar' }
   ];
+  items = [
+    {
+      label: 'Refresh',
+      icon: 'pi pi-refresh'
+    },
+    {
+      label: 'Search',
+      icon: 'pi pi-search'
+    },
+    {
+      separator: true
+    },
+    {
+      label: 'Delete',
+      icon: 'pi pi-times'
+    }
+  ]
   automationForm: FormGroup;
   formSubmitted: boolean = false;
 
@@ -60,7 +83,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
     this.initAutomationForm();
     this.usersMappedToAppend = {
       automationId: this.automationStore.automation()?.id!,
-      userIds: this.userStore.users().items.map((user: any) => user.id)
+      userIds: this.workspacesStore.workspaces().items.map((workspace: any) => workspace.id)
     }
   }
 

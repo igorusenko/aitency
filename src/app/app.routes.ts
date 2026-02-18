@@ -6,6 +6,7 @@ import {userResolver} from './core/resolvers/user/user-resolver';
 import {confirmEmailResolver} from './core/resolvers/register/confirm-email-resolver';
 import {confirmResetPasswordResolver} from './core/resolvers/register/confirm-reset-password-resolver';
 import {isAuthenticatedGuard} from './core/guard/authenticated-guard';
+import {workspacesResolver} from './core/resolvers/workspace/workspaces-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -54,7 +55,7 @@ export const routes: Routes = [
         title: 'Automation edit',
         loadComponent: () =>
           import('./features/management-system/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
-        resolve: {automation: automationResolver, users: usersResolver}
+        resolve: {automation: automationResolver, workspaces: workspacesResolver}
       },
       {
         path: 'users',
@@ -78,6 +79,14 @@ export const routes: Routes = [
         resolve: {user: userResolver}
       }
     ]
+  },
+  {
+    path: 'demo-auth',
+    title: 'Demo Authorization',
+    loadComponent: () =>
+      import('./features/management-system/pages/demo-auth/demo-auth').then(
+        (m) => m.DemoAuth
+      ),
   },
   {
     path: 'login',
