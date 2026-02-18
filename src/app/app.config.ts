@@ -25,6 +25,9 @@ export const appConfig: ApplicationConfig = {
     MessageService,
     providePrimeNG({
       theme: {
+        options: {
+          darkModeSelector: '.dark'
+        },
         preset: CustomPreset,
       }
     }),
