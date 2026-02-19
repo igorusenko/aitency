@@ -6,20 +6,26 @@ import {map} from 'rxjs';
 import {ReactiveFormsModule} from '@angular/forms';
 import {toSignal} from '@angular/core/rxjs-interop';
 import {UserStore} from '../../../../../core/services/management-system/user/user.store';
+import {
+  AutomationAdminService
+} from '../../../../../core/services/management-system/automation/automation-admin.service';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-automation-details',
-  imports: [PanelModule, ReactiveFormsModule, Menu, RouterLink],
+  imports: [PanelModule, ReactiveFormsModule, Menu, RouterLink, AsyncPipe],
   templateUrl: './automation-details.html',
   styleUrl: './automation-details.scss',
 })
 export class AutomationDetails {
+  automationAdminService = inject(AutomationAdminService);
   userStore = inject(UserStore);
   automation = toSignal(
     inject(ActivatedRoute).data.pipe(
       map(data => data['automation'])
     )
   );
+  automationLogs$ = this.automationAdminService.getLogs();
   items = [
     {
       label: 'Refresh',
@@ -37,4 +43,5 @@ export class AutomationDetails {
       icon: 'pi pi-times'
     }
   ]
+  protected readonly JSON = JSON;
 }

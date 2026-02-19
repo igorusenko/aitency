@@ -2,6 +2,11 @@ import {Component, ElementRef, inject, OnDestroy, OnInit, ViewChild} from '@angu
 import { Observable, from, defer, Subject } from 'rxjs';
 import { switchMap, takeUntil, shareReplay } from 'rxjs/operators';
 import {AssistantService} from '../../../core/services/voice-assistant/assistant.service';
+import {AutomationsStore} from '../../../core/stores/automations.store';
+import {ActivatedRoute} from '@angular/router';
+import {UserStore} from '../../../core/services/management-system/user/user.store';
+import {AutomationAdminService} from '../../../core/services/management-system/automation/automation-admin.service';
+import {MessageService} from 'primeng/api';
 type MessageWho = 'assistant' | 'user';
 
 interface ChatMessage {
@@ -19,6 +24,9 @@ export class ChatComponent implements OnInit, OnDestroy{
   @ViewChild('player', { static: true }) player!: ElementRef<HTMLAudioElement>;
   @ViewChild('bottom') bottom!: ElementRef;
   private assistantService = inject(AssistantService);
+  private automationsService = inject(AutomationAdminService);
+  private route = inject(ActivatedRoute);
+  messageService = inject(MessageService);
   private destroy$ = new Subject<void>();
   private wsReady$?: Observable<void>;
   showEmptyState = true;
@@ -43,9 +51,21 @@ export class ChatComponent implements OnInit, OnDestroy{
 
   private sessionId!: string;
   private streamingServerUrl!: string;
+  limitExceeded: boolean = false;
 
   ngOnInit(): void {
-    this.initAssistant();
+    this.automationsService.getAutomationAccess(this.route.snapshot.params['id']).subscribe(x => {
+      if (x.value) this.initAssistant();
+      else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Access to automation is prohibited',
+          life: 2000
+        });
+        this.limitExceeded = true;
+      }
+    })
   }
 
   private getUserMedia$(): Observable<MediaStream> {
@@ -218,6 +238,17 @@ export class ChatComponent implements OnInit, OnDestroy{
             if (msg.type === 'response.created') {
               this.stopAllPlayback();
               this.lastResponseItemId = msg.response?.id ?? null;
+            }
+
+            if (msg.type === 'demo.limit_exceeded') {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'You have reached the limit of using automation',
+                life: 2000
+              });
+              this.limitExceeded = true;
+              this.stopAllPlayback();
             }
 
           } catch {

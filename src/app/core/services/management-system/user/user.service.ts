@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
 import {Observable, tap} from 'rxjs';
 import {UserStore} from './user.store';
@@ -13,8 +13,13 @@ export class UserService {
   private readonly userStore = inject(UserStore);
   private readonly apiUrl = environment.apiUrl;
 
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users`)
+  getUsers(page: number, count: number): Observable<any> {
+    const params = new HttpParams()
+      // .set('userId', this.userStore.currentUser().id)
+      .set('page', page)
+      .set('count', count);
+
+    return this.http.get<any>(`${this.apiUrl}/users`, {params})
       .pipe(tap(users => this.userStore.users.set(users)));
   }
 

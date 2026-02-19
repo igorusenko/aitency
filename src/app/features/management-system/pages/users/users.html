@@ -8,6 +8,9 @@
       [tableStyle]="{ 'min-width': '50rem' }"
       [rowsPerPageOptions]="[5, 10, 20]"
       [rowHover]="true"
+      [lazy]="true"
+      [totalRecords]="totalRecords!"
+      (onLazyLoad)="loadData($event)"
       (onRowSelect)="selectRow($event)"
       selectionMode="single"
     >

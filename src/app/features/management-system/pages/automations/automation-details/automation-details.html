@@ -47,42 +47,50 @@
 
         <div class="flex items-center gap-2">
           <p>Voice:</p>
-          <p>{{automation.config.voice.name}}</p>
+          <p>{{automation.config.voice}}</p>
         </div>
-        <div class="flex items-center gap-2">
-          <p>Volume:</p>
-          <p>{{automation.config.volume}}</p>
-        </div>
+<!--        <div class="flex items-center gap-2">-->
+<!--          <p>Volume:</p>-->
+<!--          <p>{{automation.config.volume}}</p>-->
+<!--        </div>-->
         <div class="flex items-center gap-2">
           <p>Speed:</p>
           <p>{{automation.config.speed}}</p>
         </div>
+
+<!--        @if (automation.config.tools) {-->
+<!--          <div class="flex items-center gap-2">-->
+<!--            <p>Tools:</p>-->
+<!--            <p>{{JSON.stringify(automation.config.tools)}}</p>-->
+<!--          </div>-->
+<!--        }-->
       </div>
     }
     </div>
   </p-panel>
-  <p-panel [toggleable]="true">
-    <ng-template #header>
-      <div class="flex items-center gap-2">
-        <span class="font-bold">Automation Logs</span>
-      </div>
-    </ng-template>
-    <!--  <ng-template #footer>-->
-    <!--    <div class="flex flex-wrap items-center justify-between gap-4">-->
-    <!--      <div class="flex items-center gap-2">-->
-    <!--        <p-button icon="pi pi-user" rounded text></p-button>-->
-    <!--        <p-button icon="pi pi-bookmark" severity="secondary" rounded text></p-button>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </ng-template>-->
-    <ng-template #icons>
-      <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
-    </ng-template>
-    <p class="m-0">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-  </p-panel>
+  @if (userStore.currentUser().role === 'Admin') {
+    @if (automationLogs$ | async; as logs) {
+      <p-panel [toggleable]="true">
+        <ng-template #header>
+          <div class="flex items-center gap-2">
+            <span class="font-bold">Automation Logs</span>
+          </div>
+        </ng-template>
+        <ng-template #icons>
+          <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
+        </ng-template>
+        @if (logs.items.length > 0) {
+          <div class="flex flex-col gap-2">
+            @for (log of logs.items; track log.id) {
+              <p>{{log.logs}}</p>
+            }
+          </div>
+        } @else {
+          <p>There are no logs yet</p>
+        }
+      </p-panel>
+    }
+  }
 
   <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/demo', automation.id]">Go to demo</button>
 </div>

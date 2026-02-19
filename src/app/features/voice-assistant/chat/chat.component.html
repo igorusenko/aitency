@@ -27,6 +27,7 @@
     title="Нажмите для записи голоса"
     [class.recording]="isRecording"
     (click)="toggleRecording()"
+    [disabled]="limitExceeded"
   >
     <svg class="p-2" fill="#000000" width="60px" height="60px" viewBox="0 0 36 36" version="1.1"  preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <title>microphone-line</title>

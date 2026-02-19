@@ -1,12 +1,33 @@
 export interface IAutomation {
   id?: string;
-  users?: Array<{
-    id: string;
-    email: string;
-  }>;
-  config?: any;
-  isActive: boolean;
-  isDemo: boolean;
+  workspaces: Array<IWorkspace>;
   serverId: string;
-  userId: string;
+  isDemo: boolean;
+  isActive: boolean;
+
+  config?: IAutomationConfig;
+}
+
+export interface IWorkspace {
+  id: string;
+  ownerId: string;
+}
+
+export interface IAutomationConfig {
+  instructions: string;
+  voice: string;
+  speed: number;
+  tools: Array<IAutomationConfigTool>;
+}
+
+export interface IAutomationConfigTool {
+  type: string;
+  name: string;
+  description: string;
+  parameters: IAutomationConfigToolParameter;
+}
+
+export interface IAutomationConfigToolParameter {
+  type: string;
+  properties: any;
 }

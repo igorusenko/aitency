@@ -1,14 +1,10 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {FloatLabel} from "primeng/floatlabel";
-import {InputNumber} from "primeng/inputnumber";
-import {Message} from "primeng/message";
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AutomationAdminService} from '../../../../../core/services/management-system/automation/automation-admin.service';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
 import {concatMap} from 'rxjs';
 import {AutomationsStore} from '../../../../../core/stores/automations.store';
-import {UserStore} from '../../../../../core/services/management-system/user/user.store';
 import {IAppendUserModel} from '../../../../../core/interfaces/users/user';
 import {Button} from 'primeng/button';
 import {DatePipe} from '@angular/common';
@@ -57,6 +53,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
     { name: 'echo' },
     { name: 'shimmer' },
     { name: 'marin' },
+    { name: 'ash' },
     { name: 'cedar' }
   ];
   items = [
@@ -94,7 +91,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
       serverId: new FormControl(this.automationStore.automation()?.serverId ?? '', [Validators.required]),
       config: this.fb.group({
         voice: new FormControl(this.automationStore.automation()?.config?.voice ?? null, [Validators.required]),
-        volume: new FormControl(this.automationStore.automation()?.config?.volume ?? null, [Validators.required]),
+        // volume: new FormControl(this.automationStore.automation()?.config?.volume ?? null, [Validators.required]),
         speed: new FormControl(this.automationStore.automation()?.config?.speed ?? null, [Validators.required]),
       }),
     })
@@ -158,10 +155,6 @@ export class AutomationEdit implements OnInit, OnDestroy {
     this.automationForm.reset();
     this.formSubmitted = false;
     this.router.navigate(['/automations'])
-  }
-
-  isUserAttached(userId: string): any {
-    return this.automationStore.automation()?.users?.some(user => user.id === userId)
   }
 
   ngOnDestroy() {

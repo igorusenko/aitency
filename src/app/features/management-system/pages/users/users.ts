@@ -26,6 +26,10 @@ export class Users {
   userService = inject(UserService);
   messageService = inject(MessageService);
 
+  first: number = 1;
+  rows: number = 10;
+  totalRecords = this.usersStore.users()?.totalCount;
+
   selectRow(row: TableRowSelectEvent) {
     this.router.navigate([row.data.id], {relativeTo: this.route});
   }
@@ -33,7 +37,19 @@ export class Users {
   deleteUser(userId: string): void {
       this.userService.deleteUser(userId).subscribe(x => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User Deleted Successfully!', life: 2000 });
-        this.userService.getUsers().subscribe(x => {})
+        this.loadData({first: this.first, rows: this.rows});
       });
+  }
+
+  loadData(event: any): void {
+    this.first = event.first;
+    this.rows = event.rows;
+
+    const page = (event.first / event.rows) + 1;
+    const count = event.rows;
+
+    this.userService.getUsers(page, count).subscribe(x => {
+      this.totalRecords = x.totalCount;
+    })
   }
 }

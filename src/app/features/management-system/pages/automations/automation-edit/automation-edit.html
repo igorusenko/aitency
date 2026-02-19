@@ -39,18 +39,19 @@
         controlName="voice"
         title="Voice"
         optionLabel="name"
+        optionValue="name"
       ></app-select>
 
-      <app-input-number
-        [form]="getConfigForm()"
-        [formSubmitted]="formSubmitted"
-        controlName="volume"
-        label="Volume (1.0 - 2.0)"
-        [min]="1"
-        [max]="2"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-      />
+<!--      <app-input-number-->
+<!--        [form]="getConfigForm()"-->
+<!--        [formSubmitted]="formSubmitted"-->
+<!--        controlName="volume"-->
+<!--        label="Volume (1.0 - 2.0)"-->
+<!--        [min]="1"-->
+<!--        [max]="2"-->
+<!--        [minFractionDigits]="2"-->
+<!--        [maxFractionDigits]="2"-->
+<!--      />-->
 
       <app-input-number
         [form]="getConfigForm()"
@@ -67,7 +68,7 @@
     <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
   </form>
 
-  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {
+<!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->
 
     <p-panel [toggleable]="true" [collapsed]="true">
       <ng-template #header>
@@ -83,7 +84,6 @@
         [value]="workspacesStore.workspaces()?.items"
         [paginator]="true"
         [rows]="5"
-        [tableStyle]="{ 'min-width': '50rem' }"
         [rowsPerPageOptions]="[5, 10, 20]"
         [rowHover]="true"
         selectionMode="single"
@@ -91,38 +91,32 @@
         <ng-template #header>
           <tr>
             <th>Id</th>
-            <th>Address</th>
-            <th>Billing</th>
             <th>Company name</th>
-            <th>Contact Person</th>
-            <th>Email</th>
-            <th>Actvie</th>
-            <th>Registration date</th>
-            <th>Actions</th>
+            <th>Email owner</th>
+            <th>ID owner</th>
+            <th>Status</th>
           </tr>
         </ng-template>
-        <ng-template #body let-user>
-          <tr class="cursor-pointer" [pSelectableRow]="user">
-            <td>{{ user.id }}</td>
-            <td>{{ user.address || '-' }}</td>
-            <td>{{ user.billing?.account || '-' }}</td>
-            <td>{{ user.companyName || '-' }}</td>
-            <td>{{ user.contactPerson || '-' }}</td>
-            <td>{{ user.email || '-' }}</td>
-            <td>{{ user.isActive || '-' }}</td>
-            <td>{{ (user.registrationDate | date) || '-' }}</td>
-            <td (click)="$event.stopPropagation()">
-              <div class="flex gap-2">
-                @if (isUserAttached(user.id)) {
-                  <p-button severity="danger" (click)="detachUsers(user.id)">Detach</p-button>
-                } @else {
-                  <p-button (click)="appendUsers(user.id)">Append</p-button>
-                }
-              </div>
-            </td>
+        <ng-template #body let-workspace>
+          <tr class="cursor-pointer" [pSelectableRow]="workspace">
+            <td>{{ workspace.id }}</td>
+            <td>{{ workspace.companyName || '-' }}</td>
+            <td>{{ workspace.ownerEmail || '-' }}</td>
+            <td>{{ workspace.ownerId || '-' }}</td>
+            <td>{{ workspace.status || '-' }}</td>
+
+<!--            <td (click)="$event.stopPropagation()">-->
+<!--              <div class="flex gap-2">-->
+<!--                @if (isUserAttached(user.id)) {-->
+<!--                  <p-button severity="danger" (click)="detachUsers(user.id)">Detach</p-button>-->
+<!--                } @else {-->
+<!--                  <p-button (click)="appendUsers(user.id)">Append</p-button>-->
+<!--                }-->
+<!--              </div>-->
+<!--            </td>-->
           </tr>
         </ng-template>
       </p-table>
     </p-panel>
-  }
+<!--  }-->
 </div>

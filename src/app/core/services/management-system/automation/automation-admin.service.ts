@@ -7,6 +7,7 @@ import {IAutomation} from '../../../interfaces/automations/automation-interface'
 import {UserService} from '../user/user.service';
 import {AutomationsStore} from '../../../stores/automations.store';
 import {IAppendUserModel} from '../../../interfaces/users/user';
+import {UserStore} from '../user/user.store';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,17 @@ import {IAppendUserModel} from '../../../interfaces/users/user';
 export class AutomationAdminService {
   private readonly http = inject(HttpClient);
   private readonly automationsStore = inject(AutomationsStore);
+  private readonly userStore = inject(UserStore);
+
   private readonly apiUrl = environment.apiUrl;
 
-  getAutomations(): Observable<IPaginatedList<IAutomation>> {
-    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automations`).pipe(
+  getAutomations(page: number, count: number): Observable<IPaginatedList<IAutomation>> {
+    const params = new HttpParams()
+      // .set('userId', this.userStore.currentUser().id)
+      .set('page', page)
+      .set('count', count);
+
+    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automations`, {params}).pipe(
       tap(automationsList => this.automationsStore.automations.set(automationsList))
     );
   }
@@ -45,5 +53,18 @@ export class AutomationAdminService {
 
   detachUsers(appendModel: IAppendUserModel): Observable<any> {
     return this.http.patch(`${this.apiUrl}/automations/users/detach`, appendModel);
+  }
+
+  getLogs(): Observable<any> {
+    const params = new HttpParams()
+      .set('automationId', this.automationsStore.automation()?.id!)
+      // .set('userId', this.userStore.currentUser().id)
+      .set('page', 1)
+      .set('count', 200);
+    return this.http.get(`${this.apiUrl}/automations/logs`, {params});
+  }
+
+  getAutomationAccess(automationId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/automations/${automationId}/access`)
   }
 }

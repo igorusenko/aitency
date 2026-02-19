@@ -13,14 +13,7 @@ import {UserStore} from '../user/user.store';
 export class AutomationUserService {
   private readonly http = inject(HttpClient);
   private readonly automationsStore = inject(AutomationsStore);
-  private readonly userStore = inject(UserStore);
   private readonly apiUrl = environment.apiUrl;
-
-  getAutomations(): Observable<IPaginatedList<IAutomation>> {
-    return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automations?userId=${this.userStore.currentUser().id}`).pipe(
-      tap(automationsList => this.automationsStore.automations.set(automationsList))
-    );
-  }
 
   getAutomationUser(id: string): Observable<IAutomation> {
     return this.http.get<IAutomation>(`${this.apiUrl}/automations/${id}`)

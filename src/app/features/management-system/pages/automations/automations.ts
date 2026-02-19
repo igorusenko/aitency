@@ -19,7 +19,7 @@ import {UserStore} from '../../../../core/services/management-system/user/user.s
   templateUrl: './automations.html',
   styleUrl: './automations.scss',
 })
-export class Automations implements OnInit {
+export class Automations {
   router = inject(Router);
   route = inject(ActivatedRoute);
   automationAdminService = inject(AutomationAdminService);
@@ -27,11 +27,12 @@ export class Automations implements OnInit {
   messageService = inject(MessageService);
   userStore = inject(UserStore);
 
+
+  first: number = 1;
+  rows: number = 10;
+  totalRecords = this.automationAdminStore.automations()?.totalCount;
+
   constructor() {}
-
-  ngOnInit() {
-
-  }
 
   selectRow(row: TableRowSelectEvent) {
     this.router.navigate([row.data.id], {relativeTo: this.route});
@@ -40,7 +41,19 @@ export class Automations implements OnInit {
   deleteAutomation(id: string) {
     this.automationAdminService.deleteAutomation(id).subscribe(x => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Automation Deleted Successfully!', life: 2000 });
-      this.automationAdminService.getAutomations().subscribe(x => {})
+      this.loadData({first: this.first, rows: this.rows});
     });
+  }
+
+  loadData(event: any): void {
+    this.first = event.first;
+    this.rows = event.rows;
+
+    const page = (event.first / event.rows) + 1;
+    const count = event.rows;
+
+    this.automationAdminService.getAutomations(page, count).subscribe(x => {
+      this.totalRecords = x.totalCount;
+    })
   }
 }
