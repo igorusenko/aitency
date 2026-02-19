@@ -20,10 +20,13 @@ export class AutomationAdminService {
   private readonly apiUrl = environment.apiUrl;
 
   getAutomations(page: number, count: number): Observable<IPaginatedList<IAutomation>> {
-    const params = new HttpParams()
-      // .set('userId', this.userStore.currentUser().id)
+    let params = new HttpParams()
       .set('page', page)
       .set('count', count);
+
+    if (this.userStore.currentUser().role !== 'Admin') {
+      params = params.append('userId', this.userStore.currentUser().id)
+    }
 
     return this.http.get<IPaginatedList<IAutomation>>(`${this.apiUrl}/automations`, {params}).pipe(
       tap(automationsList => this.automationsStore.automations.set(automationsList))
@@ -55,12 +58,12 @@ export class AutomationAdminService {
     return this.http.patch(`${this.apiUrl}/automations/users/detach`, appendModel);
   }
 
-  getLogs(): Observable<any> {
+  getLogs(page: number, count: number): Observable<any> {
     const params = new HttpParams()
       .set('automationId', this.automationsStore.automation()?.id!)
       // .set('userId', this.userStore.currentUser().id)
-      .set('page', 1)
-      .set('count', 200);
+      .set('page', page)
+      .set('count', count);
     return this.http.get(`${this.apiUrl}/automations/logs`, {params});
   }
 

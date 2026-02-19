@@ -69,7 +69,7 @@
     </div>
   </p-panel>
   @if (userStore.currentUser().role === 'Admin') {
-    @if (automationLogs$ | async; as logs) {
+    @if (automationLogs) {
       <p-panel [toggleable]="true">
         <ng-template #header>
           <div class="flex items-center gap-2">
@@ -79,11 +79,60 @@
         <ng-template #icons>
           <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
         </ng-template>
-        @if (logs.items.length > 0) {
-          <div class="flex flex-col gap-2">
-            @for (log of logs.items; track log.id) {
-              <p>{{log.logs}}</p>
+        @if (automationLogs.items.length > 0) {
+          <div class="flex flex-col gap-4">
+            @for (log of automationLogs.items; track log.id) {
+              <div class="flex flex-col bg-[#19263f8c] rounded-xl p-2">
+                <div class="flex gap-2">
+                  <p>Date:</p>
+                  <p>{{log.dateTime | date:'medium'}}</p>
+                </div>
+
+                <div class="flex gap-2">
+                  <p>User ID:</p>
+                  <p>{{log.userId}}</p>
+                </div>
+
+                <div class="flex gap-2">
+                  <p>Action type:</p>
+                  <p>{{log.logs.action}}</p>
+                </div>
+
+                @if (log.logs.payload) {
+                  @if (log.logs.payload?.text) {
+                    <div class="flex gap-2">
+                      <p>Response text:</p>
+                      <p>{{log.logs.payload?.text}}</p>
+                    </div>
+                  }
+
+                  @if (log.logs.payload?.context) {
+                    <div class="flex gap-2">
+                      <p>Payload context:</p>
+                      <p>{{log.logs.payload?.context}}</p>
+                    </div>
+                  }
+
+                  @if (log.logs.payload?.remainingCalls) {
+                    <div class="flex gap-2">
+                      <p>Remain calls:</p>
+                      <p>{{log.logs.payload?.remainingCalls}}</p>
+                    </div>
+                  }
+                }
+              </div>
             }
+
+<!--            <div class="card flex justify-center">-->
+              <p-paginator
+                (onPageChange)="onPageChange($event)"
+                [first]="logsPaginator.first"
+                [rows]="logsPaginator.count"
+                [totalRecords]="logsPaginator.totalRecords"
+                [rowsPerPageOptions]="[10, 20, 50, 100, 200]"
+              />
+<!--            </div>-->
+
           </div>
         } @else {
           <p>There are no logs yet</p>

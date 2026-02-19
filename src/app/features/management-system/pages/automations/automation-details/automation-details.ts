@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {PanelModule} from 'primeng/panel';
 import {Menu} from 'primeng/menu';
 import {ActivatedRoute, RouterLink} from '@angular/router';
@@ -9,15 +9,16 @@ import {UserStore} from '../../../../../core/services/management-system/user/use
 import {
   AutomationAdminService
 } from '../../../../../core/services/management-system/automation/automation-admin.service';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, DatePipe} from '@angular/common';
+import {Paginator} from 'primeng/paginator';
 
 @Component({
   selector: 'app-automation-details',
-  imports: [PanelModule, ReactiveFormsModule, Menu, RouterLink, AsyncPipe],
+  imports: [PanelModule, ReactiveFormsModule, Menu, RouterLink, DatePipe, Paginator],
   templateUrl: './automation-details.html',
   styleUrl: './automation-details.scss',
 })
-export class AutomationDetails {
+export class AutomationDetails implements OnInit {
   automationAdminService = inject(AutomationAdminService);
   userStore = inject(UserStore);
   automation = toSignal(
@@ -25,7 +26,7 @@ export class AutomationDetails {
       map(data => data['automation'])
     )
   );
-  automationLogs$ = this.automationAdminService.getLogs();
+  automationLogs: any;
   items = [
     {
       label: 'Refresh',
@@ -43,5 +44,31 @@ export class AutomationDetails {
       icon: 'pi pi-times'
     }
   ]
-  protected readonly JSON = JSON;
+
+  logsPaginator = {
+    page: 1,
+    count: 10,
+    first: 0,
+    totalRecords: 0
+  }
+
+  ngOnInit() {
+    this.getLogs();
+  }
+
+  getLogs(): void {
+    this.automationAdminService.getLogs(this.logsPaginator.page, this.logsPaginator.count).subscribe(logs => {
+      this.automationLogs = logs;
+      this.logsPaginator.totalRecords = logs.totalCount;
+    })
+  }
+
+  onPageChange(event: any): void {
+    const page = (event.first / event.rows) + 1;
+    const count = event.rows;
+    this.logsPaginator.page = page;
+    this.logsPaginator.count = count;
+    this.getLogs();
+  }
+
 }

@@ -64,6 +64,7 @@ export class ChatComponent implements OnInit, OnDestroy{
           life: 2000
         });
         this.limitExceeded = true;
+        this.isRecording = false;
       }
     })
   }
@@ -86,7 +87,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
 
   private resolveWsUrl(): string {
-    return this.REMOTE_WS_URL;
+    return `${this.LOCAL_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
   }
 
   private resolveSessionId(): string {
@@ -245,10 +246,12 @@ export class ChatComponent implements OnInit, OnDestroy{
                 severity: 'error',
                 summary: 'Error',
                 detail: 'You have reached the limit of using automation',
-                life: 2000
+                life: 3000
               });
               this.limitExceeded = true;
-              this.stopAllPlayback();
+              this.isRecording = false;
+              // this.stopAllPlayback();
+              this.ws.close();
             }
 
           } catch {

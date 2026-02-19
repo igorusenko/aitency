@@ -25,7 +25,9 @@
       @if (userStore.currentUser().role === 'Demo') {
         <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/register']">Register a real account</button>
       }
-      <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
+      @if (userStore.currentUser().role !== 'Demo') {
+        <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
+      }
     </div>
   </aside>
 @if (!sideMenuService.isSideMenuCollapsed()) {
