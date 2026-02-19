@@ -6,7 +6,7 @@ import {TableModule, TableRowSelectEvent} from 'primeng/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {IPaginatedList} from '../../../../core/interfaces/paginated-list-interface';
 import {IAutomation} from '../../../../core/interfaces/automations/automation-interface';
-import {Observable} from 'rxjs';
+import {Observable, skip, skipLast} from 'rxjs';
 import {Button} from 'primeng/button';
 import {MessageService} from 'primeng/api';
 import {AutomationsStore} from '../../../../core/stores/automations.store';

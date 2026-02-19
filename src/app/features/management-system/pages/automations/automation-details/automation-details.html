@@ -101,8 +101,15 @@
                 @if (log.logs.payload) {
                   @if (log.logs.payload?.text) {
                     <div class="flex gap-2">
-                      <p>Response text:</p>
+                      <p>Response:</p>
                       <p>{{log.logs.payload?.text}}</p>
+                    </div>
+                  }
+
+                  @if (log.logs.payload?.message) {
+                    <div class="flex gap-2">
+                      <p>Payload message:</p>
+                      <p>{{log.logs.payload?.message}}</p>
                     </div>
                   }
 

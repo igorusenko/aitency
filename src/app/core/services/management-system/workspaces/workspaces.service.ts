@@ -21,4 +21,12 @@ export class WorkspacesService {
     return this.http.get<any>(`${this.apiUrl}/workspaces/${id}`)
       .pipe(tap(workspace => this.workspacesStore.workspace.set(workspace)));
   }
+
+  appendWorkspace(automationId: string, workspaceIds: string[]) {
+    return this.http.patch<any>(`${this.apiUrl}/automations/workspaces/append`, {automationId, workspaceIds})
+  }
+
+  detachWorkspace(automationId: string, workspaceIds: string[]) {
+    return this.http.patch<any>(`${this.apiUrl}/automations/workspaces/detach`, {automationId, workspaceIds})
+  }
 }

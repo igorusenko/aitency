@@ -1,72 +1,72 @@
 <div class="flex flex-col gap-4">
   <p>{{editMode ? 'Update' : 'Create'}} Automation</p>
-  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">
+<!--  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">-->
 
-    <!--      <p-floatlabel>-->
-    <!--        <input-text pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />-->
-    <!--        <label for="over_label">Over Label</label>-->
-    <!--      </p-floatlabel>-->
+<!--    &lt;!&ndash;      <p-floatlabel>&ndash;&gt;-->
+<!--    &lt;!&ndash;        <input-text pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />&ndash;&gt;-->
+<!--    &lt;!&ndash;        <label for="over_label">Over Label</label>&ndash;&gt;-->
+<!--    &lt;!&ndash;      </p-floatlabel>&ndash;&gt;-->
 
-    <app-input-text
-      [form]="automationForm"
-      [formSubmitted]="formSubmitted"
-      controlName="serverId"
-      title="Server ID"
-      type="text"
-    >
-    </app-input-text>
+<!--    <app-input-text-->
+<!--      [form]="automationForm"-->
+<!--      [formSubmitted]="formSubmitted"-->
+<!--      controlName="serverId"-->
+<!--      title="Server ID"-->
+<!--      type="text"-->
+<!--    >-->
+<!--    </app-input-text>-->
 
-    <app-checkbox
-      [form]="automationForm"
-      [formSubmitted]="formSubmitted"
-      controlName="isActive"
-      title="Active"
-    ></app-checkbox>
+<!--    <app-checkbox-->
+<!--      [form]="automationForm"-->
+<!--      [formSubmitted]="formSubmitted"-->
+<!--      controlName="isActive"-->
+<!--      title="Active"-->
+<!--    ></app-checkbox>-->
 
-    <app-checkbox
-      [form]="automationForm"
-      [formSubmitted]="formSubmitted"
-      controlName="isDemo"
-      title="Demo"
-    ></app-checkbox>
+<!--    <app-checkbox-->
+<!--      [form]="automationForm"-->
+<!--      [formSubmitted]="formSubmitted"-->
+<!--      controlName="isDemo"-->
+<!--      title="Demo"-->
+<!--    ></app-checkbox>-->
 
-    <div class="flex flex-col gap-4">
-      <!--        @if ($assistantVoices | async; as voices) {-->
-      <app-select
-        [form]="getConfigForm()"
-        [formSubmitted]="formSubmitted"
-        [options]="voices"
-        controlName="voice"
-        title="Voice"
-        optionLabel="name"
-        optionValue="name"
-      ></app-select>
+<!--    <div class="flex flex-col gap-4">-->
+<!--      &lt;!&ndash;        @if ($assistantVoices | async; as voices) {&ndash;&gt;-->
+<!--      <app-select-->
+<!--        [form]="getConfigForm()"-->
+<!--        [formSubmitted]="formSubmitted"-->
+<!--        [options]="voices"-->
+<!--        controlName="voice"-->
+<!--        title="Voice"-->
+<!--        optionLabel="name"-->
+<!--        optionValue="name"-->
+<!--      ></app-select>-->
+
+<!--&lt;!&ndash;      <app-input-number&ndash;&gt;-->
+<!--&lt;!&ndash;        [form]="getConfigForm()"&ndash;&gt;-->
+<!--&lt;!&ndash;        [formSubmitted]="formSubmitted"&ndash;&gt;-->
+<!--&lt;!&ndash;        controlName="volume"&ndash;&gt;-->
+<!--&lt;!&ndash;        label="Volume (1.0 - 2.0)"&ndash;&gt;-->
+<!--&lt;!&ndash;        [min]="1"&ndash;&gt;-->
+<!--&lt;!&ndash;        [max]="2"&ndash;&gt;-->
+<!--&lt;!&ndash;        [minFractionDigits]="2"&ndash;&gt;-->
+<!--&lt;!&ndash;        [maxFractionDigits]="2"&ndash;&gt;-->
+<!--&lt;!&ndash;      />&ndash;&gt;-->
 
 <!--      <app-input-number-->
 <!--        [form]="getConfigForm()"-->
 <!--        [formSubmitted]="formSubmitted"-->
-<!--        controlName="volume"-->
-<!--        label="Volume (1.0 - 2.0)"-->
+<!--        controlName="speed"-->
+<!--        label="Speed (1.0 - 2.0)"-->
 <!--        [min]="1"-->
 <!--        [max]="2"-->
 <!--        [minFractionDigits]="2"-->
 <!--        [maxFractionDigits]="2"-->
 <!--      />-->
+<!--    </div>-->
 
-      <app-input-number
-        [form]="getConfigForm()"
-        [formSubmitted]="formSubmitted"
-        controlName="speed"
-        label="Speed (1.0 - 2.0)"
-        [min]="1"
-        [max]="2"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-      />
-    </div>
-
-    <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
-  </form>
+<!--    <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>-->
+<!--  </form>-->
 
 <!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->
 
@@ -95,6 +95,7 @@
             <th>Email owner</th>
             <th>ID owner</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template #body let-workspace>
@@ -104,7 +105,15 @@
             <td>{{ workspace.ownerEmail || '-' }}</td>
             <td>{{ workspace.ownerId || '-' }}</td>
             <td>{{ workspace.status || '-' }}</td>
-
+            <td (click)="$event.stopPropagation()">
+              <div class="flex gap-2">
+                @if (isWorkspaceAttached(workspace.id)) {
+                  <p-button severity="danger" (onClick)="detachWorkspace(workspace.id)">Detach</p-button>
+                } @else {
+                  <p-button (onClick)="appendWorkspace(workspace.id)">Append</p-button>
+                }
+              </div>
+            </td>
 <!--            <td (click)="$event.stopPropagation()">-->
 <!--              <div class="flex gap-2">-->
 <!--                @if (isUserAttached(user.id)) {-->

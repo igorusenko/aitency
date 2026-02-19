@@ -16,20 +16,15 @@ import {InputNumberComponent} from '../../../../../shared/input-number/input-num
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
 import {WorkspacesStore} from '../../../../../core/services/management-system/workspaces/workspaces.store';
+import {WorkspacesService} from '../../../../../core/services/management-system/workspaces/workspaces.service';
 
 @Component({
   selector: 'app-automation-edit',
   imports: [
-    Checkbox,
     ReactiveFormsModule,
-    SelectComponent,
     FormsModule,
     Button,
-    DatePipe,
     TableModule,
-    InputTextComponent,
-    Checkbox,
-    InputNumberComponent,
     Menu,
     Panel,
   ],
@@ -41,6 +36,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
   automationStore = inject(AutomationsStore);
   // userStore = inject(UserStore);
   workspacesStore = inject(WorkspacesStore);
+  workspacesService = inject(WorkspacesService);
   router = inject(Router);
   fb = inject(FormBuilder);
   messageService = inject(MessageService);
@@ -155,6 +151,26 @@ export class AutomationEdit implements OnInit, OnDestroy {
     this.automationForm.reset();
     this.formSubmitted = false;
     this.router.navigate(['/automations'])
+  }
+
+  appendWorkspace(workSpaceId: string): void {
+    this.workspacesService.appendWorkspace(this.automationStore.automation()?.id!, [workSpaceId])
+      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
+      .subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace appended to automation!', life: 2000 });
+    })
+  }
+
+  detachWorkspace(workSpaceId: string): void {
+    this.workspacesService.detachWorkspace(this.automationStore.automation()?.id!, [workSpaceId])
+      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
+      .subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace detached from automation!', life: 2000 });
+    })
+  }
+
+  isWorkspaceAttached(workspaceId: string): boolean {
+    return this.automationStore.automation()?.workspaces.some(x => x.id === workspaceId)!;
   }
 
   ngOnDestroy() {
