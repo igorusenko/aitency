@@ -61,7 +61,7 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Access to automation is prohibited',
+          detail: 'Demo limit reached. Please register a real account to continue.',
           life: 2000
         });
         this.limitExceeded = true;
