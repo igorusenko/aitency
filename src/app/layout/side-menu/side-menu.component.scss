@@ -2,6 +2,17 @@
   @apply h-screen;
 }
 
+
+.demo-tip {
+  @apply flex flex-col text-[#9fb0c3] items-center border rounded-lg p-2;
+  border-color: rgba(55, 65, 81, 0.9);
+  background: radial-gradient(
+      circle at top,
+      #020617,
+      #020617 52%,
+      #000 100%
+  );
+}
 /**
  * Sidebar container
  * Основная базовая стилизация уже описана в `src/styles.scss` для `.sidebar`.

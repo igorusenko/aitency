@@ -24,7 +24,7 @@ export const routes: Routes = [
       },
       {
         path: 'demo/:id',
-        title: 'Demo',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/voice-assistant/voice-assistant').then(
             (m) => m.VoiceAssistant
@@ -32,48 +32,48 @@ export const routes: Routes = [
       },
       {
         path: 'home',
-        title: 'VoiceAssistant',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/home/home').then((m) => m.Home),
       },
       {
         path: 'automations',
-        title: 'Automations',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/automations/automations').then((m) => m.Automations),
         resolve: {automations: automationsResolver}
       },
       {
         path: 'automations/:id',
-        title: 'Automation details',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
         resolve: {automation: automationResolver}
       },
       {
         path: 'automations/edit/:id',
-        title: 'Automation edit',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
         resolve: {automation: automationResolver, workspaces: workspacesResolver}
       },
       {
         path: 'users',
-        title: 'Users',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/users/users').then((m) => m.Users),
         resolve: {users: usersResolver}
       },
       {
         path: 'users/:id',
-        title: 'User Details',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/users/user-details/user-details').then((m) => m.UserDetails),
         resolve: {user: userResolver}
       },
       {
         path: 'users/edit/:id',
-        title: 'User Edit',
+        title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/users/user-edit/user-edit').then((m) => m.UserEdit),
         resolve: {user: userResolver}
