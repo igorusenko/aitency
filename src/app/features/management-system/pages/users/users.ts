@@ -10,7 +10,6 @@ import {MessageService} from 'primeng/api';
 @Component({
   selector: 'app-users',
   imports: [
-    Button,
     TableModule,
     RouterLink,
     UpperCasePipe,

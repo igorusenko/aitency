@@ -27,6 +27,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   private automationsService = inject(AutomationAdminService);
   private route = inject(ActivatedRoute);
   messageService = inject(MessageService);
+  userStore = inject(UserStore);
   private destroy$ = new Subject<void>();
   private wsReady$?: Observable<void>;
   showEmptyState = true;
@@ -66,6 +67,10 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.limitExceeded = true;
         this.isRecording = false;
       }
+    })
+    if (this.userStore.currentUser().role === 'Demo')
+    this.assistantService.getLimits().subscribe(x => {
+      this.assistantService.requestsLimit.set(x.value);
     })
   }
 
@@ -252,6 +257,10 @@ export class ChatComponent implements OnInit, OnDestroy{
               this.isRecording = false;
               // this.stopAllPlayback();
               this.ws.close();
+            }
+
+            if (msg.type === 'demo.limit_remaining') {
+              this.assistantService.requestsLimit.set(Number(msg.text))
             }
 
           } catch {

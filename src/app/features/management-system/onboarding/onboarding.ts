@@ -87,18 +87,18 @@ export class Onboarding implements OnInit {
   initCompanyForm(): void {
     this.companyForm = this.fb.group({
       accountType: new FormControl('Company'),
-      needInvoice: new FormControl(false),
+      needInvoice: new FormControl(true),
 
       name: new FormControl('', Validators.required),
-      website: new FormControl('', Validators.required),
+      website: new FormControl(''),
       vatTaxId: new FormControl('', Validators.required),
 
       invoiceAddress: new FormGroup({
-        fullName: new FormControl(null),
-        street: new FormControl(null),
+        fullName: new FormControl(null, Validators.required),
+        street: new FormControl(null, Validators.required),
         city: new FormControl(null),
         postalCode: new FormControl(null),
-        country: new FormControl(null),
+        country: new FormControl(null, Validators.required),
       }),
     })
     this.onCompanyInvoiceChanged();

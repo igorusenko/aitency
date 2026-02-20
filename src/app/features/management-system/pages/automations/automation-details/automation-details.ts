@@ -53,6 +53,7 @@ export class AutomationDetails implements OnInit {
   }
 
   ngOnInit() {
+    if (this.userStore.currentUser().role == 'Admin')
     this.getLogs();
   }
 

@@ -1,13 +1,26 @@
 <div class="flex flex-col gap-1">
   <p-floatlabel variant="on">
-    <input class="w-full"
-           pInputText
-           autocomplete="off"
-           [type]="type() || 'text'"
-           [id]="controlName()"
-           [formControl]="control()"
-           [invalid]="isInvalidControl()"
-    />
+    @if (textarea()) {
+      <textarea class="w-full"
+        rows="5"
+        cols="30"
+        pTextarea
+        [id]="controlName()"
+        [formControl]="control()"
+        [invalid]="isInvalidControl()"
+      >
+
+      </textarea>
+    } @else {
+      <input class="w-full"
+             pInputText
+             autocomplete="off"
+             [type]="type() || 'text'"
+             [id]="controlName()"
+             [formControl]="control()"
+             [invalid]="isInvalidControl()"
+      />
+    }
     <label [for]="controlName()!">{{ title() }}</label>
   </p-floatlabel>
 

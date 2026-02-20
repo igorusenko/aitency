@@ -8,6 +8,8 @@ import {environment} from '../../../../environments/environment';
 })
 export class AssistantService {
   private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+
   calendarProcessing: WritableSignal<boolean> = signal(false);
   bookingProcessing: WritableSignal<boolean> = signal(false);
   priceInquiryProcessing: WritableSignal<boolean> = signal(false);
@@ -15,6 +17,7 @@ export class AssistantService {
   cancelAppointmentProcessing: WritableSignal<boolean> = signal(false);
   rescheduleAppointmentProcessing: WritableSignal<boolean> = signal(false);
   handoffToHumanProcessing: WritableSignal<boolean> = signal(false);
+  requestsLimit: WritableSignal<number | undefined> = signal(undefined);
 
   public systems = [
     {
@@ -105,5 +108,9 @@ export class AssistantService {
       const handoffToHumanIndex = this.systems.findIndex(system => system.key === 'handoff_to_human')
       this.systems[handoffToHumanIndex].active = this.handoffToHumanProcessing();
     });
+  }
+
+  getLimits(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users/automation/calls`)
   }
 }

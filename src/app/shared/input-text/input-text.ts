@@ -3,6 +3,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Message} from 'primeng/message';
 import {InputText} from 'primeng/inputtext';
+import {Textarea} from 'primeng/textarea';
 
 @Component({
   selector: 'app-input-text',
@@ -11,7 +12,8 @@ import {InputText} from 'primeng/inputtext';
     FormsModule,
     Message,
     ReactiveFormsModule,
-    InputText
+    InputText,
+    Textarea
   ],
   standalone: true,
   templateUrl: './input-text.html',
@@ -20,6 +22,7 @@ import {InputText} from 'primeng/inputtext';
 export class InputTextComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
   formSubmitted: InputSignal<boolean> = input.required<boolean>();
+  textarea: InputSignal<boolean> = input<boolean>(false);
   controlName: InputSignal<string> = input.required<string>();
   type: InputSignal<string> = input('text');
   title: InputSignal<string> = input('');

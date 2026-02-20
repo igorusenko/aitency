@@ -1,4 +1,4 @@
-<main class="main">
+<main class="main !pb-0">
   <section class="hero">
     <div class="hero-text">
       <h1>
@@ -9,7 +9,17 @@
         This interactive demo simulates how an AI Booking Agent handles patient bookings,
         recall reminders, and call automation.
       </p>
+    </div>
 
+    <div class="flex flex-col gap-2 pt-4 !max-w-full text-xs sm:text-base">
+      <p>This demo showcases the core capabilities of our AI voice assistant.</p>
+      <p>The assistant can:
+        <p>• Handle reception calls</p>
+        <p>• Answer frequently asked questions</p>
+        <p>• Make appointment booking</p>
+        <p>• Connect to databases and provide information to client</p>
+        <p>• Integrate with CRM and booking systems</p>
+        <p>• Work via phone, website or messaging platforms</p>
     </div>
 
   </section>
@@ -17,7 +27,12 @@
   <!-- CHAT -->
   <section id="chat-demo" class="panel panel-grid">
     <div class="panel-column">
-      <h2>AI VOICE AGENT</h2>
+      <div class="flex items-center justify-between">
+        <h2>AI VOICE AGENT</h2>
+        @if (assistantService.requestsLimit()) {
+          <h2>DEMO LIMIT: <span class="!text-green-300">{{assistantService.requestsLimit()}}</span></h2>
+        }
+      </div>
 
       <div class="chat-window">
         <app-voice-assistant></app-voice-assistant>
@@ -49,5 +64,16 @@
 </main>
 
 <footer class="footer">
-  <p>© {{ currentYear }} AItency – AI Business Automation Demo.</p>
+  <p class="text-xl text-white pb-4">Please note:</p>
+  <p class="text-base pb-4">
+    This demo operates on limited resources and a simplified
+    infrastructure.
+    As a result, performance may differ from a fully optimized production
+    deployment.
+    In a live environment, the system is configured with dedicated
+    resources and full database integrations.
+    At AITENCY, we don’t believe in one-size-fits-all solutions.
+    We design and build custom AI automations tailored to each business.
+  </p>
+  <p class="pt-4">© {{ currentYear }} AItency – AI Business Automation Demo.</p>
 </footer>

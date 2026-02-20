@@ -27,6 +27,10 @@ import {WorkspacesService} from '../../../../../core/services/management-system/
     TableModule,
     Menu,
     Panel,
+    InputTextComponent,
+    Checkbox,
+    SelectComponent,
+    InputNumberComponent,
   ],
   templateUrl: './automation-edit.html',
   styleUrl: './automation-edit.scss',
@@ -43,6 +47,10 @@ export class AutomationEdit implements OnInit, OnDestroy {
   usersMappedToAppend: IAppendUserModel;
   editMode: boolean = Boolean(this.automationStore.automation()) ?? false;
   linkedUsers = [];
+
+  assistantTypes = [
+    { name: 'Reception AI Agent(Demo)' }
+  ]
 
   voices = [
     { name: 'alloy' },
@@ -87,9 +95,11 @@ export class AutomationEdit implements OnInit, OnDestroy {
       serverId: new FormControl(this.automationStore.automation()?.serverId ?? '', [Validators.required]),
       config: this.fb.group({
         voice: new FormControl(this.automationStore.automation()?.config?.voice ?? null, [Validators.required]),
-        // volume: new FormControl(this.automationStore.automation()?.config?.volume ?? null, [Validators.required]),
-        speed: new FormControl(this.automationStore.automation()?.config?.speed ?? null, [Validators.required]),
+        speed: new FormControl(this.automationStore.automation()?.config?.speed ?? 1.2, [Validators.required]),
+        instructions: new FormControl(this.automationStore.automation()?.config?.instructions ?? null, [Validators.required]),
+        tools: new FormControl([]),
       }),
+      assistantType: new FormControl('Reception AI Agent(Demo)'),
     })
   }
 
