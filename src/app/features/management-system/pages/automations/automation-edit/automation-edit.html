@@ -77,14 +77,16 @@
         controlName="isDemo"
         title="Demo"
       ></app-checkbox>
-    </form>
 
-    <div class="flex flex-col pt-2">
-      <p><span class="text-green-300">Calendar Integration:</span> Not connected (Demo Mode)</p>
-      <p><span class="text-green-300">Price List Database:</span> No database connected (Demo Mode)</p>
-      <p><span class="text-green-300">CRM Integration:</span> No database connected (Demo Mode)</p>
-      <p><span class="text-green-300">FAQ:</span> Not Connected</p>
-    </div>
+      <div class="flex flex-col">
+        <p><span class="text-green-300">Calendar Integration:</span> Not connected (Demo Mode)</p>
+        <p><span class="text-green-300">Price List Database:</span> No database connected (Demo Mode)</p>
+        <p><span class="text-green-300">CRM Integration:</span> No database connected (Demo Mode)</p>
+        <p><span class="text-green-300">FAQ:</span> Not Connected</p>
+      </div>
+
+      <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
+    </form>
   </p-panel>
 
 <!--  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">-->
@@ -110,8 +112,6 @@
 <!--&lt;!&ndash;        [maxFractionDigits]="2"&ndash;&gt;-->
 <!--&lt;!&ndash;      />&ndash;&gt;-->
 
-
-<!--    <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>-->
 <!--  </form>-->
 
 <!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->

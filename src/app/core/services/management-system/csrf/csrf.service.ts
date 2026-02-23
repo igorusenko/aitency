@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {firstValueFrom, Observable, take, tap} from 'rxjs';
 import {environment} from '../../../../../environments/environment';
-import {CsrfStore} from './csrf.store';
+import {CsrfStore} from '../../../stores/csrf.store';
 
 @Injectable({ providedIn: 'root' })
 export class CsrfService {

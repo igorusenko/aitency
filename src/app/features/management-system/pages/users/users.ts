@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {Button} from 'primeng/button';
 import {TableModule, TableRowSelectEvent} from 'primeng/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {UserStore} from '../../../../core/services/management-system/user/user.store';
+import {UserStore} from '../../../../core/stores/user.store';
 import {DatePipe, NgClass, UpperCasePipe} from '@angular/common';
 import {UserService} from '../../../../core/services/management-system/user/user.service';
 import {MessageService} from 'primeng/api';

@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
 import {Observable, tap} from 'rxjs';
-import {UserStore} from './user.store';
+import {UserStore} from '../../../stores/user.store';
 import {IUser} from '../../../interfaces/users/user';
 
 @Injectable({

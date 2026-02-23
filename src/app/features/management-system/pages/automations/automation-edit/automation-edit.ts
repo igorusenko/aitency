@@ -15,7 +15,7 @@ import {SelectComponent} from '../../../../../shared/select/select';
 import {InputNumberComponent} from '../../../../../shared/input-number/input-number';
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
-import {WorkspacesStore} from '../../../../../core/services/management-system/workspaces/workspaces.store';
+import {WorkspacesStore} from '../../../../../core/stores/workspaces.store';
 import {WorkspacesService} from '../../../../../core/services/management-system/workspaces/workspaces.service';
 
 @Component({

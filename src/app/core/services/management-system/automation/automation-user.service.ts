@@ -5,7 +5,7 @@ import {IAutomation} from '../../../interfaces/automations/automation-interface'
 import {environment} from '../../../../../environments/environment';
 import {AutomationsStore} from '../../../stores/automations.store';
 import {IPaginatedList} from '../../../interfaces/paginated-list-interface';
-import {UserStore} from '../user/user.store';
+import {UserStore} from '../../../stores/user.store';
 
 @Injectable({
   providedIn: 'root',

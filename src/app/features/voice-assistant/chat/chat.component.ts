@@ -4,7 +4,7 @@ import { switchMap, takeUntil, shareReplay } from 'rxjs/operators';
 import {AssistantService} from '../../../core/services/voice-assistant/assistant.service';
 import {AutomationsStore} from '../../../core/stores/automations.store';
 import {ActivatedRoute} from '@angular/router';
-import {UserStore} from '../../../core/services/management-system/user/user.store';
+import {UserStore} from '../../../core/stores/user.store';
 import {AutomationAdminService} from '../../../core/services/management-system/automation/automation-admin.service';
 import {MessageService} from 'primeng/api';
 type MessageWho = 'assistant' | 'user';
@@ -55,6 +55,13 @@ export class ChatComponent implements OnInit, OnDestroy{
   limitExceeded: boolean = false;
 
   ngOnInit(): void {
+    this.getAutomationAcess();
+
+    if (this.userStore.currentUser().role === 'Demo')
+    this.getAutomationLimits()
+  }
+
+  getAutomationAcess(): void {
     this.automationsService.getAutomationAccess(this.route.snapshot.params['id']).subscribe(x => {
       if (x.value) this.initAssistant();
       else {
@@ -68,7 +75,9 @@ export class ChatComponent implements OnInit, OnDestroy{
         this.isRecording = false;
       }
     })
-    if (this.userStore.currentUser().role === 'Demo')
+  }
+
+  getAutomationLimits(): void {
     this.assistantService.getLimits().subscribe(x => {
       this.assistantService.requestsLimit.set(x.value);
     })

@@ -1,8 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {WorkspacesStore} from './workspaces.store';
+import {WorkspacesStore} from '../../../stores/workspaces.store';
 import {environment} from '../../../../../environments/environment';
 import {Observable, tap} from 'rxjs';
+import {IPaginatedList} from '../../../interfaces/paginated-list-interface';
+import {IWorkspace} from '../../../interfaces/workspace/workspace.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +14,8 @@ export class WorkspacesService {
   private readonly workspacesStore = inject(WorkspacesStore);
   private readonly apiUrl = environment.apiUrl;
 
-  getWorkspaces(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/workspaces`)
+  getWorkspaces(): Observable<IPaginatedList<IWorkspace>> {
+    return this.http.get<IPaginatedList<IWorkspace>>(`${this.apiUrl}/workspaces`)
       .pipe(tap(workspaces => this.workspacesStore.workspaces.set(workspaces)));
   }
 

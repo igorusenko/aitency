@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {UserStore} from '../../../../../core/services/management-system/user/user.store';
+import {UserStore} from '../../../../../core/stores/user.store';
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
 import {AsyncPipe, DatePipe} from '@angular/common';

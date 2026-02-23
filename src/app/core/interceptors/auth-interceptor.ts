@@ -2,7 +2,7 @@ import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
 import {inject} from '@angular/core';
 import {catchError, concatMap, throwError} from 'rxjs';
 import {Router} from '@angular/router';
-import {CsrfStore} from '../services/management-system/csrf/csrf.store';
+import {CsrfStore} from '../stores/csrf.store';
 import {CsrfService} from '../services/management-system/csrf/csrf.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

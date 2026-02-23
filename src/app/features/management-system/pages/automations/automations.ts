@@ -10,7 +10,7 @@ import {Observable, skip, skipLast} from 'rxjs';
 import {Button} from 'primeng/button';
 import {MessageService} from 'primeng/api';
 import {AutomationsStore} from '../../../../core/stores/automations.store';
-import {UserStore} from '../../../../core/services/management-system/user/user.store';
+import {UserStore} from '../../../../core/stores/user.store';
 
 @Component({
   selector: 'app-automations',

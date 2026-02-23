@@ -3,7 +3,7 @@ import {Checkbox} from 'primeng/checkbox';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
-import {UserStore} from '../../../../../core/services/management-system/user/user.store';
+import {UserStore} from '../../../../../core/stores/user.store';
 import {UserService} from '../../../../../core/services/management-system/user/user.service';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
