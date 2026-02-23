@@ -23,15 +23,15 @@ export class UserService {
       .pipe(tap(users => this.userStore.users.set(users)));
   }
 
-  getCurrentUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users/me`)
+  getCurrentUser(): Observable<IUser> {
+    return this.http.get<IUser>(`${this.apiUrl}/users/me`)
       .pipe(tap(user => {
         this.userStore.currentUser.set(user);
       }));
   }
 
-  getUserById(id: string) {
-    return this.http.get<any>(`${this.apiUrl}/users/${id}`)
+  getUserById(id: string): Observable<IUser> {
+    return this.http.get<IUser>(`${this.apiUrl}/users/${id}`)
       .pipe(tap(user => this.userStore.userById.set(user)));
   }
 
@@ -47,7 +47,7 @@ export class UserService {
     return this.http.delete<any>(`${this.apiUrl}/users/${id}`);
   }
 
-  getUserPassword(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users/${this.userStore.userById().id}/password`)
+  getUserPassword(): Observable<{ password: string }> {
+    return this.http.get<{ password: string }>(`${this.apiUrl}/users/${this.userStore.userById().id}/password`)
   }
 }

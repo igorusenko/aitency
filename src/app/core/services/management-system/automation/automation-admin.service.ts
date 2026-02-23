@@ -39,6 +39,11 @@ export class AutomationAdminService {
       .pipe(tap(x => this.automationsStore.automation.set(x)));
   }
 
+  getAutomationUser(id: string): Observable<IAutomation> {
+    return this.http.get<IAutomation>(`${this.apiUrl}/automations/${id}`)
+      .pipe(tap(x => this.automationsStore.automation.set(x)));
+  }
+
   createAutomation(automation: IAutomation): Observable<any> {
     return this.http.post<IAutomation>(`${this.apiUrl}/automations`, automation);
   }

@@ -1,3 +1,5 @@
+import {IWorkspace} from '../workspace/workspace.interface';
+
 export interface IUser {
   id?: string,
   email: string,
@@ -5,7 +7,15 @@ export interface IUser {
   address: string,
   contactPerson: string,
   billing: string,
-  isActive: boolean
+  isActive: boolean,
+  emailConfirmed: boolean,
+  fullName: string,
+  onboardingStatus: string,
+  onboardingStep: string,
+  registrationDate: string,
+  termsAcceptedAt: string,
+  timezone: string,
+  workspaces: Array<IWorkspace>
 }
 
 export interface IAppendUserModel {

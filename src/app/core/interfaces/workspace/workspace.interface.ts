@@ -4,4 +4,5 @@ export interface IWorkspace {
   ownerEmail: string;
   ownerId: string;
   status: string;
+  userRole?: string;
 }
