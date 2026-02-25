@@ -4,8 +4,7 @@
 
 
 .demo-tip {
-  @apply flex flex-col text-[#9fb0c3] items-center border rounded-lg p-2;
-  border-color: rgba(55, 65, 81, 0.9);
+  @apply flex flex-col text-[#9fb0c3] items-center rounded-lg p-2;
   background: radial-gradient(
       circle at top,
       #020617,
@@ -33,23 +32,44 @@
   @apply hidden;
 }
 
-@media (max-width: 980px) {
-  /**
-   * На мобильных устройствах выдвижное меню слева.
-   * Состояние `collapsed` прячем через transform.
-   */
-  .sidebar {
-    @apply fixed inset-y-0 left-0 z-50;
-    width: 260px;
-    transform: translateX(0);
-    transition: transform 0.3s ease;
+//@media (max-width: 980px) {
+//  .sidebar {
+//    @apply fixed inset-y-0 left-0 z-50;
+//    width: 260px;
+//    transform: translateX(0);
+//    transition: transform 0.3s ease;
+//  }
+//
+//  .sidebar.collapsed {
+//    transform: translateX(-100%);
+//  }
+//
+//  .mobile-black-overlay {
+//    @apply fixed inset-0 bg-black/60 z-40;
+//  }
+//}
+
+.sidebar-collapsed {
+  @apply px-0 py-4;
+  width: 50px;
+
+  .sidebar-menu-item {
+    position: static;
   }
 
-  .sidebar.collapsed {
-    transform: translateX(-100%);
+  .sidebar-item {
+    i {
+      margin-right: 0;
+    }
+    &-text,
+    &-arrow {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
   }
 
-  .mobile-black-overlay {
-    @apply fixed inset-0 bg-black/60 z-40;
+  .sidebar-submenu {
+    display: none;
   }
 }

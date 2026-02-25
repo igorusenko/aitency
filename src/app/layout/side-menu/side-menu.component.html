@@ -1,45 +1,75 @@
 <div class="sidebar z-20"
-     [ngClass]="{'collapsed': sideMenuService.isSideMenuCollapsed()}"
+     [ngClass]="{'sidebar-collapsed': isSidebarCollapsed()}"
      tabindex="0" (click)="$event.stopPropagation()">
-  <aside>
-    <div class="flex flex-col gap-4">
-      <img src="logo.png" alt="" class="w-40">
-      <div class="brand" [routerLink]="['/onboarding']">
-        <div class="logo">AI</div>
-        <div class="brand-text">
-          <div class="brand-name">{{userStore.currentUser().fullName}}</div>
-          <div class="brand-sub">{{userStore.currentUser().email}}</div>
-        </div>
-      </div>
+  @if (isSidebarCollapsed()) {
+    <div class="flex flex-col justify-between items-center h-full">
+      <div class="flex flex-col items-center gap-4">
 
-      <nav class="nav">
+        <p class="text-[11px] text-[#4a1fb8]">AITENCY</p>
+
+        <p-button class="pb-4" icon="pi pi-user" size="small" pTooltip="Onboarding" [routerLink]="['/onboarding']" />
+
         @if (userStore.currentUser().role === 'Demo') {
-          <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/register']">Register a real account</button>
+          <p-button icon="pi pi-user-plus" aria-label="Save" size="small" pTooltip="Register new account" />
         }
+
         @for (item of items; track item) {
           @if (roleCompatability(item.roles)) {
-            <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
-              <span class="nav-dot"></span><span>{{item.title}}</span>
-            </a>
+            <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item.path]" />
           }
         }
-      </nav>
+      </div>
+      <div class="flex flex-col gap-4">
+        @if (userStore.currentUser().role === 'Demo') {
+          <div class="text-[10px] text-green-300">
+            <p>DEMO</p>
+            <p>MODE</p>
+          </div>
+        }
+        @if (userStore.currentUser().role !== 'Demo') {
+        <p-button icon="pi pi-sign-out" aria-label="Save" size="small" pTooltip="Logout" />
+        }
+      </div>
     </div>
 
-    <div class="flex flex-col gap-4">
-      @if (userStore.currentUser().role === 'Demo') {
-        <div class="demo-tip">
-          <p>DEMO MODE</p>
-          <p>Limited functionality</p>
+  } @else {
+    <aside>
+      <div class="flex flex-col gap-4">
+        <img src="logo.png" alt="" class="w-40">
+        <div class="brand" [routerLink]="['/onboarding']">
+          <div class="logo">AI</div>
+          <div class="brand-text">
+            <div class="brand-name">{{userStore.currentUser().fullName}}</div>
+            <div class="brand-sub">{{userStore.currentUser().email}}</div>
+          </div>
         </div>
-      }
+        @if (userStore.currentUser().role === 'Demo') {
+          <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/register']">Register new account</button>
+        }
 
-      @if (userStore.currentUser().role !== 'Demo') {
-        <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
-      }
-    </div>
-  </aside>
-@if (!sideMenuService.isSideMenuCollapsed()) {
-  <div tabindex="0" class="mobile-black-overlay" (click)="sideMenuService.isSideMenuCollapsed.set(true)"></div>
-}
+        <nav class="nav">
+          @for (item of items; track item) {
+            @if (roleCompatability(item.roles)) {
+              <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
+                <span class="nav-dot"></span><span>{{item.title}}</span>
+              </a>
+            }
+          }
+        </nav>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        @if (userStore.currentUser().role === 'Demo') {
+          <div class="demo-tip">
+            <p>DEMO MODE</p>
+            <p>Limited functionality</p>
+          </div>
+        }
+
+        @if (userStore.currentUser().role !== 'Demo') {
+          <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
+        }
+      </div>
+    </aside>
+  }
 </div>

@@ -13,3 +13,50 @@
   overflow-x: hidden;
   @apply relative;
 }
+
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.content {
+  flex-grow: 1;
+  transition: all 0.3s ease-in-out;
+  overflow-y: auto;
+
+  &-inner {
+    @apply p-8;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &-expanded {
+    //margin-left: 50px;
+  }
+}
+
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 4rem;
+  left: 228px; // Default position when sidebar is expanded
+  background-color: #2c3e50;
+  border: none;
+  color: #fff;
+  padding: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  cursor: pointer;
+  z-index: 1001;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #34495e;
+  }
+
+  &.sidebar-collapsed {
+    left: 48px; // Position when sidebar is collapsed
+  }
+}

@@ -1,13 +1,21 @@
-<div class="min-h-screen w-full">
-
-  <div class="w-full flex relative">
-    <app-side-menu class="flex-none"></app-side-menu>
-
-    <div class="grow content-container py-4 px-6 flex flex-row justify-center items-start">
-      <div class="router-container max-w-[1280px] w-full justify-center items-start">
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+<div class="app-container">
+  <div class="position-relative">
+    <app-side-menu class="flex-none"
+                   [isSidebarCollapsed]="isSidebarCollapsed"
+                   (sidebarToggle)="onSidebarToggle($event)"
+    ></app-side-menu>
+    <button
+      class="sidebar-toggle-btn"
+      [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }"
+      (click)="isSidebarCollapsed = !isSidebarCollapsed"
+    >
+      <i class="pi" [ngClass]="[isSidebarCollapsed ? 'pi-angle-double-right' : 'pi-angle-double-left']" style="font-size: 1rem"></i>
+    </button>
   </div>
 
+  <main class="content" [ngClass]="{ 'content-expanded': isSidebarCollapsed }">
+    <div class="content-inner">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
 </div>

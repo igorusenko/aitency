@@ -39,6 +39,9 @@ export const CustomPreset = definePreset(Aura, {
       tablist: {
         background: 'transparent',
       }
+    },
+    button: {
+
     }
   }
 });

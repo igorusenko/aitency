@@ -28,16 +28,19 @@ export class SideMenuService implements OnDestroy {
     {
       path: 'home',
       title: 'Overview',
+      icon: 'pi-home',
       roles: ['Default', 'Admin', 'Demo']
     },
     {
       path: 'automations',
       title: 'Automations',
+      icon: 'pi-list-check',
       roles: ['Default', 'Admin', 'Demo']
     },
     {
       path: 'users',
       title: 'Users',
+      icon: 'pi-users',
       roles: ['Admin']
     }
   ]);
@@ -49,22 +52,6 @@ export class SideMenuService implements OnDestroy {
    * If the screen width is less than MOBILE_BREAKPOINT, the menu is collapsed.
    */
   constructor() {
-
-    if (window.innerWidth < this.MOBILE_BREAKPOINT) {
-      this.isSideMenuCollapsed.set(true);
-    }
-
-    fromEvent(window, 'resize')
-      .pipe(
-        debounceTime(300), // Затримка для оптимізації
-        map(() => window.innerWidth),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(width => {
-        if (width < this.MOBILE_BREAKPOINT) {
-          this.isSideMenuCollapsed.set(true);
-        }
-      });
   }
 
   ngOnDestroy() {
