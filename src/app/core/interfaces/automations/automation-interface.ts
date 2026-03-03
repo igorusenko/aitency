@@ -1,3 +1,5 @@
+import {IUIConfig} from './ui-config.interface';
+
 export interface IAutomation {
   id?: string;
   workspaces: Array<IWorkspace>;
@@ -6,6 +8,7 @@ export interface IAutomation {
   isActive: boolean;
 
   config?: IAutomationConfig;
+  uiConfig: IUIConfig;
 }
 
 export interface IWorkspace {

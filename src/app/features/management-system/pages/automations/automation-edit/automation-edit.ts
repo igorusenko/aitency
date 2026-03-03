@@ -1,5 +1,13 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators
+} from "@angular/forms";
 import {AutomationAdminService} from '../../../../../core/services/management-system/automation/automation-admin.service';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
@@ -17,6 +25,7 @@ import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
 import {WorkspacesStore} from '../../../../../core/stores/workspaces.store';
 import {WorkspacesService} from '../../../../../core/services/management-system/workspaces/workspaces.service';
+import {FieldType} from '../../../../../core/interfaces/automations/ui-config.interface';
 
 @Component({
   selector: 'app-automation-edit',
@@ -60,6 +69,12 @@ export class AutomationEdit implements OnInit, OnDestroy {
     { name: 'ash' },
     { name: 'cedar' }
   ];
+
+  fieldTypes = Object.entries(FieldType).map(([key, value]) => ({
+    label: key,
+    value: value
+  }));
+
   items = [
     {
       label: 'Refresh',
@@ -80,6 +95,26 @@ export class AutomationEdit implements OnInit, OnDestroy {
   automationForm: FormGroup;
   formSubmitted: boolean = false;
 
+  get sections(): FormArray {
+    return this.automationForm.get('uiConfig.sections') as FormArray;
+  }
+
+  getSectionGroup(index: number): FormGroup {
+    return this.sections.at(index) as FormGroup;
+  }
+
+  getFields(sectionIndex: number): FormArray {
+    return this.getSectionGroup(sectionIndex).get('fields') as FormArray;
+  }
+
+  getFieldGroup(sectionIndex: number, fieldIndex: number): FormGroup {
+    return this.getFields(sectionIndex).at(fieldIndex) as FormGroup;
+  }
+
+  getValidationGroup(sectionIndex: number, fieldIndex: number): FormGroup {
+    return this.getFieldGroup(sectionIndex, fieldIndex).get('validation') as FormGroup;
+  }
+
   ngOnInit() {
     this.initAutomationForm();
     this.usersMappedToAppend = {
@@ -89,37 +124,72 @@ export class AutomationEdit implements OnInit, OnDestroy {
   }
 
   initAutomationForm(): void {
+    const automation = this.automationStore.automation();
+
     this.automationForm = this.fb.group({
-      isActive: new FormControl(this.automationStore.automation()?.isActive ?? true, [Validators.required]),
-      isDemo: new FormControl(this.automationStore.automation()?.isDemo ?? true, [Validators.required]),
-      serverId: new FormControl(this.automationStore.automation()?.serverId ?? '', [Validators.required]),
+      isActive: new FormControl(automation?.isActive ?? true, [Validators.required]),
+      isDemo: new FormControl(automation?.isDemo ?? true, [Validators.required]),
+      serverId: new FormControl(automation?.serverId ?? '', [Validators.required]),
+
       config: this.fb.group({
-        voice: new FormControl(this.automationStore.automation()?.config?.voice ?? null, [Validators.required]),
-        speed: new FormControl(this.automationStore.automation()?.config?.speed ?? 1.2, [Validators.required]),
-        instructions: new FormControl(this.automationStore.automation()?.config?.instructions ?? null, [Validators.required]),
-        tools: new FormControl([]),
+        voice: new FormControl(automation?.config?.voice ?? null, [Validators.required]),
+        speed: new FormControl(automation?.config?.speed ?? 1.2, [Validators.required]),
+        instructions: new FormControl(automation?.config?.instructions ?? null, [Validators.required]),
+        tools: new FormControl(automation?.config?.tools ?? []),
       }),
+
+      uiConfig: this.fb.group({
+        sections: this.fb.array(
+          automation?.uiConfig?.sections?.map(section =>
+            this.createSection(section)
+          ) ?? []
+        )
+      }),
+
       assistantType: new FormControl('Reception AI Agent(Demo)'),
-    })
+    });
+  }
+
+  private createField(field?: any): FormGroup {
+    return this.fb.group({
+      key: [field?.key ?? ''],
+      label: [field?.label ?? ''],
+      help: [field?.help ?? ''],
+      type: [field?.type ?? 'string'],
+      visible: [field?.visible ?? true],
+      editable: [field?.editable ?? true],
+      required: [field?.required ?? false],
+      redact: [field?.redact ?? false],
+      value: [field?.value ?? null],
+
+      validation: this.fb.group({
+        regex: [field?.validation?.regex ?? null],
+        min: [field?.validation?.min ?? null],
+        max: [field?.validation?.max ?? null],
+        enum: [field?.validation?.enum ?? []],
+      }),
+    });
+  }
+
+  private createSection(section?: any): FormGroup {
+    return this.fb.group({
+      id: [section?.id ?? crypto.randomUUID()],
+      title: [section?.title ?? ''],
+      fields: this.fb.array(
+        section?.fields?.map((field: any) =>
+          this.createField(field)
+        ) ?? []
+      )
+    });
   }
 
   getConfigForm(): FormGroup {
     return this.automationForm.get('config') as FormGroup;
   }
 
-  isInvalidAutomationControl(controlName: string) {
-    const control = this.automationForm.get(controlName);
-    return control?.invalid && (control.touched || this.formSubmitted);
-  }
-
-  isInvalidConfigControl(controlName: string) {
-    const configFormGroup = this.automationForm.get('config') as FormGroup;
-    const control = configFormGroup.get(controlName);
-    return control?.invalid && (control.touched || this.formSubmitted);
-  }
-
   onSubmit() {
     this.formSubmitted = true;
+    console.log(this.automationForm)
     if (this.automationForm.valid) {
       if (this.editMode) {
         this.automationAdminService.updateAutomation({...this.automationForm.value, id: this.automationStore.automation()?.id})
@@ -130,30 +200,6 @@ export class AutomationEdit implements OnInit, OnDestroy {
           .subscribe(resp => this.automationChanged())
       }
     }
-  }
-
-  appendUsers(userId: string): void {
-    const appendModel: IAppendUserModel = {
-      automationId: this.automationStore.automation()?.id!,
-      userIds: [userId]
-    }
-    this.automationAdminService.appendUsers(appendModel)
-      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
-      .subscribe(() => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User Attached Successfully!', life: 2000 });
-    })
-  }
-
-  detachUsers(userId: string): void {
-    const appendModel: IAppendUserModel = {
-      automationId: this.automationStore.automation()?.id!,
-      userIds: [userId]
-    }
-    this.automationAdminService.detachUsers(appendModel)
-      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
-      .subscribe(resp => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User Detached Successfully!', life: 2000 });
-    })
   }
 
   automationChanged(): void {
@@ -181,6 +227,32 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   isWorkspaceAttached(workspaceId: string): boolean {
     return this.automationStore.automation()?.workspaces.some(x => x.id === workspaceId)!;
+  }
+
+  addDynamicConfig(): void {
+    this.sections.push(this.createSection());
+  }
+
+  addDynamicField(sectionIndex: number): void {
+    this.getFields(sectionIndex).push(this.createField())
+  }
+
+  deleteField(sectionIndex: number, fieldIndex: number): void {
+    const fields = this.getFields(sectionIndex);
+
+    if (!fields || fieldIndex < 0 || fieldIndex >= fields.length) {
+      return;
+    }
+
+    fields.removeAt(fieldIndex);
+  }
+
+  deleteSection(index: number): void {
+    if (!this.sections || index < 0 || index >= this.sections.length) {
+      return;
+    }
+
+    this.sections.removeAt(index);
   }
 
   ngOnDestroy() {

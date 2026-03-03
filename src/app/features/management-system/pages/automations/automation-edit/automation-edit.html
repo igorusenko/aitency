@@ -12,14 +12,14 @@
     </ng-template>
 
     <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
-          <app-input-text
-            [form]="automationForm"
-            [formSubmitted]="formSubmitted"
-            controlName="serverId"
-            title="Server ID"
-            type="text"
-          >
-          </app-input-text>
+      <app-input-text
+        [form]="automationForm"
+        [formSubmitted]="formSubmitted"
+        controlName="serverId"
+        title="Server ID"
+        type="text"
+      >
+      </app-input-text>
 
       <app-select
         [form]="automationForm"
@@ -78,6 +78,168 @@
         title="Demo"
       ></app-checkbox>
 
+      <div formGroupName="uiConfig" class="flex flex-col gap-4">
+
+        <p-panel [toggleable]="true" [collapsed]="true">
+          <ng-template #header>
+            <div class="flex items-center gap-2">
+              <span class="font-bold">Dynamic Configuration</span>
+            </div>
+          </ng-template>
+
+          <div formArrayName="sections" class="flex flex-col gap-4">
+              @for (section of sections.controls; track $index; let i = $index) {
+
+                <div [formGroupName]="i">
+
+                  <p-panel [toggleable]="true" [collapsed]="true">
+                    <ng-template #header>
+
+                      <div class="flex items-center justify-between text-sm font-semibold w-full">
+                        <p class="text-gray-400">
+                          Section {{ i + 1 }}
+                        </p>
+                        <p class="text-red-500 cursor-pointer pr-4" (click)="deleteSection(i)">
+                          Delete section
+                        </p>
+                      </div>
+                    </ng-template>
+
+                    <div class="flex flex-col gap-4">
+
+                      <!-- SECTION TITLE -->
+                      <app-input-text
+                        [form]="getSectionGroup(i)"
+                        [formSubmitted]="formSubmitted"
+                        controlName="title"
+                        title="Section Title"
+                      />
+
+                      <!-- FIELDS -->
+                      <div formArrayName="fields" class="flex flex-col gap-4">
+
+                        @for (field of getFields(i).controls; track $index; let j = $index) {
+
+                          <div [formGroupName]="j"
+                               class="p-4 bg-[#1018278c] flex flex-col gap-3 border-t border-gray-700">
+                            <div class="flex items-center justify-between text-sm font-semibold">
+                              <p class="text-gray-400">
+                                Field {{ j + 1 }}
+                              </p>
+                              <p class="text-red-500 cursor-pointer" (click)="deleteField(i, j)">
+                                Delete field
+                              </p>
+                            </div>
+
+                            <app-input-text
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="key"
+                              title="Key"
+                            />
+
+                            <app-input-text
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="label"
+                              title="Label"
+                            />
+
+                            <app-input-text
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="help"
+                              title="Help"
+                            />
+
+                            <app-select
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              [options]="fieldTypes"
+                              controlName="type"
+                              title="Type"
+                              optionLabel="label"
+                              optionValue="value"
+                            />
+
+                            <app-checkbox
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="visible"
+                              title="Visible"
+                            />
+
+                            <app-checkbox
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="editable"
+                              title="Editable"
+                            />
+
+                            <app-checkbox
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="required"
+                              title="Required"
+                            />
+
+                            <app-checkbox
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="redact"
+                              title="Redact"
+                            />
+
+                            <!-- VALIDATION -->
+                            <div formGroupName="validation"
+                                 class="flex flex-col gap-3 pt-3">
+
+                              <p class="text-xs text-gray-400">
+                                Validation
+                              </p>
+
+                              <app-input-text
+                                [form]="getValidationGroup(i, j)"
+                                [formSubmitted]="formSubmitted"
+                                controlName="regex"
+                                title="Regex"
+                              />
+
+                              <app-input-number
+                                [form]="getValidationGroup(i, j)"
+                                [formSubmitted]="formSubmitted"
+                                controlName="min"
+                                label="Min"
+                              />
+
+                              <app-input-number
+                                [form]="getValidationGroup(i, j)"
+                                [formSubmitted]="formSubmitted"
+                                controlName="max"
+                                label="Max"
+                              />
+
+                            </div>
+
+                          </div>
+                        }
+                        <p-button label="Add field" variant="outlined" (onClick)="addDynamicField(i)" />
+                      </div>
+
+                    </div>
+
+                  </p-panel>
+
+                </div>
+
+              }
+              <p-button label="Add section" variant="outlined" (onClick)="addDynamicConfig()" />
+          </div>
+
+        </p-panel>
+
+      </div>
+
       <div class="flex flex-col">
         <p><span class="text-green-300">Calendar Integration:</span> Not connected (Demo Mode)</p>
         <p><span class="text-green-300">Price List Database:</span> No database connected (Demo Mode)</p>
@@ -89,80 +251,80 @@
     </form>
   </p-panel>
 
-<!--  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">-->
+  <!--  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">-->
 
-    <!--      <p-floatlabel>-->
-    <!--        <input-text pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />-->
-    <!--        <label for="over_label">Over Label</label>-->
-    <!--      </p-floatlabel>-->
-
-
-<!--    <div class="flex flex-col gap-4">-->
-<!--      &lt;!&ndash;        @if ($assistantVoices | async; as voices) {&ndash;&gt;-->
+  <!--      <p-floatlabel>-->
+  <!--        <input-text pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />-->
+  <!--        <label for="over_label">Over Label</label>-->
+  <!--      </p-floatlabel>-->
 
 
-<!--&lt;!&ndash;      <app-input-number&ndash;&gt;-->
-<!--&lt;!&ndash;        [form]="getConfigForm()"&ndash;&gt;-->
-<!--&lt;!&ndash;        [formSubmitted]="formSubmitted"&ndash;&gt;-->
-<!--&lt;!&ndash;        controlName="volume"&ndash;&gt;-->
-<!--&lt;!&ndash;        label="Volume (1.0 - 2.0)"&ndash;&gt;-->
-<!--&lt;!&ndash;        [min]="1"&ndash;&gt;-->
-<!--&lt;!&ndash;        [max]="2"&ndash;&gt;-->
-<!--&lt;!&ndash;        [minFractionDigits]="2"&ndash;&gt;-->
-<!--&lt;!&ndash;        [maxFractionDigits]="2"&ndash;&gt;-->
-<!--&lt;!&ndash;      />&ndash;&gt;-->
+  <!--    <div class="flex flex-col gap-4">-->
+  <!--      &lt;!&ndash;        @if ($assistantVoices | async; as voices) {&ndash;&gt;-->
 
-<!--  </form>-->
 
-<!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->
+  <!--&lt;!&ndash;      <app-input-number&ndash;&gt;-->
+  <!--&lt;!&ndash;        [form]="getConfigForm()"&ndash;&gt;-->
+  <!--&lt;!&ndash;        [formSubmitted]="formSubmitted"&ndash;&gt;-->
+  <!--&lt;!&ndash;        controlName="volume"&ndash;&gt;-->
+  <!--&lt;!&ndash;        label="Volume (1.0 - 2.0)"&ndash;&gt;-->
+  <!--&lt;!&ndash;        [min]="1"&ndash;&gt;-->
+  <!--&lt;!&ndash;        [max]="2"&ndash;&gt;-->
+  <!--&lt;!&ndash;        [minFractionDigits]="2"&ndash;&gt;-->
+  <!--&lt;!&ndash;        [maxFractionDigits]="2"&ndash;&gt;-->
+  <!--&lt;!&ndash;      />&ndash;&gt;-->
 
-    <p-panel [toggleable]="true" [collapsed]="true">
+  <!--  </form>-->
+
+  <!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->
+
+  <p-panel [toggleable]="true" [collapsed]="true">
+    <ng-template #header>
+      <div class="flex items-center gap-2">
+        <span class="font-bold">Workspaces</span>
+      </div>
+    </ng-template>
+    <ng-template #icons>
+      <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
+    </ng-template>
+    <p-table
+      class="bg-[#1018278c] rounded-2xl"
+      [value]="workspacesStore.workspaces()?.items"
+      [paginator]="true"
+      [rows]="5"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [rowHover]="true"
+      selectionMode="single"
+    >
       <ng-template #header>
-        <div class="flex items-center gap-2">
-          <span class="font-bold">Workspaces</span>
-        </div>
+        <tr>
+          <th>Id</th>
+          <th>Company name</th>
+          <th>Email owner</th>
+          <th>ID owner</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
       </ng-template>
-      <ng-template #icons>
-        <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
+      <ng-template #body let-workspace>
+        <tr class="cursor-pointer" [pSelectableRow]="workspace">
+          <td>{{ workspace.id }}</td>
+          <td>{{ workspace.companyName || '-' }}</td>
+          <td>{{ workspace.ownerEmail || '-' }}</td>
+          <td>{{ workspace.ownerId || '-' }}</td>
+          <td>{{ workspace.status || '-' }}</td>
+          <td (click)="$event.stopPropagation()">
+            <div class="flex gap-2">
+              @if (isWorkspaceAttached(workspace.id)) {
+                <p-button severity="danger" (onClick)="detachWorkspace(workspace.id)">Detach</p-button>
+              } @else {
+                <p-button (onClick)="appendWorkspace(workspace.id)">Append</p-button>
+              }
+            </div>
+          </td>
+        </tr>
       </ng-template>
-      <p-table
-        class="bg-[#1018278c] rounded-2xl"
-        [value]="workspacesStore.workspaces()?.items"
-        [paginator]="true"
-        [rows]="5"
-        [rowsPerPageOptions]="[5, 10, 20]"
-        [rowHover]="true"
-        selectionMode="single"
-      >
-        <ng-template #header>
-          <tr>
-            <th>Id</th>
-            <th>Company name</th>
-            <th>Email owner</th>
-            <th>ID owner</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </ng-template>
-        <ng-template #body let-workspace>
-          <tr class="cursor-pointer" [pSelectableRow]="workspace">
-            <td>{{ workspace.id }}</td>
-            <td>{{ workspace.companyName || '-' }}</td>
-            <td>{{ workspace.ownerEmail || '-' }}</td>
-            <td>{{ workspace.ownerId || '-' }}</td>
-            <td>{{ workspace.status || '-' }}</td>
-            <td (click)="$event.stopPropagation()">
-              <div class="flex gap-2">
-                @if (isWorkspaceAttached(workspace.id)) {
-                  <p-button severity="danger" (onClick)="detachWorkspace(workspace.id)">Detach</p-button>
-                } @else {
-                  <p-button (onClick)="appendWorkspace(workspace.id)">Append</p-button>
-                }
-              </div>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </p-panel>
-<!--  }-->
+    </p-table>
+  </p-panel>
+  <!--  }-->
 </div>

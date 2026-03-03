@@ -4,13 +4,13 @@
                    [isSidebarCollapsed]="isSidebarCollapsed"
                    (sidebarToggle)="onSidebarToggle($event)"
     ></app-side-menu>
-    <button
-      class="sidebar-toggle-btn"
-      [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }"
-      (click)="isSidebarCollapsed = !isSidebarCollapsed"
-    >
-      <i class="pi" [ngClass]="[isSidebarCollapsed ? 'pi-angle-double-right' : 'pi-angle-double-left']" style="font-size: 1rem"></i>
-    </button>
+<!--    <button-->
+<!--      class="sidebar-toggle-btn"-->
+<!--      [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }"-->
+<!--      (click)="isSidebarCollapsed = !isSidebarCollapsed"-->
+<!--    >-->
+<!--      <i class="pi" [ngClass]="[isSidebarCollapsed ? 'pi-angle-double-right' : 'pi-angle-double-left']" style="font-size: 1rem"></i>-->
+<!--    </button>-->
   </div>
 
   <main class="content" [ngClass]="{ 'content-expanded': isSidebarCollapsed }">
