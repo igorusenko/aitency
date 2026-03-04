@@ -8,4 +8,5 @@ import {IAutomation} from '../interfaces/automations/automation-interface';
 export class AutomationsStore {
   automations: WritableSignal<IPaginatedList<IAutomation> | undefined> = signal(undefined);
   automation: WritableSignal<IAutomation | undefined> = signal(undefined);
+  intents: WritableSignal<any> = signal(undefined);
 }

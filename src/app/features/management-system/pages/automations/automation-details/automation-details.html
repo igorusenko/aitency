@@ -66,13 +66,23 @@
 <!--        }-->
       </div>
     }
+      @if (automationStore.automation()?.isDemo || userStore.currentUser().role === 'Demo') {
         <p class="text-green-300">Demo, limited capabilities</p>
-      <div class="flex flex-col pt-2">
-        <p><span class="text-green-300">Calendar Integration:</span> Not connected (Demo Mode)</p>
-        <p><span class="text-green-300">Price List Database:</span> No database connected (Demo Mode)</p>
-        <p><span class="text-green-300">CRM Integration:</span> No database connected (Demo Mode)</p>
-        <p><span class="text-green-300">FAQ:</span> Not Connected</p>
-      </div>
+      }
+      @if (automationStore.intents().length > 0) {
+        <div class="flex flex-col">
+          @for (intent of automationStore.intents(); track intent.key) {
+            <div>
+              <p>
+                {{intent.title}} <span class="text-green-300">Connected</span>
+                @if (automationStore.automation()?.isDemo || userStore.currentUser().role === 'Demo') {
+                  (Demo Mode)
+                }
+              </p>
+            </div>
+          }
+        </div>
+      }
     </div>
   </p-panel>
   @if (userStore.currentUser().role === 'Admin') {

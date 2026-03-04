@@ -240,16 +240,33 @@
 
       </div>
 
-      <div class="flex flex-col">
-        <p><span class="text-green-300">Calendar Integration:</span> Not connected (Demo Mode)</p>
-        <p><span class="text-green-300">Price List Database:</span> No database connected (Demo Mode)</p>
-        <p><span class="text-green-300">CRM Integration:</span> No database connected (Demo Mode)</p>
-        <p><span class="text-green-300">FAQ:</span> Not Connected</p>
-      </div>
-
       <button id="btn-reset" class="btn btn-ghost" type="submit">{{editMode ? 'Update' : 'Create'}} automation</button>
     </form>
   </p-panel>
+
+  <p-panel [toggleable]="true" [collapsed]="true">
+    <ng-template #header>
+      <div class="flex items-center gap-2">
+        <span class="font-bold">Tools</span>
+      </div>
+    </ng-template>
+    @if (automationStore.intents().length > 0) {
+    <div class="flex flex-col">
+      @for (intent of automationStore.intents(); track intent.key) {
+        <div>
+          <p>
+            {{intent.title}} <span class="text-green-300">Connected</span>
+            @if (userStore.currentUser().role === 'Demo') {
+              (Demo Mode)
+            }
+          </p>
+        </div>
+      }
+    </div>
+    }
+  </p-panel>
+
+
 
   <!--  <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3 max-w-80">-->
 

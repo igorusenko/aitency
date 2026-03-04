@@ -26,6 +26,7 @@ import {Panel} from 'primeng/panel';
 import {WorkspacesStore} from '../../../../../core/stores/workspaces.store';
 import {WorkspacesService} from '../../../../../core/services/management-system/workspaces/workspaces.service';
 import {FieldType} from '../../../../../core/interfaces/automations/ui-config.interface';
+import {UserStore} from '../../../../../core/stores/user.store';
 
 @Component({
   selector: 'app-automation-edit',
@@ -47,7 +48,7 @@ import {FieldType} from '../../../../../core/interfaces/automations/ui-config.in
 export class AutomationEdit implements OnInit, OnDestroy {
   automationAdminService = inject(AutomationAdminService)
   automationStore = inject(AutomationsStore);
-  // userStore = inject(UserStore);
+  userStore = inject(UserStore);
   workspacesStore = inject(WorkspacesStore);
   workspacesService = inject(WorkspacesService);
   router = inject(Router);

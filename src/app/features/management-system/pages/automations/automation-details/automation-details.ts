@@ -11,6 +11,7 @@ import {
 } from '../../../../../core/services/management-system/automation/automation-admin.service';
 import {AsyncPipe, DatePipe} from '@angular/common';
 import {Paginator} from 'primeng/paginator';
+import {AutomationsStore} from '../../../../../core/stores/automations.store';
 
 @Component({
   selector: 'app-automation-details',
@@ -20,6 +21,7 @@ import {Paginator} from 'primeng/paginator';
 })
 export class AutomationDetails implements OnInit {
   automationAdminService = inject(AutomationAdminService);
+  automationStore = inject(AutomationsStore);
   userStore = inject(UserStore);
   automation = toSignal(
     inject(ActivatedRoute).data.pipe(

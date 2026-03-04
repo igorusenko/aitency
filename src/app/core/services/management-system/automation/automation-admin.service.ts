@@ -76,4 +76,10 @@ export class AutomationAdminService {
   getAutomationAccess(automationId: string): Observable<{ value: boolean }> {
     return this.http.get<{ value: boolean }>(`${this.apiUrl}/automations/${automationId}/access`)
   }
+
+  getAutomationIntents(automationId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/automations/${automationId}/intents`).pipe(
+      tap(x => this.automationsStore.intents.set(x))
+    )
+  }
 }
