@@ -42,23 +42,28 @@
     <!-- SYSTEM ACTIVITY -->
     <div id="system-activity" class="panel-column">
       <h2>System Activity Monitor</h2>
-
-      <div class="systems-grid">
-        @for (intent of automationsStore.intents(); track intent.key) {
-          <div
-            class="system-card"
-            [class.active]="intent.active"
-          >
-            <div style="display: flex; flex-direction: column; gap: 8px">
-              <h3>{{ intent.title }}</h3>
-              <p>{{ intent.description }}</p>
+      @if (automationsStore.intents().length > 0) {
+        <div class="systems-grid">
+          @for (intent of automationsStore.intents(); track intent.key) {
+            <div
+              class="system-card"
+              [class.active]="intent.active"
+            >
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <h3>{{ intent.title }}</h3>
+                <p>{{ intent.description }}</p>
+              </div>
+              <p class="status">
+                {{ intent.status }}
+              </p>
             </div>
-            <p class="status">
-            {{ intent.status }}
-          </p>
-          </div>
-        }
-      </div>
+          }
+        </div>
+      } @else {
+        <p class="text-center">
+          No intents...
+        </p>
+      }
     </div>
   </section>
 </main>
