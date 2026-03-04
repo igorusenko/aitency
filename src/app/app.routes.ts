@@ -7,6 +7,7 @@ import {confirmEmailResolver} from './core/resolvers/register/confirm-email-reso
 import {confirmResetPasswordResolver} from './core/resolvers/register/confirm-reset-password-resolver';
 import {isAuthenticatedGuard} from './core/guard/authenticated-guard';
 import {workspacesResolver} from './core/resolvers/workspace/workspaces-resolver';
+import {automationIntentsResolver} from './core/resolvers/automation/automation-intents-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -29,6 +30,7 @@ export const routes: Routes = [
           import('./features/voice-assistant/voice-assistant').then(
             (m) => m.VoiceAssistant
           ),
+        resolve: { intents: automationIntentsResolver }
       },
       {
         path: 'home',

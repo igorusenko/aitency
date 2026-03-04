@@ -10,14 +10,11 @@ export class AssistantService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
-  calendarProcessing: WritableSignal<boolean> = signal(false);
-  bookingProcessing: WritableSignal<boolean> = signal(false);
-  priceInquiryProcessing: WritableSignal<boolean> = signal(false);
-  serviceInfoProcessing: WritableSignal<boolean> = signal(false);
-  cancelAppointmentProcessing: WritableSignal<boolean> = signal(false);
-  rescheduleAppointmentProcessing: WritableSignal<boolean> = signal(false);
-  handoffToHumanProcessing: WritableSignal<boolean> = signal(false);
   requestsLimit: WritableSignal<number | undefined> = signal(undefined);
+
+  constructor() {
+
+  }
 
   public systems = [
     {
@@ -84,31 +81,6 @@ export class AssistantService {
       status: 'Idle ...',
     },
   ];
-
-  constructor() {
-    effect(() => {
-      const calendarIndex = this.systems.findIndex(system => system.key === 'calendar')
-      this.systems[calendarIndex].active = this.calendarProcessing();
-
-      const bookingIndex = this.systems.findIndex(system => system.key === 'booking')
-      this.systems[bookingIndex].active = this.bookingProcessing();
-
-      const priceInquiryIndex = this.systems.findIndex(system => system.key === 'price_inquiry')
-      this.systems[priceInquiryIndex].active = this.priceInquiryProcessing();
-
-      const serviceInfoIndex = this.systems.findIndex(system => system.key === 'service_info')
-      this.systems[serviceInfoIndex].active = this.serviceInfoProcessing();
-
-      const cancelAppointmentIndex = this.systems.findIndex(system => system.key === 'cancel_appointment')
-      this.systems[cancelAppointmentIndex].active = this.cancelAppointmentProcessing();
-
-      const rescheduleAppointmentIndex = this.systems.findIndex(system => system.key === 'reschedule_appointment')
-      this.systems[rescheduleAppointmentIndex].active = this.rescheduleAppointmentProcessing();
-
-      const handoffToHumanIndex = this.systems.findIndex(system => system.key === 'handoff_to_human')
-      this.systems[handoffToHumanIndex].active = this.handoffToHumanProcessing();
-    });
-  }
 
   getLimits(): Observable<any> {
     return this.http.get(`${this.apiUrl}/users/automation/calls`)

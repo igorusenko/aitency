@@ -44,17 +44,17 @@
       <h2>System Activity Monitor</h2>
 
       <div class="systems-grid">
-        @for (system of assistantService.systems; track system.title) {
+        @for (intent of automationsStore.intents(); track intent.key) {
           <div
             class="system-card"
-            [class.active]="system.active"
+            [class.active]="intent.active"
           >
             <div style="display: flex; flex-direction: column; gap: 8px">
-              <h3>{{ system.title }}</h3>
-              <p>{{ system.description }}</p>
+              <h3>{{ intent.title }}</h3>
+              <p>{{ intent.description }}</p>
             </div>
             <p class="status">
-            {{ system.status }}
+            {{ intent.status }}
           </p>
           </div>
         }

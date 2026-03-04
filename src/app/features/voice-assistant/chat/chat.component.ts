@@ -25,6 +25,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   @ViewChild('bottom') bottom!: ElementRef;
   private assistantService = inject(AssistantService);
   private automationsService = inject(AutomationAdminService);
+  private automationsStore = inject(AutomationsStore);
   private route = inject(ActivatedRoute);
   messageService = inject(MessageService);
   userStore = inject(UserStore);
@@ -101,7 +102,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
 
   private resolveWsUrl(): string {
-    return `${this.REMOTE_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
+    return `${this.LOCAL_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
   }
 
   private resolveSessionId(): string {
@@ -221,12 +222,12 @@ export class ChatComponent implements OnInit, OnDestroy{
             const msg = JSON.parse(e.data);
 
             if (msg.type === 'agent.step') {
-              const i = this.assistantService.systems
-                .findIndex(s => s.key === msg.key);
+              const i = this.automationsStore.intents()
+                .findIndex((s: any) => s.key === msg.key);
 
               if (i !== -1) {
-                this.assistantService.systems[i] = {
-                  ...this.assistantService.systems[i],
+                this.automationsStore.intents()[i] = {
+                  ...this.automationsStore.intents()[i],
                   active: true,
                   status: msg.step
                 };
