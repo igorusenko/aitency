@@ -276,8 +276,7 @@
 
   <!--  </form>-->
 
-  <!--  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items > 0) {-->
-
+  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items.length > 0) {
   <p-panel [toggleable]="true" [collapsed]="true">
     <ng-template #header>
       <div class="flex items-center gap-2">
@@ -326,5 +325,5 @@
       </ng-template>
     </p-table>
   </p-panel>
-  <!--  }-->
+    }
 </div>

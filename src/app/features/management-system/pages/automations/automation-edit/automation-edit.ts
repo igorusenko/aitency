@@ -152,15 +152,15 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   private createField(field?: any): FormGroup {
     return this.fb.group({
-      key: [field?.key ?? ''],
-      label: [field?.label ?? ''],
+      key: [field?.key ?? '', Validators.required],
+      label: [field?.label ?? '', Validators.required],
       help: [field?.help ?? ''],
-      type: [field?.type ?? 'string'],
+      type: [field?.type ?? 'string', Validators.required],
       visible: [field?.visible ?? true],
       editable: [field?.editable ?? true],
       required: [field?.required ?? false],
       redact: [field?.redact ?? false],
-      value: [field?.value ?? null],
+      value: [field?.value ?? null, Validators.required],
 
       validation: this.fb.group({
         regex: [field?.validation?.regex ?? null],
@@ -173,8 +173,8 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   private createSection(section?: any): FormGroup {
     return this.fb.group({
-      id: [section?.id ?? crypto.randomUUID()],
-      title: [section?.title ?? ''],
+      id: [section?.id ?? null],
+      title: [section?.title ?? '', Validators.required],
       fields: this.fb.array(
         section?.fields?.map((field: any) =>
           this.createField(field)
@@ -189,7 +189,6 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   onSubmit() {
     this.formSubmitted = true;
-    console.log(this.automationForm)
     if (this.automationForm.valid) {
       if (this.editMode) {
         this.automationAdminService.updateAutomation({...this.automationForm.value, id: this.automationStore.automation()?.id})
