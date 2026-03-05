@@ -8,6 +8,7 @@ import {confirmResetPasswordResolver} from './core/resolvers/register/confirm-re
 import {isAuthenticatedGuard} from './core/guard/authenticated-guard';
 import {workspacesResolver} from './core/resolvers/workspace/workspaces-resolver';
 import {automationIntentsResolver} from './core/resolvers/automation/automation-intents-resolver';
+import {analyticsResolver} from './core/resolvers/analytics/analytics-resolver';
 
 const loadLayout = () =>
   import('./layout/layout').then((m) => m.Layout);
@@ -37,6 +38,7 @@ export const routes: Routes = [
         title: 'AITENCY Voice Agent',
         loadComponent: () =>
           import('./features/management-system/pages/home/home').then((m) => m.Home),
+        resolve: {analytics: analyticsResolver},
       },
       {
         path: 'automations',

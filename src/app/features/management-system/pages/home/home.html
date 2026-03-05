@@ -22,10 +22,39 @@
 
     <section id="view" class="view">
 
-      <div>
-        <div class="h1">Overview</div>
-        <div class="sub">Stats + integration health + recent activity (demo).</div>
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="h1">Overview</div>
+          <div class="sub">Stats + integration health + recent activity (demo).</div>
+        </div>
+        @if (userStore.currentUser().role === 'Admin') {
+          <form action="" [formGroup]="analyticsForm" class="flex gap-4">
+            <p-floatlabel variant="on">
+            <p-date-picker
+              [formControlName]="'dateRange'"
+              [readonlyInput]="true"
+              selectionMode="range"
+            ></p-date-picker>
+              <label [for]="'dateRange'">
+                Date range
+              </label>
+            </p-floatlabel>
+            <app-select
+              [form]="analyticsForm"
+              [formSubmitted]="formSubmitted"
+              [options]="users"
+              [loading]="usersLoading"
+              (onLazyLoad)="onLazyLoadUsers($event)"
+              (onChange)="onChangeUser($event)"
+              controlName="userId"
+              title="User"
+              optionLabel="fullName"
+              optionValue="id"
+            ></app-select>
+          </form>
+        }
       </div>
+
 
       <div class="grid cols-3 gap-4">
         <div class="card">
@@ -37,8 +66,8 @@
           </div>
           <div class="stat">
             <div>
-              <div class="value">36</div>
-              <div class="label">of 36 runs</div>
+              <div class="value">{{analyticsService.analytics()?.successCount}}</div>
+              <div class="label">of {{analyticsService.analytics()?.successCount}} runs</div>
             </div>
           </div>
         </div>
@@ -52,7 +81,7 @@
           </div>
           <div class="stat">
             <div>
-              <div class="value">0</div>
+              <div class="value">{{analyticsService.analytics()?.errorCount}}</div>
               <div class="label">requires review</div>
             </div>
           </div>

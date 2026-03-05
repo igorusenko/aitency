@@ -9,6 +9,12 @@
       [optionValue]="optionValue()"
       [invalid]="isInvalid()"
       [inputId]="controlName()"
+      [loading]="loading()"
+      [virtualScroll]="virtualScroll()"
+      [virtualScrollItemSize]="virtualScrollItemSize()"
+      [virtualScrollOptions]="virtualScrollOptions()"
+      (onLazyLoad)="onLazyLoad.emit($event)"
+      (onChange)="onChange.emit($event)"
     />
 
     <label [for]="controlName()">

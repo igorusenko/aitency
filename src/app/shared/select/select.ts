@@ -1,8 +1,10 @@
-import {Component, computed, input, InputSignal} from '@angular/core';
+import {Component, computed, input, InputSignal, output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {FloatLabel} from 'primeng/floatlabel';
-import {SelectModule} from 'primeng/select';
+import {SelectChangeEvent, SelectModule} from 'primeng/select';
 import {Message} from 'primeng/message';
+import {ScrollerOptions} from 'primeng/api';
+import {SelectLazyLoadEvent} from 'primeng/select';
 
 @Component({
   selector: 'app-select',
@@ -18,11 +20,19 @@ import {Message} from 'primeng/message';
 export class SelectComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
   formSubmitted: InputSignal<boolean> = input.required<boolean>();
+  loading: InputSignal<boolean> = input<boolean>(false);
+  lazy: InputSignal<boolean> = input<boolean>(false);
+  virtualScroll: InputSignal<boolean> = input<boolean>(false);
+  virtualScrollItemSize: InputSignal<number | undefined> = input<number>();
+  virtualScrollOptions: InputSignal<ScrollerOptions | undefined> = input<ScrollerOptions | undefined>();
   controlName: InputSignal<string> = input.required<string>();
   title: InputSignal<string> = input('');
   options: InputSignal<any[]> = input.required();
   optionLabel: InputSignal<string> = input('label');
   optionValue: InputSignal<string | undefined> = input();
+
+  onLazyLoad = output<SelectLazyLoadEvent>();
+  onChange = output<SelectChangeEvent>();
 
   control = computed<FormControl | null>(() => {
     const form = this.form();
