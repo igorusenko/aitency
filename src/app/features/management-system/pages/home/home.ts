@@ -32,7 +32,7 @@ export class Home implements OnInit{
   formSubmitted: boolean = false;
   usersLoading: boolean = false;
   users: Array<IUser> = [];
-  userId: string;
+  userId: any;
   from: any;
   to: any;
   page: number = 1;
@@ -46,6 +46,7 @@ export class Home implements OnInit{
     this.userId = this.userStore.currentUser().id
     this.initAnalyticsForm();
     if (this.userStore.currentUser().role === 'Admin') {
+      this.userId = null;
       this.getUsers();
       this.onDateChange();
     }

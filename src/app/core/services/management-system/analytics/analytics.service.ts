@@ -13,7 +13,7 @@ export class AnalyticsService {
 
   analytics: WritableSignal<IAnalytics | undefined> = signal(undefined);
 
-  getAnalyticsByUserId(userId: string, from?: string, to?: string): Observable<IAnalytics> {
+  getAnalyticsByUserId(userId: string | undefined, from?: string, to?: string): Observable<IAnalytics> {
     let params = new HttpParams()
     if (userId) params = params.set('userId', userId);
     if (from) params = params.set('from', from);
