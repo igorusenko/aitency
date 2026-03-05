@@ -33,6 +33,7 @@
             <p-date-picker
               [formControlName]="'dateRange'"
               [readonlyInput]="true"
+              [showClear]="true"
               selectionMode="range"
             ></p-date-picker>
               <label [for]="'dateRange'">
@@ -57,10 +58,11 @@
 
 
       <div class="grid cols-3 gap-4">
-        <div class="card">
+        <div class="card flex flex-col justify-between">
           <div class="card-header">
             <div>
               <div class="card-title">Successful runs</div>
+              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
             </div>
             <span class="pill good">24h</span>
           </div>
@@ -72,11 +74,11 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card flex flex-col justify-between">
           <div class="card-header">
             <div>
               <div class="card-title">Failed runs</div>
-              <div class="card-note">Period: 24h</div>
+              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
             </div>
           </div>
           <div class="stat">
@@ -87,11 +89,11 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card flex flex-col justify-between">
           <div class="card-header">
             <div>
               <div class="card-title">Integrations</div>
-              <div class="card-note">Connected vs error</div>
+              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
             </div>
             <span class="pill good">0 issue(s)</span>
           </div>
@@ -104,7 +106,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card flex flex-col justify-between">
         <div class="card-header">
           <div>
             <div class="card-title">Recent activity</div>

@@ -14,7 +14,8 @@ export class AnalyticsService {
   analytics: WritableSignal<IAnalytics | undefined> = signal(undefined);
 
   getAnalyticsByUserId(userId: string, from?: string, to?: string): Observable<IAnalytics> {
-    let params = new HttpParams().set('userId', userId);
+    let params = new HttpParams()
+    if (userId) params = params.set('userId', userId);
     if (from) params = params.set('from', from);
     if (to) params = params.set('to', to);
     return this.http.get<IAnalytics>(`${this.apiUrl}/analytics/automation-logs`, {params})

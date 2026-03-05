@@ -9,6 +9,7 @@ import {ScrollerOptions} from 'primeng/api';
 import {SelectChangeEvent, SelectLazyLoadEvent} from 'primeng/select';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ import {FloatLabel} from 'primeng/floatlabel';
     SelectComponent,
     ReactiveFormsModule,
     DatePicker,
-    FloatLabel
+    FloatLabel,
+    DatePipe
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -31,8 +33,8 @@ export class Home implements OnInit{
   usersLoading: boolean = false;
   users: Array<IUser> = [];
   userId: string;
-  from: string;
-  to: string;
+  from: any;
+  to: any;
   page: number = 1;
   count: number = 10;
   totalRecords: number = 0;
@@ -51,7 +53,7 @@ export class Home implements OnInit{
 
   initAnalyticsForm(): void {
     this.analyticsForm = this.fb.group({
-      userId: [this.userStore.currentUser().id],
+      userId: [null],
       dateRange: [null],
     });
   }
@@ -60,7 +62,7 @@ export class Home implements OnInit{
     if (this.usersLoading) return;
     this.usersLoading = true;
     this.userService.getUsers(this.page, this.count).subscribe(res => {
-      this.users = [...this.users, ...res.items];
+      this.users = [{fullName: 'All', id: null}, ...res.items];
       this.totalRecords = res.total;
       this.usersLoading = false;
     })
@@ -72,6 +74,7 @@ export class Home implements OnInit{
 
   onDateChange(): void {
     this.analyticsForm.get('dateRange')?.valueChanges.subscribe(dateRange => {
+      console.log(dateRange)
       if (dateRange && dateRange[0] && dateRange[1]) {
         const from = new Date(dateRange[0]);
         from.setHours(23, 59, 59, 999);
@@ -80,8 +83,12 @@ export class Home implements OnInit{
 
         this.from = this.formatDate(from);
         this.to = this.formatDate(to);
-        this.getAnalytics();
       }
+      else {
+        this.from = null;
+        this.to = null;
+      }
+      this.getAnalytics();
     })
   }
 
