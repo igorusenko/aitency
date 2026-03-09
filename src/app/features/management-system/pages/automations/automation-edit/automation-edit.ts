@@ -59,7 +59,8 @@ export class AutomationEdit implements OnInit, OnDestroy {
   linkedUsers = [];
 
   assistantTypes = [
-    { name: 'Reception AI Agent(Demo)' }
+    { name: 'Reception AI Agent(Demo)' },
+    { name: 'Other' },
   ]
 
   voices = [
@@ -174,7 +175,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
 
   private createSection(section?: any): FormGroup {
     return this.fb.group({
-      id: [section?.id ?? null],
+      id: [section?.id ?? '', Validators.required],
       title: [section?.title ?? '', Validators.required],
       fields: this.fb.array(
         section?.fields?.map((field: any) =>
@@ -259,5 +260,6 @@ export class AutomationEdit implements OnInit, OnDestroy {
     this.automationForm.reset();
     this.automationStore.automation.set(undefined)
     this.formSubmitted = false;
+    this.automationStore.intents.set(undefined)
   }
 }

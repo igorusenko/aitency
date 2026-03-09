@@ -12,14 +12,6 @@
     </ng-template>
 
     <form [formGroup]="automationForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-3">
-      <app-input-text
-        [form]="automationForm"
-        [formSubmitted]="formSubmitted"
-        controlName="serverId"
-        title="Server ID"
-        type="text"
-      >
-      </app-input-text>
 
       <app-select
         [form]="automationForm"
@@ -30,6 +22,15 @@
         optionLabel="name"
         optionValue="name"
       ></app-select>
+
+      <app-input-text
+        [form]="automationForm"
+        [formSubmitted]="formSubmitted"
+        controlName="serverId"
+        title="Server ID"
+        type="text"
+      >
+      </app-input-text>
 
       <div formGroupName="config" class="flex flex-col gap-3">
         <app-select
@@ -115,6 +116,13 @@
                         title="Section Title"
                       />
 
+                      <app-input-text
+                        [form]="getSectionGroup(i)"
+                        [formSubmitted]="formSubmitted"
+                        controlName="id"
+                        title="Id"
+                      />
+
                       <!-- FIELDS -->
                       <div formArrayName="fields" class="flex flex-col gap-4">
 
@@ -136,6 +144,13 @@
                               [formSubmitted]="formSubmitted"
                               controlName="key"
                               title="Key"
+                            />
+
+                            <app-input-text
+                              [form]="getFieldGroup(i, j)"
+                              [formSubmitted]="formSubmitted"
+                              controlName="value"
+                              title="Value"
                             />
 
                             <app-input-text
@@ -250,7 +265,7 @@
         <span class="font-bold">Tools</span>
       </div>
     </ng-template>
-    @if (automationStore.intents().length > 0) {
+    @if (automationStore.intents()?.length > 0) {
     <div class="flex flex-col">
       @for (intent of automationStore.intents(); track intent.key) {
         <div>
@@ -263,6 +278,8 @@
         </div>
       }
     </div>
+    } @else {
+      There are no tools yet
     }
   </p-panel>
 
