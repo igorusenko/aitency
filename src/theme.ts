@@ -56,6 +56,11 @@ export const CustomPreset = definePreset(Aura, {
       },
       item: {
         focusBackground: 'transparent',
+      },
+    },
+    card: {
+      root: {
+        background: '#1018278c',
       }
     }
   }
