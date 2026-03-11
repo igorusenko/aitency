@@ -43,44 +43,91 @@ export const routes: Routes = [
       {
         path: 'automations',
         title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/automations/automations').then((m) => m.Automations),
-        resolve: {automations: automationsResolver}
-      },
-      {
-        path: 'automations/:id',
-        title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
-        resolve: {automation: automationResolver}
-      },
-      {
-        path: 'automations/edit/:id',
-        title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
-        resolve: {automation: automationResolver, workspaces: workspacesResolver}
+        resolve: {automations: automationsResolver},
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/management-system/pages/automations/automations').then((m) => m.Automations),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/management-system/pages/automations/automation-details/automation-details').then((m) => m.AutomationDetails),
+            resolve: {automation: automationResolver}
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import('./features/management-system/pages/automations/automation-edit/automation-edit').then((m) => m.AutomationEdit),
+            resolve: {automation: automationResolver, workspaces: workspacesResolver}
+          }
+        ]
       },
       {
         path: 'users',
         title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/users/users').then((m) => m.Users),
-        resolve: {users: usersResolver}
+        resolve: {users: usersResolver},
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./features/management-system/pages/users/users').then((m) => m.Users),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import('./features/management-system/pages/users/user-details/user-details').then((m) => m.UserDetails),
+            resolve: {user: userResolver}
+          },
+          {
+            path: 'edit/:id',
+            loadComponent: () =>
+              import('./features/management-system/pages/users/user-edit/user-edit').then((m) => m.UserEdit),
+            resolve: {user: userResolver}
+          }
+        ]
       },
       {
-        path: 'users/:id',
+        path: 'billing',
         title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/users/user-details/user-details').then((m) => m.UserDetails),
-        resolve: {user: userResolver}
-      },
-      {
-        path: 'users/edit/:id',
-        title: 'AITENCY Voice Agent',
-        loadComponent: () =>
-          import('./features/management-system/pages/users/user-edit/user-edit').then((m) => m.UserEdit),
-        resolve: {user: userResolver}
+        children: [
+          {
+            path: 'overview',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/overview/overview').then((m) => m.BillingOverview),
+          },
+          {
+            path: 'invoices',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/invoices/invoices').then((m) => m.Invoices),
+          },
+          {
+            path: 'payments',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/payments/payments').then((m) => m.Payments),
+          },
+          {
+            path: 'subscriptions',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/subscriptions/subscriptions').then((m) => m.Subscriptions),
+          },
+          {
+            path: 'usage',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/usage/usage').then((m) => m.Usage),
+          },
+          {
+            path: 'coupons',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/coupons/coupons').then((m) => m.Coupons),
+          },
+          {
+            path: 'settings',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/settings/settings').then((m) => m.Settings),
+          }
+        ]
       }
     ]
   },

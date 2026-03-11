@@ -40,8 +40,23 @@ export const CustomPreset = definePreset(Aura, {
         background: 'transparent',
       }
     },
-    button: {
-
+    panelmenu: {
+      panel: {
+        padding: '0',
+        background: 'transparent',
+        borderRadius: '12px',
+        borderWidth: '0',
+        first: {
+          topBorderRadius: '12px',
+          borderWidth: '0'
+        },
+        last: {
+          borderWidth: '0'
+        }
+      },
+      item: {
+        focusBackground: 'transparent',
+      }
     }
   }
 });

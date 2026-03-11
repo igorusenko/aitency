@@ -1,5 +1,14 @@
 :host {
   @apply h-screen;
+
+  ::ng-deep {
+    ul li.p-panelmenu-item:not(:last-child) {
+      @apply pb-2;
+    }
+    ul li.p-panelmenu-item:first-child {
+      @apply pt-2;
+    }
+  }
 }
 
 

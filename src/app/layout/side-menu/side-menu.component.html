@@ -14,8 +14,8 @@
         }
 
         @for (item of items; track item) {
-          @if (roleCompatability(item.roles)) {
-            <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item.path]" />
+          @if (roleCompatability(item['roles'])) {
+            <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item['path']]" />
           }
         }
       </div>
@@ -47,15 +47,23 @@
           <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/register']">Register new account</button>
         }
 
-        <nav class="nav">
-          @for (item of items; track item) {
-            @if (roleCompatability(item.roles)) {
-              <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
+<!--        <nav class="nav">-->
+<!--          @for (item of items; track item) {-->
+<!--            @if (roleCompatability(item.roles)) {-->
+<!--              <a class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">-->
+<!--                <span class="nav-dot"></span><span>{{item.title}}</span>-->
+<!--              </a>-->
+<!--            }-->
+<!--          }-->
+
+          <p-panel-menu [model]="items" class="nav">
+            <ng-template #item let-item>
+              <a pRipple class="nav-item" [routerLinkActive]="'active'" [routerLink]="[item.path]">
                 <span class="nav-dot"></span><span>{{item.title}}</span>
               </a>
-            }
-          }
-        </nav>
+            </ng-template>
+          </p-panel-menu>
+<!--        </nav>-->
       </div>
 
       <div class="flex flex-col gap-4">

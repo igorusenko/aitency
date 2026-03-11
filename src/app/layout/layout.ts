@@ -7,7 +7,7 @@ import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterModule, SideMenuComponent, Sidebar, NgClass],
+  imports: [RouterModule, SideMenuComponent, NgClass],
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
   standalone: true,
