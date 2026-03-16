@@ -1,0 +1,56 @@
+<p-dialog header="Invoice details" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }">
+
+  <div class="flex flex-col gap-4">
+    <div class="grid grid-cols-2 gap-4 p-4 bg-[#1018278c]">
+      <div class="flex flex-col gap-1">
+        <p>Invoice #</p>
+        <p>INV-2026-0048</p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <p>Status</p>
+        <p>Sent</p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <p>Date issued</p>
+        <p>Mar 5, 2026</p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <p>Due date</p>
+        <p>Mar 20, 2026</p>
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
+      <h2>Line Items</h2>
+      <table class="w-full bg-[#1018278c]">
+        <thead>
+        <tr class="border-b border-[rgba(255,255,255,.08)]">
+          <th class="p-2 text-left">Description</th>
+          <th class="p-2 text-left">Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="border-b border-[rgba(255,255,255,.08)]">
+          <td class="p-2">AI Automation Pro (March 2026)</td>
+          <td class="p-2 text-right">€299.00</td>
+        </tr>
+        <tr class="border-b border-[rgba(255,255,255,.08)]">
+          <td class="p-2">Usage-Based API (10,000 calls)</td>
+          <td class="p-2 text-right">€1,000.00</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; font-weight: 600;">Total</td>
+          <td style="padding: 8px; text-align: right; font-weight: 600;">€1,299.00</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-2 pt-4">
+    <p-button label="Close" severity="secondary" (onClick)="visible.set(false)" />
+    <p-button label="Download PDF" (onClick)="visible.set(false)" />
+  </div>
+</p-dialog>

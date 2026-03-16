@@ -19,7 +19,7 @@ import {SelectLazyLoadEvent} from 'primeng/select';
 })
 export class SelectComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
-  formSubmitted: InputSignal<boolean> = input.required<boolean>();
+  formSubmitted: InputSignal<boolean | undefined> = input<boolean>();
   loading: InputSignal<boolean> = input<boolean>(false);
   lazy: InputSignal<boolean> = input<boolean>(false);
   virtualScroll: InputSignal<boolean> = input<boolean>(false);

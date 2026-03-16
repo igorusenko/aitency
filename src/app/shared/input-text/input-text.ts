@@ -21,7 +21,7 @@ import {Textarea} from 'primeng/textarea';
 })
 export class InputTextComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
-  formSubmitted: InputSignal<boolean> = input.required<boolean>();
+  formSubmitted: InputSignal<boolean | undefined> = input<boolean>();
   textarea: InputSignal<boolean> = input<boolean>(false);
   controlName: InputSignal<string> = input.required<string>();
   type: InputSignal<string> = input('text');
@@ -33,7 +33,7 @@ export class InputTextComponent {
 
   isInvalidControl(): boolean {
     const c = this.control();
-    return (c && c.invalid && (c.touched || c.dirty || this.formSubmitted()));
+    return (c && c.invalid && (c.touched || c.dirty || this.formSubmitted()!));
   }
 
   getErrorMessage(): string {
