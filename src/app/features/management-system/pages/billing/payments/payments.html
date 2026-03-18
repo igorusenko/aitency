@@ -1,3 +1,80 @@
-<div class="billing-payments">
-  <h1>Payments</h1>
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-start gap-4">
+    <app-select
+      [form]="filterForm"
+      [options]="invoiceStatuses"
+      controlName="type"
+      title="Payment Type"
+      optionLabel="name"
+      optionValue="name"
+      class="min-w-48"
+    ></app-select>
+    <div class="flex flex-col gap-1 min-w-48">
+      <p-floatlabel variant="on">
+        <p-date-picker
+          [readonlyInput]="true"
+          [showClear]="true"
+          selectionMode="single"
+          appendTo="body"
+          class="w-full"
+        ></p-date-picker>
+        <label for="over_label">Date</label>
+      </p-floatlabel>
+    </div>
+    <div class="flex flex-col gap-1 min-w-48">
+      <p-floatlabel variant="on">
+        <p-date-picker
+          [readonlyInput]="true"
+          [showClear]="true"
+          selectionMode="single"
+          appendTo="body"
+          class="w-full"
+        ></p-date-picker>
+        <label for="over_label">Due date</label>
+      </p-floatlabel>
+    </div>
+    <app-input-text
+      [form]="filterForm"
+      controlName="search"
+      title="Search Payments..."
+      type="text"
+      class="flex-1 min-w-48"
+    ></app-input-text>
+  </div>
+  @if (userStore.currentUser().role === 'Admin') {
+    <div class="flex gap-4">
+    <p-button label="Record Manual Payment" severity="primary" size="small" (onClick)="visibleCreatePayment.set(true)"/>
+      <p-button label="Adjust Balance" severity="secondary" size="small" (onClick)="visibleCreatePayment.set(true)"/>
+    </div>
+  }
+  <p-table [value]="invoices" class="p-4 pb-0 bg-[#1018278c] rounded-2xl">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Date</th>
+        <th>Reference</th>
+        <th>Type</th>
+        <th>Method</th>
+        <th>Amount</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-tr>
+      <tr>
+        <td>{{ tr.date | date }}</td>
+        <td>{{ tr.reference }}</td>
+        <td>
+          <p-tag [value]="tr.type" [severity]="tr.type"></p-tag>
+        </td>
+        <td>{{ tr.method }}</td>
+        <td>
+          <p-tag [value]="tr.status" [severity]="tr.status"></p-tag>
+        </td>
+        <td>
+          {{ (tr.amount >= 0 ? '+' : '') + formatCurrency(tr.amount) }}
+        </td>
+        <td>{{ tr.notes }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
