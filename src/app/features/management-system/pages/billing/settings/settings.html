@@ -1,3 +1,122 @@
-<div class="billing-settings">
-  <h1>Settings</h1>
+<div class="flex flex-col gap-6">
+  <h1 class="text-xl text-white font-bold">Account Settings</h1>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Billing Details -->
+    <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-6">
+      <h2 class="text-lg text-white font-semibold">Billing Details</h2>
+      <form [formGroup]="billingForm" (ngSubmit)="updateBillingDetails()" class="flex flex-col gap-4">
+        <app-input-text
+          [form]="billingForm"
+          controlName="companyName"
+          title="Company Name"
+        ></app-input-text>
+        <app-input-text
+          [form]="billingForm"
+          controlName="vatNumber"
+          title="VAT Number"
+        ></app-input-text>
+        <div class="flex flex-col gap-2">
+          <app-input-text
+            [form]="billingForm"
+            controlName="address"
+            title="Street address"
+          ></app-input-text>
+          <div class="grid grid-cols-2 gap-2">
+            <app-input-text
+              [form]="billingForm"
+              controlName="city"
+              title="City, State, ZIP"
+            ></app-input-text>
+            <app-input-text
+              [form]="billingForm"
+              controlName="country"
+              title="Country"
+            ></app-input-text>
+          </div>
+        </div>
+        <app-input-text
+          [form]="billingForm"
+          controlName="email"
+          title="Billing Email"
+          type="email"
+        ></app-input-text>
+        <p-button label="Update Billing Details" type="submit" size="small"></p-button>
+      </form>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      <!-- Payment Methods -->
+      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+        <h2 class="text-lg text-white font-semibold">Payment Methods</h2>
+        <div class="flex flex-col gap-3">
+          @for (method of paymentMethods; track method.name) {
+            <div class="flex justify-between items-center p-3 border border-white/5 rounded-xl bg-white/5">
+              <div class="flex flex-col">
+                <div class="text-white font-medium flex items-center gap-2">
+                  <span>{{ method.icon }}</span>
+                  {{ method.name }}
+                </div>
+                <div class="text-white/40 text-xs">{{ method.detail }}</div>
+              </div>
+              <div class="flex gap-2">
+                @if (!method.isDefault) {
+                  <p-button label="Set Default" severity="secondary" [text]="true" size="small"></p-button>
+                }
+                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small"></p-button>
+              </div>
+            </div>
+          }
+        </div>
+        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2"></p-button>
+      </div>
+
+      <!-- Auto-Recharge Settings -->
+      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-lg text-white font-semibold">Auto-Recharge Settings</h2>
+        <form [formGroup]="autoRechargeForm" (ngSubmit)="saveAutoRecharge()" class="flex flex-col gap-4">
+          <div class="flex items-center justify-between">
+            <span class="text-white font-medium text-sm">Enable Auto-Recharge</span>
+            <app-checkbox
+              [form]="autoRechargeForm"
+              controlName="enabled"
+              [formSubmitted]="false"
+            ></app-checkbox>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <app-input-number
+              [form]="autoRechargeForm"
+              controlName="threshold"
+              label="Recharge When Balance Falls Below"
+              [formSubmitted]="false"
+            ></app-input-number>
+            <app-input-number
+              [form]="autoRechargeForm"
+              controlName="amount"
+              label="Auto-Recharge Amount"
+              [formSubmitted]="false"
+            ></app-input-number>
+          </div>
+          <p-button label="Save Auto-Recharge Settings" type="submit" size="small"></p-button>
+        </form>
+      </div>
+
+      <!-- Notification Preferences -->
+      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+        <h2 class="text-lg text-white font-semibold">Notification Preferences</h2>
+        <div class="flex flex-col gap-3">
+          @for (pref of notifications; track pref.controlName) {
+            <div class="flex items-center justify-between">
+              <span class="text-white/80 text-sm">{{ pref.label }}</span>
+              <app-checkbox
+                [form]="notificationForm"
+                [controlName]="pref.controlName"
+                [formSubmitted]="false"
+              ></app-checkbox>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

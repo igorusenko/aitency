@@ -1,3 +1,49 @@
-<div class="billing-subscriptions">
-  <h1>Subscriptions</h1>
+<div class="flex flex-col gap-4">
+  <h1 class="text-xl text-white font-bold">Subscriptions</h1>
+
+  @if (userStore.currentUser().role === 'Admin') {
+    <div class="flex gap-4">
+      <p-button label="Create Subscription" severity="primary" size="small" (onClick)="visibleCreateSubscription.set(true)"/>
+    </div>
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (sub of subscriptions; track sub.name) {
+      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
+        <div class="flex flex-col gap-1">
+          <div class="text-white/60 text-sm font-medium">{{ sub.name }}</div>
+          <div class="text-3xl text-white font-bold">
+            {{ sub.price }}<span class="text-lg font-normal text-white/40">{{ sub.unit }}</span>
+          </div>
+          <div class="text-white/40 text-xs">{{ sub.billing }}</div>
+        </div>
+
+        <div class="border-t border-white/10 my-2"></div>
+
+        <div class="flex flex-col gap-2">
+          <div class="flex justify-between items-center text-sm">
+            <span class="text-white/60">Status:</span>
+            <p-tag [value]="sub.status" [severity]="sub.statusSeverity"></p-tag>
+          </div>
+          @for (detail of sub.details; track detail.label) {
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-white/60">{{ detail.label }}</span>
+              <span class="text-white font-medium text-right">{{ detail.value }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="flex gap-2 mt-auto pt-2">
+          @for (action of sub.actions; track action; let i = $index) {
+            <p-button class="flex-1" [label]="action" [severity]="i === 0 ? 'primary' : 'secondary'" styleClass="w-full" size="small"></p-button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+
+
 </div>
+
+<app-create-subscription [(visible)]="visibleCreateSubscription"></app-create-subscription>

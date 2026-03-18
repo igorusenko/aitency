@@ -30,6 +30,7 @@ export class SelectComponent {
   options: InputSignal<any[]> = input.required();
   optionLabel: InputSignal<string> = input('label');
   optionValue: InputSignal<string | undefined> = input();
+  appendTo: InputSignal<string | undefined> = input();
 
   onLazyLoad = output<SelectLazyLoadEvent>();
   onChange = output<SelectChangeEvent>();

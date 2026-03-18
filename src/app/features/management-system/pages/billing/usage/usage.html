@@ -1,3 +1,56 @@
-<div class="billing-usage">
-  <h1>Usage</h1>
+<div class="flex flex-col gap-6">
+  <h1 class="text-xl text-white font-bold">Usage & Billing</h1>
+
+  <!-- Usage Summary Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    @for (card of summaryCards; track card.label) {
+      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-1">
+        <div class="text-white/60 text-sm font-medium">{{ card.label }}</div>
+        <div class="text-2xl text-white font-bold">{{ card.value }}</div>
+        <div class="text-white/40 text-xs">{{ card.detail }}</div>
+      </div>
+    }
+  </div>
+
+  <!-- Usage Chart (Simplified CSS implementation) -->
+  <div class="bg-[#101827] border border-white/10 rounded-2xl p-6">
+    <h2 class="text-lg text-white font-semibold mb-6">Usage Trend (Last 7 Days)</h2>
+    <div class="flex items-end justify-between h-48 gap-2">
+      @for (bar of usageTrend; track bar.label) {
+        <div class="flex-1 flex flex-col items-center gap-2 group">
+          <div class="w-full bg-[#491eb8]/40 hover:bg-[#491eb8] transition-colors rounded-t-lg relative" [style.height]="bar.height">
+            <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              {{ bar.height }} usage
+            </div>
+          </div>
+          <div class="text-white/40 text-[10px]">{{ bar.label }}</div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Usage Details Table -->
+  <div class="flex flex-col gap-4">
+    <h2 class="text-lg text-white font-semibold">Usage Details — March 2026</h2>
+    <p-table [value]="usageDetails" class="bg-[#1018278c] rounded-2xl overflow-hidden border border-white/10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="bg-transparent text-white/60 font-medium text-sm">Date</th>
+          <th class="bg-transparent text-white/60 font-medium text-sm">Metric</th>
+          <th class="bg-transparent text-white/60 font-medium text-sm">Quantity</th>
+          <th class="bg-transparent text-white/60 font-medium text-sm">Unit Price</th>
+          <th class="bg-transparent text-white/60 font-medium text-sm text-right">Total</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-usage>
+        <tr class="border-t border-white/5">
+          <td class="bg-transparent text-white text-sm">{{ usage.date }}</td>
+          <td class="bg-transparent text-white text-sm">{{ usage.metric }}</td>
+          <td class="bg-transparent text-white text-sm">{{ usage.quantity }}</td>
+          <td class="bg-transparent text-white text-sm">{{ usage.unitPrice }}</td>
+          <td class="bg-transparent text-white text-sm text-right">{{ usage.total }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>

@@ -1,0 +1,54 @@
+<p-dialog header="Create new Subscription" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }">
+  <form action="" [formGroup]="subscriptionForm" class="flex flex-col gap-4 pb-4">
+    <div class="flex flex-col gap-1">
+      <app-input-text
+        [form]="subscriptionForm"
+        [formSubmitted]="formSubmitted"
+        controlName="planName"
+        title="Plan Name"
+        type="text"
+      >
+      </app-input-text>
+    </div>
+    <div class="flex flex-col gap-1">
+      <app-input-number
+        [form]="subscriptionForm"
+        [formSubmitted]="formSubmitted"
+        controlName="price"
+        label="Price €"
+      >
+      </app-input-number>
+    </div>
+    <div class="flex flex-col gap-1">
+      <app-select
+        [form]="subscriptionForm"
+        [options]="billingCycles"
+        controlName="billingCycle"
+        title="Billing Cycle"
+        optionLabel="name"
+        optionValue="name"
+        class="min-w-48"
+        appendTo="body"
+      ></app-select>
+    </div>
+    <div class="flex flex-col gap-1">
+      <p-floatlabel variant="on">
+        <p-date-picker
+          [readonlyInput]="true"
+          [showClear]="true"
+          [formGroup]="subscriptionForm"
+          formControlName="startDate"
+          selectionMode="single"
+          appendTo="body"
+          class="w-full"
+        ></p-date-picker>
+        <label for="over_label">Start Date</label>
+      </p-floatlabel>
+    </div>
+  </form>
+
+  <div class="flex justify-end gap-2">
+    <p-button label="Cancel" severity="secondary" (onClick)="visible.set(false)" />
+    <p-button label="Create Subscription" (onClick)="visible.set(false)" />
+  </div>
+</p-dialog>

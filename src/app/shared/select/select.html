@@ -15,6 +15,7 @@
       [virtualScrollOptions]="virtualScrollOptions()"
       (onLazyLoad)="onLazyLoad.emit($event)"
       (onChange)="onChange.emit($event)"
+      [appendTo]="appendTo()"
     />
 
     <label [for]="controlName()">
