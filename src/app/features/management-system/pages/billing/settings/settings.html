@@ -50,25 +50,32 @@
       <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
         <h2 class="text-lg text-white font-semibold">Payment Methods</h2>
         <div class="flex flex-col gap-3">
-          @for (method of paymentMethods; track method.name) {
-            <div class="flex justify-between items-center p-3 border border-white/5 rounded-xl bg-white/5">
-              <div class="flex flex-col">
-                <div class="text-white font-medium flex items-center gap-2">
-                  <span>{{ method.icon }}</span>
-                  {{ method.name }}
+          @if (paymentMethods$ | async; as methods) {
+            @for (method of methods; track method.id) {
+              <div class="flex justify-between items-center p-3 border border-white/5 rounded-xl bg-white/5">
+                <div class="flex flex-col">
+                  <div class="text-white font-medium flex items-center gap-2">
+                    <span>{{ getIcon(method.brand) }}</span>
+                    {{ method.brand | titlecase }} ending in {{ method.last4 }}
+                  </div>
+                  <div class="text-white/40 text-xs">
+                    Expires: {{ method.expMonth }}/{{ method.expYear }}
+                    @if (method.isDefault) {
+                      • Default
+                    }
+                  </div>
                 </div>
-                <div class="text-white/40 text-xs">{{ method.detail }}</div>
+                <div class="flex gap-2">
+                  @if (!method.isDefault) {
+                    <p-button label="Set Default" severity="secondary" [text]="true" size="small" (onClick)="setDefault(method.id)"></p-button>
+                  }
+                  <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small" (onClick)="delete(method.id)"></p-button>
+                </div>
               </div>
-              <div class="flex gap-2">
-                @if (!method.isDefault) {
-                  <p-button label="Set Default" severity="secondary" [text]="true" size="small"></p-button>
-                }
-                <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small"></p-button>
-              </div>
-            </div>
+            }
           }
         </div>
-        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2"></p-button>
+        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2" (onClick)="visibleCreatePaymentMethod.set(true)"></p-button>
       </div>
 
       <!-- Auto-Recharge Settings -->
@@ -120,3 +127,5 @@
     </div>
   </div>
 </div>
+
+<app-create-payment-method [(visible)]="visibleCreatePaymentMethod"></app-create-payment-method>

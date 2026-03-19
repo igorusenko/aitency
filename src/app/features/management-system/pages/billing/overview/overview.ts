@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
+import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
 
 @Component({
   selector: 'app-overview',
@@ -13,6 +14,8 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './overview.scss'
 })
 export class BillingOverview {
+  billingService = inject(BillingService);
+  balance$ = this.billingService.getBalance();
   clientInfo = {
     companyName: 'TechFlow Solutions Ltd',
     vatNumber: 'EL999999999',

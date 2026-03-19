@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import {Component, inject, signal, WritableSignal} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Checkbox } from '../../../../../shared/checkbox/checkbox';
 import { InputNumberComponent } from '../../../../../shared/input-number/input-number';
 import { InputTextComponent } from '../../../../../shared/input-text/input-text';
+import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
+import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
 
 @Component({
   selector: 'app-settings',
@@ -15,13 +17,17 @@ import { InputTextComponent } from '../../../../../shared/input-text/input-text'
     ButtonModule,
     InputTextComponent,
     InputNumberComponent,
-    Checkbox
+    Checkbox,
+    CreatePaymentMethod
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss'
 })
 export class Settings {
   private fb = inject(FormBuilder);
+  billingService = inject(BillingService);
+  visibleCreatePaymentMethod: WritableSignal<boolean> = signal(false);
+  paymentMethods$ = this.billingService.getPaymentMethods();
 
   billingForm: FormGroup = this.fb.group({
     companyName: ['TechFlow Solutions Ltd'],
@@ -47,27 +53,6 @@ export class Settings {
     marketing: [false]
   });
 
-  paymentMethods = [
-    {
-      icon: '💳',
-      name: 'Visa ending in 2847',
-      detail: 'Expires: 12/2027 • Default',
-      isDefault: true
-    },
-    {
-      icon: '💳',
-      name: 'MasterCard ending in 5521',
-      detail: 'Expires: 08/2025',
-      isDefault: false
-    },
-    {
-      icon: '🏦',
-      name: 'IBAN: GR89...8714',
-      detail: 'SEPA Transfer • Default for large payments',
-      isDefault: true
-    }
-  ];
-
   notifications = [
     { controlName: 'invoiceIssued', label: 'Invoice issued notifications' },
     { controlName: 'paymentReceived', label: 'Payment received notifications' },
@@ -83,5 +68,27 @@ export class Settings {
 
   saveAutoRecharge() {
     console.log('Save Auto-Recharge', this.autoRechargeForm.value);
+  }
+
+  setDefault(id: string) {
+    this.billingService.setDefaultPaymentMethod(id).subscribe(() => {
+      this.paymentMethods$ = this.billingService.getPaymentMethods();
+    });
+  }
+
+  delete(id: string) {
+    if (!confirm('Are you sure you want to delete this payment method?')) return;
+    this.billingService.deletePaymentMethod(id).subscribe(() => {
+      this.paymentMethods$ = this.billingService.getPaymentMethods();
+    });
+  }
+
+  getIcon(brand: string | null): string {
+    if (!brand) return '💳';
+    const b = brand.toLowerCase();
+    if (b.includes('visa')) return '💳';
+    if (b.includes('mastercard')) return '💳';
+    if (b.includes('amex')) return '💳';
+    return '💳';
   }
 }

@@ -1,0 +1,75 @@
+<p-dialog header="Create new invoice" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }">
+<div class="flex flex-col gap-6" [formGroup]="paymentElementForm">
+  <h2 class="text-xl text-white font-bold">Add Payment Method</h2>
+
+  <div class="flex flex-col gap-4">
+    <app-input-text
+      [form]="paymentElementForm"
+      controlName="name"
+      title="Cardholder Name"
+      [formSubmitted]="formSubmitted()"
+    ></app-input-text>
+
+    <app-input-text
+      [form]="paymentElementForm"
+      controlName="email"
+      title="Email Address"
+      type="email"
+      [formSubmitted]="formSubmitted()"
+    ></app-input-text>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <app-input-text
+        [form]="paymentElementForm"
+        controlName="address"
+        title="Street Address"
+        [formSubmitted]="formSubmitted()"
+      ></app-input-text>
+
+      <div class="grid grid-cols-2 gap-2">
+        <app-input-text
+          [form]="paymentElementForm"
+          controlName="city"
+          title="City"
+          [formSubmitted]="formSubmitted()"
+        ></app-input-text>
+        <app-input-text
+          [form]="paymentElementForm"
+          controlName="zipcode"
+          title="ZIP Code"
+          [formSubmitted]="formSubmitted()"
+        ></app-input-text>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-white/60 text-sm font-medium">Card Details</label>
+    <div class="p-4 bg-white/5 border border-white/10 rounded-xl">
+      <ngx-stripe-elements
+        [stripe]="stripe"
+        [elementsOptions]="elementsOptions"
+      >
+        <ngx-stripe-payment [options]="paymentElementOptions" />
+      </ngx-stripe-elements>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <span class="text-white font-medium text-sm">Set as default payment method</span>
+    <app-checkbox
+      [form]="paymentElementForm"
+      controlName="setAsDefault"
+      [formSubmitted]="formSubmitted()"
+    ></app-checkbox>
+  </div>
+
+  <p-button
+    (click)="save()"
+    [loading]="saving()"
+    label="Save Payment Method"
+    icon="pi pi-check"
+    styleClass="w-full"
+  ></p-button>
+</div>
+</p-dialog>
