@@ -72,15 +72,19 @@ export class Settings {
 
   setDefault(id: string) {
     this.billingService.setDefaultPaymentMethod(id).subscribe(() => {
-      this.paymentMethods$ = this.billingService.getPaymentMethods();
+      this.refreshPaymentMethods();
     });
   }
 
   delete(id: string) {
     if (!confirm('Are you sure you want to delete this payment method?')) return;
     this.billingService.deletePaymentMethod(id).subscribe(() => {
-      this.paymentMethods$ = this.billingService.getPaymentMethods();
+      this.refreshPaymentMethods();
     });
+  }
+
+  refreshPaymentMethods() {
+    this.paymentMethods$ = this.billingService.getPaymentMethods();
   }
 
   getIcon(brand: string | null): string {

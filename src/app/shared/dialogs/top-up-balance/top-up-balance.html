@@ -1,0 +1,32 @@
+<p-dialog header="Top Up Balance" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+  <div class="flex flex-col gap-6 pt-4" [formGroup]="topUpForm">
+    <div class="flex flex-col gap-4">
+      <app-input-number
+        [form]="topUpForm"
+        controlName="amount"
+        label="Amount"
+        [min]="1"
+        [formSubmitted]="formSubmitted()"
+      ></app-input-number>
+
+      <app-select
+        [form]="topUpForm"
+        controlName="paymentMethodId"
+        title="Payment Method"
+        [options]="(paymentMethods$ | async) || []"
+        optionLabel="label"
+        optionValue="value"
+        [formSubmitted]="formSubmitted()"
+        appendTo="body"
+      ></app-select>
+    </div>
+
+    <p-button
+      (click)="save()"
+      [loading]="saving()"
+      label="Top Up"
+      icon="pi pi-plus"
+      styleClass="w-full"
+    ></p-button>
+  </div>
+</p-dialog>

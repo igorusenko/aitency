@@ -54,7 +54,7 @@ export class SideMenuComponent implements OnInit {
       path: 'billing',
       title: 'Billing',
       icon: 'pi-bill',
-      roles: ['Default', 'Admin', 'Demo'],
+      roles: ['Default', 'Admin'],
       items: [
         {
           path: 'billing/overview',

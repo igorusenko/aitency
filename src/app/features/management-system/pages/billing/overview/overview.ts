@@ -1,21 +1,23 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
+import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-balance';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule],
+  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule, TopUpBalance],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
 export class BillingOverview {
   billingService = inject(BillingService);
   balance$ = this.billingService.getBalance();
+  visibleTopUpDialog = signal(false);
   clientInfo = {
     companyName: 'TechFlow Solutions Ltd',
     vatNumber: 'EL999999999',
@@ -55,5 +57,9 @@ export class BillingOverview {
 
   getAmountClass(amount: number): string {
     return amount >= 0 ? 'text-green-600' : 'text-red-600';
+  }
+
+  refreshBalance() {
+    this.balance$ = this.billingService.getBalance();
   }
 }

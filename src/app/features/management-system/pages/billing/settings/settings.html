@@ -51,27 +51,32 @@
         <h2 class="text-lg text-white font-semibold">Payment Methods</h2>
         <div class="flex flex-col gap-3">
           @if (paymentMethods$ | async; as methods) {
-            @for (method of methods; track method.id) {
-              <div class="flex justify-between items-center p-3 border border-white/5 rounded-xl bg-white/5">
-                <div class="flex flex-col">
-                  <div class="text-white font-medium flex items-center gap-2">
-                    <span>{{ getIcon(method.brand) }}</span>
-                    {{ method.brand | titlecase }} ending in {{ method.last4 }}
+            @if (methods.length > 0) {
+              @for (method of methods; track method.id) {
+                <div class="flex justify-between items-center p-3 border border-white/5 rounded-xl bg-white/5">
+                  <div class="flex flex-col">
+                    <div class="text-white font-medium flex items-center gap-2">
+                      <span>{{ getIcon(method.brand) }}</span>
+                      {{ method.brand | titlecase }} ending in {{ method.last4 }}
+                    </div>
+                    <div class="text-white/40 text-xs">
+                      Expires: {{ method.expMonth }}/{{ method.expYear }}
+                      @if (method.isDefault) {
+                        • Default
+                      }
+                    </div>
                   </div>
-                  <div class="text-white/40 text-xs">
-                    Expires: {{ method.expMonth }}/{{ method.expYear }}
-                    @if (method.isDefault) {
-                      • Default
+                  <div class="flex gap-2">
+                    @if (!method.isDefault) {
+                      <p-button label="Set Default" severity="secondary" [text]="true" size="small" (onClick)="setDefault(method.id)"></p-button>
                     }
+                    <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small" (onClick)="delete(method.id)"></p-button>
                   </div>
                 </div>
-                <div class="flex gap-2">
-                  @if (!method.isDefault) {
-                    <p-button label="Set Default" severity="secondary" [text]="true" size="small" (onClick)="setDefault(method.id)"></p-button>
-                  }
-                  <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger" size="small" (onClick)="delete(method.id)"></p-button>
-                </div>
-              </div>
+              }
+            }
+            @else {
+              <p>There are no payment methods yet</p>
             }
           }
         </div>
@@ -128,4 +133,4 @@
   </div>
 </div>
 
-<app-create-payment-method [(visible)]="visibleCreatePaymentMethod"></app-create-payment-method>
+<app-create-payment-method [(visible)]="visibleCreatePaymentMethod" (onCreated)="refreshPaymentMethods()"></app-create-payment-method>

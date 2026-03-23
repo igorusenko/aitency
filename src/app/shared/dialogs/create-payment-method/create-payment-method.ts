@@ -1,4 +1,4 @@
-import {Component, inject, model, ModelSignal, signal, ViewChild} from '@angular/core';
+import {Component, inject, model, ModelSignal, output, signal, ViewChild} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {injectStripe, StripeElementsDirective, StripePaymentElementComponent} from 'ngx-stripe';
 import {BillingService} from '../../../core/services/management-system/billing/billing.service';
@@ -29,6 +29,7 @@ import {Dialog} from 'primeng/dialog';
 })
 export class CreatePaymentMethod {
   visible: ModelSignal<boolean> = model.required();
+  onCreated = output<void>();
   @ViewChild(StripePaymentElementComponent)
   paymentElement!: StripePaymentElementComponent;
 
@@ -116,6 +117,7 @@ export class CreatePaymentMethod {
               next: () => {
                 this.saving.set(false);
                 this.visible.set(false);
+                this.onCreated.emit();
               },
               error: (err) => {
                 this.saving.set(false);
