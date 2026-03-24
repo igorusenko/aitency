@@ -1,4 +1,4 @@
-import {Component, DestroyRef, effect, inject, input, OnInit, output, ViewEncapsulation} from '@angular/core';
+import {Component, computed, DestroyRef, effect, inject, input, OnInit, output, ViewEncapsulation} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {AuthService} from '../../core/services/management-system/auth/auth.service';
@@ -95,9 +95,30 @@ export class SideMenuComponent implements OnInit {
     }
   ];
 
-  roleCompatability(roles: Array<string>): boolean {
-    return roles.includes(this.userStore.currentUser().role)
-  }
+  filteredItems = computed(() => {
+    const role = this.userStore.currentUser().role;
+
+    const filterFn = (items: MenuItem[]): MenuItem[] => {
+      return items
+        .filter(item => {
+          const roles = (item as any)['roles'] as string[] | undefined;
+          return !roles || roles.includes(role);
+        })
+        .map(item => {
+          if (item.items && Array.isArray(item.items)) {
+            const filteredChildren = filterFn(item.items as MenuItem[]);
+            return {
+              ...item,
+              items: filteredChildren.length > 0 ? filteredChildren : undefined
+            };
+          }
+          return item;
+        })
+        .filter(item => item['path'] || (item['items'] && item['items'].length > 0));
+    };
+
+    return filterFn(this.items);
+  });
 
   ngOnInit(): void {
     if (window.innerWidth < this.MOBILE_BREAKPOINT) {
