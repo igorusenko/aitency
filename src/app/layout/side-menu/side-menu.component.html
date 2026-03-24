@@ -14,7 +14,7 @@
         }
 
         @for (item of filteredItems(); track item) {
-            <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item['path']]" />
+            <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item['path']]" [ngClass]="{'active-button': isItemActive(item)}" />
         }
       </div>
       <div class="flex flex-col gap-4">
@@ -57,11 +57,17 @@
           <p-panel-menu [model]="filteredItems()" class="nav">
             <ng-template #item let-item>
               <a pRipple
-                 class="nav-item"
-                 [routerLinkActive]="'active'"
+                 class="nav-item flex items-center justify-between"
+                 [ngClass]="{'active': isItemActive(item)}"
                  [routerLink]="item.path === 'billing' ? null: [item.path]"
               >
-                <span class="nav-dot"></span><span>{{item.title}}</span>
+                <div class="flex items-center gap-3">
+                  <div class="nav-dot"></div>
+                  <div>{{item.title}}</div>
+                </div>
+                @if (item.items && item.items.length > 0) {
+                  <i class="pi pi-chevron-down transition-transform duration-200" [style.transform]="item.expanded ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+                }
               </a>
             </ng-template>
           </p-panel-menu>

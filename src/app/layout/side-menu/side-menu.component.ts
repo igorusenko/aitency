@@ -1,6 +1,6 @@
 import {Component, computed, DestroyRef, effect, inject, input, OnInit, output, ViewEncapsulation} from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {AuthService} from '../../core/services/management-system/auth/auth.service';
 import {UserStore} from '../../core/stores/user.store';
 import {Button} from 'primeng/button';
@@ -25,6 +25,7 @@ export class SideMenuComponent implements OnInit {
   authService = inject(AuthService);
   userStore = inject(UserStore);
   destroyRef = inject(DestroyRef);
+  router = inject(Router);
 
   isSidebarCollapsed = input.required();
   sidebarToggle = output<boolean>();
@@ -119,6 +120,23 @@ export class SideMenuComponent implements OnInit {
 
     return filterFn(this.items);
   });
+
+  isItemActive(item: MenuItem): boolean {
+    if (item['path'] && this.router.isActive(item['path'], {
+      paths: 'exact',
+      queryParams: 'ignored',
+      matrixParams: 'ignored',
+      fragment: 'ignored'
+    })) {
+      return true;
+    }
+
+    if (item.items && Array.isArray(item.items)) {
+      return item.items.some(child => this.isItemActive(child));
+    }
+
+    return false;
+  }
 
   ngOnInit(): void {
     if (window.innerWidth < this.MOBILE_BREAKPOINT) {

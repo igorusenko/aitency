@@ -82,3 +82,10 @@
     display: none;
   }
 }
+
+::ng-deep {
+  .active-button .p-button {
+    @apply bg-[rgba(124,92,255,0.16)] border-[rgba(124,92,255,0.3)] !important;
+    color: var(--text) !important;
+  }
+}

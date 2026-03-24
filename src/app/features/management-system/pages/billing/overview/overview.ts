@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
 import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-balance';
+import {UserStore} from '../../../../../core/stores/user.store';
 
 @Component({
   selector: 'app-overview',
@@ -16,6 +17,7 @@ import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-
 })
 export class BillingOverview {
   billingService = inject(BillingService);
+  userStore = inject(UserStore);
   balance$ = this.billingService.getBalance();
   visibleTopUpDialog = signal(false);
   clientInfo = {
