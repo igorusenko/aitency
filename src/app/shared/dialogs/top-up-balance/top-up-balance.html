@@ -5,7 +5,9 @@
         [form]="topUpForm"
         controlName="amount"
         label="Amount"
-        [min]="1"
+        [min]="0.1"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="2"
         [formSubmitted]="formSubmitted()"
       ></app-input-number>
 

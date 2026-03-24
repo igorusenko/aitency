@@ -7,19 +7,24 @@ import { TagModule } from 'primeng/tag';
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
 import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-balance';
 import {UserStore} from '../../../../../core/stores/user.store';
+import {Tooltip} from 'primeng/tooltip';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule, TopUpBalance],
+  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule, TopUpBalance, Tooltip],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
 export class BillingOverview {
   billingService = inject(BillingService);
   userStore = inject(UserStore);
-  balance$ = this.billingService.getBalance();
+  balance = this.billingService.balance;
   visibleTopUpDialog = signal(false);
+
+  constructor() {
+    this.refreshBalance();
+  }
   clientInfo = {
     companyName: 'TechFlow Solutions Ltd',
     vatNumber: 'EL999999999',
@@ -62,6 +67,6 @@ export class BillingOverview {
   }
 
   refreshBalance() {
-    this.balance$ = this.billingService.getBalance();
+    this.billingService.refreshBalance();
   }
 }

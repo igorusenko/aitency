@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import {
   BillingBalanceResponse,
@@ -18,8 +18,16 @@ export class BillingService {
   private readonly apiUrl = `${environment.apiUrl}/billing`;
   secretKey = 'pk_test_51TCIzBPzFQky4L5mFphkxPYPS1GUYvBQHv1pLOHl745YESpWYe3n4G4g5sw4WCIZYYYbj4ppI7LsBcVfZfqgO6ti00nc8NHIxg';
 
+  balance = signal<BillingBalanceResponse | undefined>(undefined);
+
   getBalance(): Observable<BillingBalanceResponse> {
-    return this.http.get<BillingBalanceResponse>(`${this.apiUrl}/balance`);
+    return this.http.get<BillingBalanceResponse>(`${this.apiUrl}/balance`).pipe(
+      tap(balance => this.balance.set(balance))
+    );
+  }
+
+  refreshBalance(): void {
+    this.getBalance().subscribe();
   }
 
   getPaymentMethods(): Observable<BillingPaymentMethodResponse[]> {

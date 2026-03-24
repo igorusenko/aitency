@@ -11,6 +11,7 @@ import {InputTextComponent} from '../../input-text/input-text';
 import {Checkbox} from '../../checkbox/checkbox';
 import {ButtonModule} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-create-payment-method',
@@ -35,6 +36,7 @@ export class CreatePaymentMethod {
 
   private readonly fb = inject(FormBuilder);
   private readonly billingService = inject(BillingService);
+  messageService = inject(MessageService);
 
   paymentElementForm = this.fb.group({
     name: ['', [Validators.required]],
@@ -118,6 +120,7 @@ export class CreatePaymentMethod {
                 this.saving.set(false);
                 this.visible.set(false);
                 this.onCreated.emit();
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Payment method created successfully!', life: 2000 });
               },
               error: (err) => {
                 this.saving.set(false);

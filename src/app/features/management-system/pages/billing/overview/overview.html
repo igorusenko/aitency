@@ -27,11 +27,12 @@
       </div>
     </p-card>
 
-    <div class="bg-indigo-900 text-white p-6 rounded-lg flex flex-col justify-center items-center text-center">
+    <div class="bg-indigo-900 text-white p-6 rounded-lg flex flex-col justify-center items-center text-center relative">
+      <p-button icon="pi pi-refresh" aria-label="Refresh Balance" size="small" pTooltip="Refresh Balance" class="absolute top-0 right-0 p-4"/>
       <span class="text-sm uppercase tracking-wider opacity-80 mb-2">Account Balance</span>
       <div class="text-4xl font-bold mb-2">
-        @if (balance$ | async; as balance) {
-          {{ balance.balance | currency:'EUR' }}
+        @if (balance(); as b) {
+          {{ b.balance | currency:'EUR' }}
         }
       </div>
       <span class="text-xs opacity-70">Available for billing</span>

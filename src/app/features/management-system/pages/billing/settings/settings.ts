@@ -7,6 +7,7 @@ import { InputNumberComponent } from '../../../../../shared/input-number/input-n
 import { InputTextComponent } from '../../../../../shared/input-text/input-text';
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
 import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
+import {UserStore} from '../../../../../core/stores/user.store';
 
 @Component({
   selector: 'app-settings',
@@ -26,16 +27,17 @@ import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-
 export class Settings {
   private fb = inject(FormBuilder);
   billingService = inject(BillingService);
+  userStore = inject(UserStore);
   visibleCreatePaymentMethod: WritableSignal<boolean> = signal(false);
   paymentMethods$ = this.billingService.getPaymentMethods();
 
   billingForm: FormGroup = this.fb.group({
-    companyName: ['TechFlow Solutions Ltd'],
-    vatNumber: ['EL999999999'],
-    address: [''],
-    city: [''],
-    country: [''],
-    email: ['billing@techflow.gr']
+    companyName: [this.userStore.currentUser().fullName ?? ''],
+    vatNumber: [this.userStore.currentUser().vatNumber ?? ''],
+    address: [this.userStore.currentUser().address ?? ''],
+    city: [this.userStore.currentUser().city ?? ''],
+    country: [this.userStore.currentUser().country ?? ''],
+    email: [this.userStore.currentUser().email ?? '']
   });
 
   autoRechargeForm: FormGroup = this.fb.group({
