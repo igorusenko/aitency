@@ -7,8 +7,19 @@ import {
   BillingPaymentMethodResponse,
   AddBillingPaymentMethodRequest,
   CreateTopUpRequest,
-  CreateTopUpResponse
+  CreateTopUpResponse,
+  BillingPaymentParams,
+  BillingPaymentListItemResponse,
+  BillingInvoiceParams,
+  BillingInvoiceListItemResponse,
+  BillingInvoiceResponse,
+  PayBillingInvoiceRequest,
+  BillingAdminInvoiceParams,
+  CreateManualBillingInvoiceRequest,
+  UpdateManualBillingInvoiceRequest,
+  BillingAdminPaymentParams
 } from '../../../interfaces/billing/billing.interface';
+import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +59,50 @@ export class BillingService {
 
   topUp(request: CreateTopUpRequest): Observable<CreateTopUpResponse> {
     return this.http.post<CreateTopUpResponse>(`${this.apiUrl}/top-up`, request);
+  }
+
+  getPayments(params?: BillingPaymentParams): Observable<IPaginatedList<BillingPaymentListItemResponse>> {
+    return this.http.get<IPaginatedList<BillingPaymentListItemResponse>>(`${this.apiUrl}/payments`, { params: params as any });
+  }
+
+  getInvoices(params?: BillingInvoiceParams): Observable<IPaginatedList<BillingInvoiceListItemResponse>> {
+    return this.http.get<IPaginatedList<BillingInvoiceListItemResponse>>(`${this.apiUrl}/invoices`, { params: params as any });
+  }
+
+  getInvoiceById(invoiceId: string): Observable<BillingInvoiceResponse> {
+    return this.http.get<BillingInvoiceResponse>(`${this.apiUrl}/invoices/${invoiceId}`);
+  }
+
+  payInvoice(invoiceId: string, request: PayBillingInvoiceRequest): Observable<CreateTopUpResponse> {
+    return this.http.post<CreateTopUpResponse>(`${this.apiUrl}/invoices/${invoiceId}/pay-intent`, request);
+  }
+
+  // Admin methods
+  getAdminInvoices(params?: BillingAdminInvoiceParams): Observable<IPaginatedList<BillingInvoiceListItemResponse>> {
+    return this.http.get<IPaginatedList<BillingInvoiceListItemResponse>>(`${this.apiUrl}/admin/invoices`, { params: params as any });
+  }
+
+  getAdminInvoiceById(invoiceId: string): Observable<BillingInvoiceResponse> {
+    return this.http.get<BillingInvoiceResponse>(`${this.apiUrl}/admin/invoices/${invoiceId}`);
+  }
+
+  createAdminInvoice(request: CreateManualBillingInvoiceRequest): Observable<BillingInvoiceResponse> {
+    return this.http.post<BillingInvoiceResponse>(`${this.apiUrl}/admin/invoices`, request);
+  }
+
+  updateAdminInvoice(invoiceId: string, request: UpdateManualBillingInvoiceRequest): Observable<BillingInvoiceResponse> {
+    return this.http.put<BillingInvoiceResponse>(`${this.apiUrl}/admin/invoices/${invoiceId}`, request);
+  }
+
+  issueAdminInvoice(invoiceId: string): Observable<BillingInvoiceResponse> {
+    return this.http.post<BillingInvoiceResponse>(`${this.apiUrl}/admin/invoices/${invoiceId}/issue`, {});
+  }
+
+  cancelAdminInvoice(invoiceId: string): Observable<BillingInvoiceResponse> {
+    return this.http.post<BillingInvoiceResponse>(`${this.apiUrl}/admin/invoices/${invoiceId}/cancel`, {});
+  }
+
+  getAdminPayments(params?: BillingAdminPaymentParams): Observable<IPaginatedList<BillingPaymentListItemResponse>> {
+    return this.http.get<IPaginatedList<BillingPaymentListItemResponse>>(`${this.apiUrl}/admin/payments`, { params: params as any });
   }
 }

@@ -17,6 +17,16 @@ export enum BillingPaymentStatus {
   Completed = 'Completed',
   Failed = 'Failed',
   PartiallyRefunded = 'PartiallyRefunded',
+  Refunded = 'Refunded',
+  Canceled = 'Canceled'
+}
+
+export enum BillingInvoiceStatus {
+  Draft = 'Draft',
+  Issued = 'Issued',
+  Paid = 'Paid',
+  Overdue = 'Overdue',
+  Canceled = 'Canceled',
   Refunded = 'Refunded'
 }
 
@@ -27,6 +37,50 @@ export interface BillingBalanceResponse {
   balance: number;
   currency: CurrencyCode;
   updatedAt: string;
+}
+
+export interface BillingPaymentListItemResponse {
+  id: string;
+  clientId: string;
+  gateway: BillingPaymentGateway;
+  gatewayTransactionId: string | null;
+  amount: number;
+  currency: CurrencyCode;
+  status: BillingPaymentStatus;
+  paymentMethodId: string | null;
+  reference: string | null;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BillingInvoiceItem {
+  id: string;
+  description: string;
+  amount: number;
+  quantity: number;
+  total: number;
+}
+
+export interface BillingInvoiceListItemResponse {
+  id: string;
+  clientId: string;
+  invoiceNumber: string;
+  amount: number;
+  currency: CurrencyCode;
+  status: BillingInvoiceStatus;
+  dateIssued: string;
+  dateDue: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BillingInvoiceResponse extends BillingInvoiceListItemResponse {
+  items: BillingInvoiceItem[];
+  subtotal: number;
+  taxAmount: number;
+  total: number;
+  notes: string | null;
 }
 
 export interface BillingPaymentMethodResponse {
@@ -66,6 +120,52 @@ export interface CreateTopUpResponse {
   clientSecret: string | null;
   status: BillingPaymentStatus;
   isIdempotentReplay: boolean;
+}
+
+export interface PayBillingInvoiceRequest {
+  paymentMethodId: string;
+  idempotencyKey?: string | null;
+  returnUrl?: string | null;
+}
+
+export interface CreateManualBillingInvoiceRequest {
+  clientId: string;
+  currency: CurrencyCode;
+  items: Omit<BillingInvoiceItem, 'id' | 'total'>[];
+  dateDue: string;
+  notes?: string | null;
+}
+
+export interface UpdateManualBillingInvoiceRequest {
+  items: Omit<BillingInvoiceItem, 'id' | 'total'>[];
+  dateDue: string;
+  notes?: string | null;
+}
+
+export interface BillingPaymentParams {
+  type?: BillingPaymentGateway;
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  reference?: string;
+  page?: number;
+  count?: number;
+}
+
+export interface BillingInvoiceParams {
+  status?: BillingInvoiceStatus;
+  dateIssuedFrom?: string;
+  dateIssuedTo?: string;
+  invoiceNumber?: string;
+  page?: number;
+  count?: number;
+}
+
+export interface BillingAdminInvoiceParams extends BillingInvoiceParams {
+  clientId?: string;
+}
+
+export interface BillingAdminPaymentParams extends BillingPaymentParams {
+  clientId?: string;
 }
 
 export interface ErrorResponse {
