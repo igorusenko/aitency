@@ -60,7 +60,7 @@ export class SideMenuComponent implements OnInit {
         {
           path: 'billing/overview',
           title: 'Overview',
-          roles: ['Default', 'Admin', 'Demo']
+          roles: ['Default', /*'Demo'*/]
         },
         {
           path: 'billing/invoices',

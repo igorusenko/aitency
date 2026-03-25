@@ -62,7 +62,7 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Invoice#</th>
-        <th>Date</th>
+        <th>Issue Date</th>
         <th>Due Date</th>
         <th>Amount</th>
         <th>Status</th>
@@ -73,9 +73,9 @@
       <tr>
         <td>{{ tr.invoiceNumber }}</td>
         <td>{{ tr.dateIssued | date }}</td>
-        <td>{{ tr.dateDue | date }}</td>
-        <td [ngClass]="getAmountClass(tr.amount)">
-          {{ (tr.amount >= 0 ? '+' : '') + formatCurrency(tr.amount, tr.currency) }}
+        <td>{{ tr.dueDate | date }}</td>
+        <td [ngClass]="getAmountClass(tr.total)">
+          {{ formatCurrency(tr.total, tr.currency) }}
         </td>
         <td>
           <p-tag [value]="tr.status" [severity]="'success'"></p-tag>

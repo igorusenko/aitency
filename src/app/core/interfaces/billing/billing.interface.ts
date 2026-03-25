@@ -30,6 +30,14 @@ export enum BillingInvoiceStatus {
   Refunded = 'Refunded'
 }
 
+export enum BillingInvoiceLineType {
+  Subscription = 'Subscription',
+  Usage = 'Usage',
+  Proration = 'Proration',
+  Adjustment = 'Adjustment',
+  Manual = 'Manual'
+}
+
 export type CurrencyCode = string; // Или можно расширить до конкретных кодов, если нужно
 
 export interface BillingBalanceResponse {
@@ -128,12 +136,21 @@ export interface PayBillingInvoiceRequest {
   returnUrl?: string | null;
 }
 
+export interface BillingInvoiceLine {
+  lineType: BillingInvoiceLineType;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+}
+
 export interface CreateManualBillingInvoiceRequest {
   clientId: string;
-  currency: CurrencyCode;
-  items: Omit<BillingInvoiceItem, 'id' | 'total'>[];
-  dateDue: string;
+  dueDate: string;
+  discountAmount: number;
+  taxAmount: number;
   notes?: string | null;
+  lines: BillingInvoiceLine[];
+  invoiceNumber: string;
 }
 
 export interface UpdateManualBillingInvoiceRequest {

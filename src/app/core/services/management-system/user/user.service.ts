@@ -4,6 +4,8 @@ import {environment} from '../../../../../environments/environment';
 import {Observable, tap} from 'rxjs';
 import {UserStore} from '../../../stores/user.store';
 import {IUser} from '../../../interfaces/users/user';
+import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
+import { UserWithClientResponse } from '../../../interfaces/users/user-with-client.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +51,13 @@ export class UserService {
 
   getUserPassword(): Observable<{ password: string }> {
     return this.http.get<{ password: string }>(`${this.apiUrl}/users/${this.userStore.userById().id}/password`)
+  }
+
+  getUsersWithClient(emailFilter: string = '', page: number = 1, count: number = 10): Observable<IPaginatedList<UserWithClientResponse>> {
+    let params = new HttpParams().set('page', page).set('count', count);
+    if (emailFilter) {
+      params = params.set('emailFilter', emailFilter);
+    }
+    return this.http.get<IPaginatedList<UserWithClientResponse>>(`${this.apiUrl}/users/with-client`, { params });
   }
 }

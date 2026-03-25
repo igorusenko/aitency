@@ -45,7 +45,7 @@ export class Invoices implements OnInit {
   visibleInvoiceInfo: WritableSignal<boolean> = signal(false);
   filterForm: FormGroup;
   invoiceStatuses = [
-    { name: 'All statuses', value: null },
+    { name: 'All statuses', value: '' },
     { name: 'Draft', value: BillingInvoiceStatus.Draft },
     { name: 'Issued', value: BillingInvoiceStatus.Issued },
     { name: 'Paid', value: BillingInvoiceStatus.Paid },
@@ -89,7 +89,6 @@ export class Invoices implements OnInit {
     this.loading.set(true);
     const role = this.userStore.currentUser()?.role;
     const filters = this.filterForm.value;
-    console.log(filters)
     const params: any = {
       page: this.page(),
       count: this.rows(),

@@ -40,7 +40,7 @@ export class Payments implements OnInit {
   visibleCreatePayment: WritableSignal<boolean> = signal(false);
   filterForm: FormGroup;
   paymentGateways = [
-    { name: 'All gateways', value: null },
+    { name: 'All gateways', value: '' },
     { name: 'Stripe', value: BillingPaymentGateway.Stripe },
     { name: 'Mollie', value: BillingPaymentGateway.Mollie },
     { name: 'Manual', value: BillingPaymentGateway.Manual },
