@@ -30,14 +30,19 @@ export class BillingService {
   secretKey = 'pk_test_51TCIzBPzFQky4L5mFphkxPYPS1GUYvBQHv1pLOHl745YESpWYe3n4G4g5sw4WCIZYYYbj4ppI7LsBcVfZfqgO6ti00nc8NHIxg';
 
   balance = signal<BillingBalanceResponse | undefined>(undefined);
+  balanceLoading = signal<boolean>(false);
 
   getBalance(): Observable<BillingBalanceResponse> {
     return this.http.get<BillingBalanceResponse>(`${this.apiUrl}/balance`).pipe(
-      tap(balance => this.balance.set(balance))
+      tap(balance => {
+        this.balanceLoading.set(false);
+        this.balance.set(balance)
+      })
     );
   }
 
   refreshBalance(): void {
+    this.balanceLoading.set(true);
     this.getBalance().subscribe();
   }
 
