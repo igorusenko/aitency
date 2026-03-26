@@ -1,52 +1,93 @@
-<p-dialog header="Invoice details" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }">
+<p-dialog header="Invoice details" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }" (onHide)="invoice.set(null)">
 
   <div class="flex flex-col gap-4">
-    <div class="grid grid-cols-2 gap-4 p-4 bg-[#1018278c]">
-      <div class="flex flex-col gap-1">
-        <p>Invoice #</p>
-        <p>INV-2026-0048</p>
-      </div>
+    @if (invoice$ | async; as invoice) {
+      <div class="grid grid-cols-2 gap-4 p-4 bg-[#1018278c]">
+        <div class="flex flex-col gap-1">
+          <p>Invoice #</p>
+          <p>{{ invoice.invoiceNumber }}</p>
+        </div>
 
-      <div class="flex flex-col gap-1">
-        <p>Status</p>
-        <p>Sent</p>
-      </div>
+        <div class="flex flex-col gap-1">
+          <p>Status</p>
+          <p>{{ invoice.status }}</p>
+        </div>
 
-      <div class="flex flex-col gap-1">
-        <p>Date issued</p>
-        <p>Mar 5, 2026</p>
-      </div>
+        <div class="flex flex-col gap-1">
+          <p>Date issued</p>
+          <p>{{ invoice.dateIssued ? (invoice.dateIssued | date) : '-' }}</p>
+        </div>
 
-      <div class="flex flex-col gap-1">
-        <p>Due date</p>
-        <p>Mar 20, 2026</p>
+        <div class="flex flex-col gap-1">
+          <p>Due date</p>
+          <p>{{ invoice.dueDate ? (invoice.dueDate | date) : '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Currency</p>
+          <p>{{ invoice.currency }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Subtotal</p>
+          <p>{{ invoice.subtotal ?? '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Discount</p>
+          <p>{{ invoice.discountAmount ?? '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Tax</p>
+          <p>{{ invoice.taxAmount ?? '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Total</p>
+          <p>{{ invoice.total ?? '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Type</p>
+          <p>{{ invoice.type }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Created at</p>
+          <p>{{ invoice.createdAt ? (invoice.createdAt | date) : '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Updated at</p>
+          <p>{{ invoice.updatedAt ? (invoice.updatedAt | date) : '-' }}</p>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <p>Notes</p>
+          <p>{{ invoice.notes || '-' }}</p>
+        </div>
       </div>
-    </div>
-    <div class="flex flex-col gap-2">
-      <h2>Line Items</h2>
-      <table class="w-full bg-[#1018278c]">
-        <thead>
-        <tr class="border-b border-[rgba(255,255,255,.08)]">
-          <th class="p-2 text-left">Description</th>
-          <th class="p-2 text-left">Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="border-b border-[rgba(255,255,255,.08)]">
-          <td class="p-2">AI Automation Pro (March 2026)</td>
-          <td class="p-2 text-right">€299.00</td>
-        </tr>
-        <tr class="border-b border-[rgba(255,255,255,.08)]">
-          <td class="p-2">Usage-Based API (10,000 calls)</td>
-          <td class="p-2 text-right">€1,000.00</td>
-        </tr>
-        <tr>
-          <td style="padding: 8px; font-weight: 600;">Total</td>
-          <td style="padding: 8px; text-align: right; font-weight: 600;">€1,299.00</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+      <div class="flex flex-col gap-2">
+        <h2>Line Items</h2>
+        <table class="w-full bg-[#1018278c]">
+          <thead>
+          <tr class="border-b border-[rgba(255,255,255,.08)]">
+            <th class="p-2 text-left">Description</th>
+            <th class="p-2 text-left">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (line of invoice.lines; track line.id) {
+              <tr class="invoice-line">
+                <td class="p-2">{{line.description}}</td>
+                <td class="p-2">{{formatCurrency(line.amount)}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   </div>
 
   <div class="flex justify-end gap-2 pt-4">

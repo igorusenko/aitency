@@ -82,7 +82,7 @@
         </td>
         <td class="font-medium">
           <div class="flex gap-2">
-            <p-button (onClick)="visibleInvoiceInfo.set(true)" label="View" severity="primary" size="small"/>
+            <p-button (onClick)="viewInvoice(tr)" label="View" severity="primary" size="small"/>
             <p-button label="Pdf" severity="primary" size="small"/>
           </div>
         </td>
@@ -99,4 +99,4 @@
 </div>
 
 <app-create-invoice [(visible)]="visibleCreateInvoice"></app-create-invoice>
-<app-invoice-info [(visible)]="visibleInvoiceInfo"></app-invoice-info>
+<app-invoice-info [(visible)]="visibleInvoiceInfo" [(invoice)]="selectedInvoice"></app-invoice-info>

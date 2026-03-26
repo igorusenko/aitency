@@ -13,7 +13,11 @@ import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputTextComponent} from '../../../../../shared/input-text/input-text';
 import { BillingService } from '../../../../../core/services/management-system/billing/billing.service';
-import { BillingInvoiceListItemResponse, BillingInvoiceStatus } from '../../../../../core/interfaces/billing/billing.interface';
+import {
+  BillingInvoiceListItemResponse,
+  BillingInvoiceResponse,
+  BillingInvoiceStatus
+} from '../../../../../core/interfaces/billing/billing.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -54,6 +58,7 @@ export class Invoices implements OnInit {
     { name: 'Refunded', value: BillingInvoiceStatus.Refunded },
   ]
   invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
+  selectedInvoice: WritableSignal<BillingInvoiceResponse | null> = signal(null);
   totalCount = signal(0);
   loading = signal(false);
   page = signal(1);
@@ -124,6 +129,11 @@ export class Invoices implements OnInit {
 
   getControl(control: string): FormControl {
     return this.filterForm.get(control) as FormControl;
+  }
+
+  viewInvoice(invoice: BillingInvoiceResponse): void {
+    this.visibleInvoiceInfo.set(true);
+    this.selectedInvoice.set(invoice);
   }
 
   getStatusSeverity(status: BillingInvoiceStatus): string {

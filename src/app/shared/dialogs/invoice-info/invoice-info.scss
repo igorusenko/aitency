@@ -1,0 +1,5 @@
+:host {
+  .invoice-line:not(:last-child) {
+      @apply border-b border-[rgba(255,255,255,.08)];
+  }
+}

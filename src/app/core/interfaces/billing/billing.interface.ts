@@ -30,6 +30,12 @@ export enum BillingInvoiceStatus {
   Refunded = 'Refunded'
 }
 
+export enum BillingInvoiceType {
+  Invoice = 'Invoice',
+  Quote = 'Quote',
+  CreditNote = 'CreditNote'
+}
+
 export enum BillingInvoiceLineType {
   Subscription = 'Subscription',
   Usage = 'Usage',
@@ -78,7 +84,7 @@ export interface BillingInvoiceListItemResponse {
   currency: CurrencyCode;
   status: BillingInvoiceStatus;
   dateIssued: string;
-  dateDue: string;
+  dueDate: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -87,8 +93,11 @@ export interface BillingInvoiceResponse extends BillingInvoiceListItemResponse {
   items: BillingInvoiceItem[];
   subtotal: number;
   taxAmount: number;
+  discountAmount: number;
   total: number;
   notes: string | null;
+  type: BillingInvoiceType;
+  lines: BillingInvoiceLine[]
 }
 
 export interface BillingPaymentMethodResponse {
@@ -137,9 +146,12 @@ export interface PayBillingInvoiceRequest {
 }
 
 export interface BillingInvoiceLine {
-  lineType: BillingInvoiceLineType;
+  amount: number;
   description: string;
+  id: string;
+  lineType: BillingInvoiceLineType;
   quantity: number;
+  sortOrder: number;
   unitPrice: number;
 }
 
