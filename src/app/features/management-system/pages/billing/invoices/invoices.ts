@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
-import {PrimeTemplate} from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {TableModule} from 'primeng/table';
 import {Tag} from 'primeng/tag';
 import {DatePipe, NgClass} from '@angular/common';
@@ -7,8 +7,9 @@ import {Button} from 'primeng/button';
 import {CreateInvoice} from '../../../../../shared/dialogs/create-invoice/create-invoice';
 import {UserStore} from '../../../../../core/stores/user.store';
 import {InvoiceInfo} from '../../../../../shared/dialogs/invoice-info/invoice-info';
+import {PayInvoice} from '../../../../../shared/dialogs/pay-invoice/pay-invoice';
 import {SelectComponent} from '../../../../../shared/select/select';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
 import {InputTextComponent} from '../../../../../shared/input-text/input-text';
@@ -32,6 +33,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     Button,
     CreateInvoice,
     InvoiceInfo,
+    PayInvoice,
     SelectComponent,
     DatePicker,
     FloatLabel,
@@ -44,9 +46,11 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 export class Invoices implements OnInit {
   userStore = inject(UserStore);
   fb = inject(FormBuilder);
+  messageService = inject(MessageService);
   billingService = inject(BillingService);
   visibleCreateInvoice: WritableSignal<boolean> = signal(false);
   visibleInvoiceInfo: WritableSignal<boolean> = signal(false);
+  visiblePayInvoice: WritableSignal<boolean> = signal(false);
   filterForm: FormGroup;
   invoiceStatuses = [
     { name: 'All statuses', value: '' },
@@ -59,6 +63,7 @@ export class Invoices implements OnInit {
   ]
   invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
   selectedInvoice: WritableSignal<BillingInvoiceResponse | null> = signal(null);
+  selectedInvoiceForPayment: WritableSignal<BillingInvoiceListItemResponse | null> = signal(null);
   totalCount = signal(0);
   loading = signal(false);
   page = signal(1);
@@ -136,14 +141,26 @@ export class Invoices implements OnInit {
     this.selectedInvoice.set(invoice);
   }
 
-  getStatusSeverity(status: BillingInvoiceStatus): string {
-    switch (status) {
-      case BillingInvoiceStatus.Paid: return 'success';
-      case BillingInvoiceStatus.Overdue: return 'danger';
-      case BillingInvoiceStatus.Canceled: return 'secondary';
-      case BillingInvoiceStatus.Draft: return 'info';
-      case BillingInvoiceStatus.Issued: return 'warn';
-      default: return 'info';
-    }
+  releaseInvoice(invoiceId: string): void {
+    this.billingService.issueAdminInvoice(invoiceId).subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Invoice issued!', life: 2000 });
+      this.loadInvoices();
+    })
+  }
+
+  cancelInvoice(invoiceId: string): void {
+    this.billingService.cancelAdminInvoice(invoiceId).subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Invoice cancelled!', life: 2000 });
+      this.loadInvoices();
+    })
+  }
+
+  openPayInvoiceDialog(invoice: BillingInvoiceListItemResponse): void {
+    this.selectedInvoiceForPayment.set(invoice);
+    this.visiblePayInvoice.set(true);
+  }
+
+  payInvoice(invoice: BillingInvoiceListItemResponse): void {
+    this.openPayInvoiceDialog(invoice);
   }
 }

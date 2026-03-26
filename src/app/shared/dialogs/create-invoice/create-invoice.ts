@@ -1,11 +1,9 @@
-import {Component, inject, model, ModelSignal, OnInit, signal, WritableSignal} from '@angular/core';
+import {Component, inject, model, ModelSignal, OnDestroy, OnInit, output, signal, WritableSignal} from '@angular/core';
 import {Button} from 'primeng/button';
 import {Dialog} from 'primeng/dialog';
-import {InputText} from 'primeng/inputtext';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
 import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputTextComponent} from '../../input-text/input-text';
 import {InputNumberComponent} from '../../input-number/input-number';
 import { SelectComponent } from '../../select/select';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
@@ -15,32 +13,40 @@ import { UserWithClientResponse } from '../../../core/interfaces/users/user-with
 import { CommonModule } from '@angular/common';
 
 import {UserStore} from '../../../core/stores/user.store';
+import {SelectFilterEvent} from 'primeng/select';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import {InputTextComponent} from '../../input-text/input-text';
 
 @Component({
   selector: 'app-create-invoice',
   imports: [
     Button,
     Dialog,
-    InputText,
     DatePicker,
     FloatLabel,
     FormsModule,
     ReactiveFormsModule,
-    InputTextComponent,
     InputNumberComponent,
     SelectComponent,
-    CommonModule
+    CommonModule,
+    InputTextComponent
   ],
   templateUrl: './create-invoice.html',
   styleUrl: './create-invoice.scss',
 })
-export class CreateInvoice implements OnInit {
+export class CreateInvoice implements OnInit, OnDestroy {
   fb = inject(FormBuilder);
   billingService = inject(BillingService);
   userService = inject(UserService);
   userStore = inject(UserStore);
 
+  private filterSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
   visible: ModelSignal<boolean> = model.required();
+
+  created = output<boolean>();
 
   clientOptions: WritableSignal<Array<{ label: string; value: string }>> = signal([]);
   lineTypeOptions = [
@@ -74,6 +80,11 @@ export class CreateInvoice implements OnInit {
     if (this.userStore.currentUser()?.role === 'Admin') {
       this.loadUsersForSelect();
     }
+
+    this.filterSubject.pipe(
+      debounceTime(300),
+      takeUntil(this.destroy$)
+    ).subscribe(filter => this.loadUsersForSelect(filter));
   }
 
   addLine(): void {
@@ -128,6 +139,7 @@ export class CreateInvoice implements OnInit {
         this.visible.set(false);
         // Сброс формы для следующего раза
         this.resetForm();
+        this.created.emit(true);
       },
       error: () => {
         // оставить форму открытой для исправления
@@ -155,7 +167,12 @@ export class CreateInvoice implements OnInit {
     return this.lines.at(index) as FormGroup;
   }
 
-  getLineControl(index: number, controlName: string): FormControl {
-    return this.lines.at(index).get(controlName) as FormControl;
+  onFilter(event: SelectFilterEvent): void {
+    this.filterSubject.next(event.filter);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

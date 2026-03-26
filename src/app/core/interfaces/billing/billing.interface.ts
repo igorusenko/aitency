@@ -80,7 +80,7 @@ export interface BillingInvoiceListItemResponse {
   id: string;
   clientId: string;
   invoiceNumber: string;
-  amount: number;
+  total: number;
   currency: CurrencyCode;
   status: BillingInvoiceStatus;
   dateIssued: string;

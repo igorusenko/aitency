@@ -2,4 +2,12 @@
   .invoice-line:not(:last-child) {
       @apply border-b border-[rgba(255,255,255,.08)];
   }
+
+  .invoice-info-item {
+    @apply flex flex-col gap-1;
+
+    p:first-child {
+      @apply text-gray-400 text-sm;
+    }
+  }
 }

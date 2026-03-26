@@ -3,6 +3,8 @@
     <app-select
       [form]="invoiceForm"
       [options]="clientOptions()"
+      [filter]="true"
+      (onFilter)="onFilter($event)"
       controlName="clientId"
       title="Client"
       optionLabel="label"

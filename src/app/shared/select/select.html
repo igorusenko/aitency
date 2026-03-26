@@ -16,6 +16,8 @@
       (onLazyLoad)="onLazyLoad.emit($event)"
       (onChange)="onChange.emit($event)"
       [appendTo]="appendTo()"
+      [filter]="filter()"
+      (onFilter)="onFilter.emit($event)"
     />
 
     <label [for]="controlName()">

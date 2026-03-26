@@ -1,7 +1,7 @@
 import {Component, computed, input, InputSignal, output} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {FloatLabel} from 'primeng/floatlabel';
-import {SelectChangeEvent, SelectModule} from 'primeng/select';
+import {SelectChangeEvent, SelectFilterEvent, SelectModule} from 'primeng/select';
 import {Message} from 'primeng/message';
 import {ScrollerOptions} from 'primeng/api';
 import {SelectLazyLoadEvent} from 'primeng/select';
@@ -22,6 +22,7 @@ export class SelectComponent {
   formSubmitted: InputSignal<boolean | undefined> = input<boolean>();
   loading: InputSignal<boolean> = input<boolean>(false);
   lazy: InputSignal<boolean> = input<boolean>(false);
+  filter: InputSignal<boolean> = input<boolean>(false);
   virtualScroll: InputSignal<boolean> = input<boolean>(false);
   virtualScrollItemSize: InputSignal<number | undefined> = input<number>();
   virtualScrollOptions: InputSignal<ScrollerOptions | undefined> = input<ScrollerOptions | undefined>();
@@ -34,6 +35,7 @@ export class SelectComponent {
 
   onLazyLoad = output<SelectLazyLoadEvent>();
   onChange = output<SelectChangeEvent>();
+  onFilter = output<SelectFilterEvent>();
 
   control = computed<FormControl | null>(() => {
     const form = this.form();

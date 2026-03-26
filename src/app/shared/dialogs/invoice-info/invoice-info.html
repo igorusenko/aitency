@@ -3,67 +3,67 @@
   <div class="flex flex-col gap-4">
     @if (invoice$ | async; as invoice) {
       <div class="grid grid-cols-2 gap-4 p-4 bg-[#1018278c]">
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Invoice #</p>
           <p>{{ invoice.invoiceNumber }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Status</p>
           <p>{{ invoice.status }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Date issued</p>
           <p>{{ invoice.dateIssued ? (invoice.dateIssued | date) : '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Due date</p>
           <p>{{ invoice.dueDate ? (invoice.dueDate | date) : '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Currency</p>
           <p>{{ invoice.currency }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Subtotal</p>
           <p>{{ invoice.subtotal ?? '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Discount</p>
           <p>{{ invoice.discountAmount ?? '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Tax</p>
           <p>{{ invoice.taxAmount ?? '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Total</p>
           <p>{{ invoice.total ?? '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Type</p>
           <p>{{ invoice.type }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Created at</p>
           <p>{{ invoice.createdAt ? (invoice.createdAt | date) : '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Updated at</p>
           <p>{{ invoice.updatedAt ? (invoice.updatedAt | date) : '-' }}</p>
         </div>
 
-        <div class="flex flex-col gap-1">
+        <div class="invoice-info-item">
           <p>Notes</p>
           <p>{{ invoice.notes || '-' }}</p>
         </div>
