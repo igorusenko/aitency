@@ -27,7 +27,6 @@ import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
 export class BillingService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = `${environment.apiUrl}/billing`;
-  secretKey = 'pk_test_51TCIzBPzFQky4L5mFphkxPYPS1GUYvBQHv1pLOHl745YESpWYe3n4G4g5sw4WCIZYYYbj4ppI7LsBcVfZfqgO6ti00nc8NHIxg';
 
   balance = signal<BillingBalanceResponse | undefined>(undefined);
   balanceLoading = signal<boolean>(false);

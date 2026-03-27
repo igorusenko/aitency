@@ -16,6 +16,7 @@ import {UserService} from './core/services/management-system/user/user.service';
 import {MessageService} from 'primeng/api';
 import {AuthService} from './core/services/management-system/auth/auth.service';
 import {provideNgxStripe} from 'ngx-stripe';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,7 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptors([authInterceptor])),
-    provideNgxStripe('pk_test_51TCIzBPzFQky4L5mFphkxPYPS1GUYvBQHv1pLOHl745YESpWYe3n4G4g5sw4WCIZYYYbj4ppI7LsBcVfZfqgO6ti00nc8NHIxg'),
+    provideNgxStripe(environment.stripePublishableKey),
     MessageService,
     providePrimeNG({
       theme: {
