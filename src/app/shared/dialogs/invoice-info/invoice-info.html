@@ -80,8 +80,8 @@
           <tbody>
             @for (line of invoice.lines; track line.id) {
               <tr class="invoice-line">
-                <td class="p-2">{{line.description}}</td>
-                <td class="p-2">{{formatCurrency(line.amount)}}</td>
+                <td class="p-2 w-1/2">{{line.description}}</td>
+                <td class="p-2 w-1/2">{{formatCurrency(line.amount)}}</td>
               </tr>
             }
           </tbody>

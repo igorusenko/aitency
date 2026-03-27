@@ -16,6 +16,7 @@
           [formControl]="getControl('dateIssuedFrom')"
           [readonlyInput]="true"
           [showClear]="true"
+          [maxDate]="getControl('dateIssuedTo').value"
           selectionMode="single"
           appendTo="body"
           class="w-full"
@@ -29,6 +30,7 @@
           [formControl]="getControl('dateIssuedTo')"
           [readonlyInput]="true"
           [showClear]="true"
+          [minDate]="getControl('dateIssuedFrom').value"
           selectionMode="single"
           appendTo="body"
           class="w-full"
@@ -78,13 +80,13 @@
           {{ formatCurrency(tr.total, tr.currency) }}
         </td>
         <td>
-          <p-tag [value]="tr.status" [severity]="'success'"></p-tag>
+          <p-tag [value]="tr.status" [severity]="getStatusSeverity(tr.status)"></p-tag>
         </td>
         <td class="font-medium">
           <div class="flex gap-2">
             <p-button (onClick)="viewInvoice(tr)" label="View" severity="primary" size="small"/>
-            <p-button label="Pdf" severity="primary" size="small"/>
-            @if (tr.status === 'Issued' || tr.status === 'Overdue') {
+            <p-button label="Pdf" severity="info" size="small"/>
+            @if ((tr.status === 'Issued' || tr.status === 'Overdue') && tr.type !== 'CreditNote') {
               <p-button label="Pay" severity="success" size="small" (onClick)="payInvoice(tr)"/>
             }
             @if (userStore.currentUser().role === 'Admin') {

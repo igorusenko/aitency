@@ -78,7 +78,7 @@
         <td>{{ tr.reference }}</td>
         <td>{{ tr.gateway }}</td>
         <td>
-          <p-tag [value]="tr.status" [severity]="'success'"></p-tag>
+          <p-tag [value]="tr.status" [severity]="getStatusSeverity(tr.status)"></p-tag>
         </td>
         <td [ngClass]="getAmountClass(tr.amount)">
           {{ (tr.amount >= 0 ? '+' : '') + formatCurrency(tr.amount, tr.currency) }}

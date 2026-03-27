@@ -128,6 +128,9 @@
                 <app-input-number
                   [form]="getLineForm(i)"
                   [formSubmitted]="formSubmitted"
+                  [min]="0.1"
+                  [minFractionDigits]="2"
+                  [maxFractionDigits]="2"
                   controlName="unitPrice"
                   label="Unit price"
                 >

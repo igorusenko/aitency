@@ -163,4 +163,14 @@ export class Invoices implements OnInit {
   payInvoice(invoice: BillingInvoiceListItemResponse): void {
     this.openPayInvoiceDialog(invoice);
   }
+
+  getStatusSeverity(status: string): any {
+    switch (status) {
+      case 'Cancelled': return 'danger';
+      case 'Draft': return 'secondary';
+      case 'Overdue': return 'warn';
+      case 'Issued': return 'info';
+      case 'Paid': return 'primary';
+    }
+  }
 }

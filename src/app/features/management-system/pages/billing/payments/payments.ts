@@ -119,7 +119,7 @@ export class Payments implements OnInit {
     return this.filterForm.get(control) as FormControl;
   }
 
-  getStatusSeverity(status: BillingPaymentStatus): string {
+  getStatusSeverity(status: BillingPaymentStatus): any {
     switch (status) {
       case BillingPaymentStatus.Completed: return 'success';
       case BillingPaymentStatus.Processing: return 'warn';
