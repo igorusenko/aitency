@@ -1,10 +1,8 @@
 import { Component, inject, OnInit, signal, WritableSignal } from '@angular/core';
 import { MessageService, PrimeTemplate } from 'primeng/api';
 import { TableModule } from 'primeng/table';
-import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
 import { UserStore } from '../../../../../core/stores/user.store';
 import { BillingService } from '../../../../../core/services/management-system/billing/billing.service';
 import {
@@ -18,10 +16,8 @@ import { CreateEditPlan } from '../../../../../shared/dialogs/create-edit-plan/c
   imports: [
     PrimeTemplate,
     TableModule,
-    Tag,
     Button,
     ReactiveFormsModule,
-    CurrencyPipe,
     CreateEditPlan
   ],
   templateUrl: './plans.html',
@@ -44,12 +40,15 @@ export class Plans implements OnInit {
 
   loadPlans(): void {
     this.loading.set(true);
-    this.billingService.getAdminPlans().subscribe({
+    const isAdmin = this.userStore.currentUser()?.role === 'Admin';
+    const plansObservable = isAdmin ? this.billingService.getAdminPlans() : this.billingService.getPlans();
+
+    plansObservable.subscribe({
       next: (plans) => {
         this.plans.set(plans);
         this.loading.set(false);
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load plans' });
         this.loading.set(false);
       }
@@ -90,7 +89,7 @@ export class Plans implements OnInit {
           this.plans.update(plans => plans.filter(p => p.id !== plan.id));
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan deleted successfully' });
         },
-        error: (error) => {
+        error: () => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete plan' });
         }
       });

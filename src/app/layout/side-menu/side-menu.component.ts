@@ -75,7 +75,7 @@ export class SideMenuComponent implements OnInit {
         {
           path: 'billing/subscriptions',
           title: 'Subscriptions',
-          roles: ['Default', 'Admin', 'Demo']
+          roles: ['Default', 'Demo']
         },
         {
           path: 'billing/plans',

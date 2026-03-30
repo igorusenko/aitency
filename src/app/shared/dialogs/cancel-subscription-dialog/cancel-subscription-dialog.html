@@ -1,0 +1,18 @@
+<p-dialog header="Cancel Subscription" [visible]="visible()" (visibleChange)="visibleChange.emit($event)" modal="true" styleClass="w-full max-w-2xl">
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <div class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-sm text-red-800">
+        <strong>Warning:</strong> You are about to cancel your subscription to <strong>{{ subscription()?.planName }}</strong>.
+        This action cannot be undone immediately.
+      </p>
+    </div>
+    <p-floatlabel variant="on">
+      <textarea pInputTextarea [formControl]="getControl('reason')" rows="3" class="w-full"></textarea>
+      <label>Cancellation Reason (Optional)</label>
+    </p-floatlabel>
+    <div class="flex justify-end space-x-2">
+      <p-button label="Keep Subscription" icon="pi pi-times" severity="secondary" (onClick)="close()"></p-button>
+      <p-button label="Cancel Subscription" icon="pi pi-check" type="submit" severity="danger"></p-button>
+    </div>
+  </form>
+</p-dialog>

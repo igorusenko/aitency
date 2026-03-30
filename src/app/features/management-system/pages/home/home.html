@@ -56,55 +56,56 @@
         }
       </div>
 
-
-      <div class="grid cols-3 gap-4">
-        <div class="card flex flex-col justify-between">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Successful runs</div>
-              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
+      @if (userStore.currentUser().role === 'Admin') {
+        <div class="grid cols-3 gap-4">
+          <div class="card flex flex-col justify-between">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Successful runs</div>
+                <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
+              </div>
+              <span class="pill good">24h</span>
             </div>
-            <span class="pill good">24h</span>
+            <div class="stat">
+              <div>
+                <div class="value">{{analyticsService.analytics()?.successCount}}</div>
+                <div class="label">of {{analyticsService.analytics()?.successCount}} runs</div>
+              </div>
+            </div>
           </div>
-          <div class="stat">
-            <div>
-              <div class="value">{{analyticsService.analytics()?.successCount}}</div>
-              <div class="label">of {{analyticsService.analytics()?.successCount}} runs</div>
+
+          <div class="card flex flex-col justify-between">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Failed runs</div>
+                <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
+              </div>
+            </div>
+            <div class="stat">
+              <div>
+                <div class="value">{{analyticsService.analytics()?.errorCount}}</div>
+                <div class="label">requires review</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card flex flex-col justify-between">
+            <div class="card-header">
+              <div>
+                <div class="card-title">Integrations</div>
+                <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
+              </div>
+              <span class="pill good">0 issue(s)</span>
+            </div>
+            <div class="stat">
+              <div>
+                <div class="value">6/6</div>
+                <div class="label">0 in error state</div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="card flex flex-col justify-between">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Failed runs</div>
-              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
-            </div>
-          </div>
-          <div class="stat">
-            <div>
-              <div class="value">{{analyticsService.analytics()?.errorCount}}</div>
-              <div class="label">requires review</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card flex flex-col justify-between">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Integrations</div>
-              <div class="card-note">Period: {{from | date}} - {{to | date}}</div>
-            </div>
-            <span class="pill good">0 issue(s)</span>
-          </div>
-          <div class="stat">
-            <div>
-              <div class="value">6/6</div>
-              <div class="label">0 in error state</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
 
       <div class="card flex flex-col justify-between">
         <div class="card-header">

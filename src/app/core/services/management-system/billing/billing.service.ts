@@ -20,7 +20,11 @@ import {
   BillingAdminPaymentParams,
   BillingPlanResponse,
   CreateBillingPlanRequest,
-  UpdateBillingPlanRequest
+  UpdateBillingPlanRequest,
+  BillingSubscriptionResponse,
+  CreateBillingSubscriptionRequest,
+  UpgradeBillingSubscriptionRequest,
+  CancelBillingSubscriptionRequest
 } from '../../../interfaces/billing/billing.interface';
 import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
 
@@ -117,6 +121,10 @@ export class BillingService {
     return this.http.get<BillingPlanResponse>(`${this.apiUrl}/plans/${planId}`);
   }
 
+  getPlans(): Observable<BillingPlanResponse[]> {
+    return this.http.get<BillingPlanResponse[]>(`${this.apiUrl}/plans`);
+  }
+
   getAdminPlans(): Observable<BillingPlanResponse[]> {
     return this.http.get<BillingPlanResponse[]>(`${this.apiUrl}/admin/plans`);
   }
@@ -135,5 +143,21 @@ export class BillingService {
 
   deleteAdminPlan(planId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/admin/plans/${planId}`);
+  }
+
+  getSubscriptions(): Observable<BillingSubscriptionResponse[]> {
+    return this.http.get<BillingSubscriptionResponse[]>(`${this.apiUrl}/subscriptions`);
+  }
+
+  createSubscription(request: CreateBillingSubscriptionRequest): Observable<BillingSubscriptionResponse> {
+    return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions`, request);
+  }
+
+  upgradeSubscription(subscriptionId: string, request: UpgradeBillingSubscriptionRequest): Observable<BillingSubscriptionResponse> {
+    return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/upgrade`, request);
+  }
+
+  cancelSubscription(subscriptionId: string, request: CancelBillingSubscriptionRequest): Observable<BillingSubscriptionResponse> {
+    return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/cancel`, request);
   }
 }

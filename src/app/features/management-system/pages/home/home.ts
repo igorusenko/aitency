@@ -55,8 +55,8 @@ export class Home implements OnInit{
     if (this.userStore.currentUser().role === 'Admin') {
       this.userId = null;
       this.getUsers();
+      this.getAnalytics();
     }
-    this.getAnalytics();
   }
 
   initAnalyticsForm(): void {

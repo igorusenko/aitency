@@ -1,4 +1,4 @@
 export const environment = {
-  apiUrl: 'https://api-116.aitency.net/api',
+  apiUrl: 'https://api.aitency.com/api',
   stripePublishableKey: '',
 };

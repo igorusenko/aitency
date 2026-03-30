@@ -1,5 +1,5 @@
 import { Component, inject, input, output, signal, OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
@@ -8,12 +8,14 @@ import { SelectComponent } from '../../select/select';
 import { InputNumberComponent } from '../../input-number/input-number';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
 import { MessageService } from 'primeng/api';
+import { UserStore } from '../../../core/stores/user.store';
 import {
   BillingPlanResponse,
   CreateBillingPlanRequest,
   UpdateBillingPlanRequest,
   BillingPlanInterval
 } from '../../../core/interfaces/billing/billing.interface';
+import {Checkbox} from '../../checkbox/checkbox';
 
 @Component({
   selector: 'app-create-edit-plan',
@@ -26,6 +28,7 @@ import {
     InputTextComponent,
     SelectComponent,
     InputNumberComponent,
+    Checkbox,
   ],
   templateUrl: './create-edit-plan.html',
   styleUrl: './create-edit-plan.scss'
@@ -34,6 +37,7 @@ export class CreateEditPlan implements OnInit, OnChanges {
   fb = inject(FormBuilder);
   billingService = inject(BillingService);
   messageService = inject(MessageService);
+  userStore = inject(UserStore);
 
   visible = input.required<boolean>();
   plan = input<BillingPlanResponse | null>();
@@ -48,6 +52,7 @@ export class CreateEditPlan implements OnInit, OnChanges {
     billingCycle: [BillingPlanInterval.Monthly, Validators.required],
     description: ['', Validators.required],
     currency: ['EUR', Validators.required],
+    isActive: [true, Validators.required],
   });
 
   formSubmitted = signal(false);
@@ -79,6 +84,7 @@ export class CreateEditPlan implements OnInit, OnChanges {
         price: plan.price,
         currency: plan.currency,
         billingCycle: plan.billingCycle,
+        isActive: plan.isActive,
       });
     } else {
       this.form.reset({
@@ -88,6 +94,7 @@ export class CreateEditPlan implements OnInit, OnChanges {
         price: 0,
         currency: 'EUR',
         billingCycle: BillingPlanInterval.Monthly,
+        isActive: true,
       });
     }
   }
@@ -128,9 +135,5 @@ export class CreateEditPlan implements OnInit, OnChanges {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update plan' });
       }
     });
-  }
-
-  getControl(control: string): FormControl {
-    return this.form.get(control) as FormControl;
   }
 }

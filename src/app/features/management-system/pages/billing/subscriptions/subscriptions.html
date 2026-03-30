@@ -1,49 +1,59 @@
 <div class="flex flex-col gap-4">
-  <h1 class="text-xl text-white font-bold">Subscriptions</h1>
-
-  @if (userStore.currentUser().role === 'Admin') {
-    <div class="flex gap-4">
-      <p-button label="Create Subscription" severity="primary" size="small" (onClick)="visibleCreateSubscription.set(true)"/>
-    </div>
-  }
-
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @for (sub of subscriptions; track sub.name) {
-      <div class="bg-[#101827] border border-white/10 rounded-2xl p-6 flex flex-col gap-4">
-        <div class="flex flex-col gap-1">
-          <div class="text-white/60 text-sm font-medium">{{ sub.name }}</div>
-          <div class="text-3xl text-white font-bold">
-            {{ sub.price }}<span class="text-lg font-normal text-white/40">{{ sub.unit }}</span>
-          </div>
-          <div class="text-white/40 text-xs">{{ sub.billing }}</div>
-        </div>
-
-        <div class="border-t border-white/10 my-2"></div>
-
-        <div class="flex flex-col gap-2">
-          <div class="flex justify-between items-center text-sm">
-            <span class="text-white/60">Status:</span>
-            <p-tag [value]="sub.status" [severity]="sub.statusSeverity"></p-tag>
-          </div>
-          @for (detail of sub.details; track detail.label) {
-            <div class="flex justify-between items-center text-sm">
-              <span class="text-white/60">{{ detail.label }}</span>
-              <span class="text-white font-medium text-right">{{ detail.value }}</span>
-            </div>
-          }
-        </div>
-
-        <div class="flex gap-2 mt-auto pt-2">
-          @for (action of sub.actions; track action; let i = $index) {
-            <p-button class="flex-1" [label]="action" [severity]="i === 0 ? 'primary' : 'secondary'" styleClass="w-full" size="small"></p-button>
-          }
-        </div>
-      </div>
-    }
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-2xl font-bold">Subscriptions</h1>
+    <p-button label="Create Subscription" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
   </div>
 
-
-
+  <p-table
+    [value]="subscriptions()"
+    [loading]="loading()"
+    [paginator]="true"
+    [rows]="10"
+    [rowHover]="true"
+    class="p-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Plan Name</th>
+        <th>Status</th>
+        <th>Price</th>
+        <th>Current Period</th>
+        <th>Renewal Date</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-subscription>
+      <tr>
+        <td>{{ subscription.planName }}</td>
+        <td>
+          <p-tag [value]="subscription.status" [severity]="getStatusSeverity(subscription.status)"></p-tag>
+        </td>
+        <td>{{ subscription.price | currency:subscription.currency }}</td>
+        <td>{{ subscription.currentPeriodStart | date }} - {{ subscription.currentPeriodEnd | date }}</td>
+        <td>{{ subscription.renewalDate | date }}</td>
+        <td>
+          <div class="flex gap-2">
+            @if (subscription.status === 'Active') {
+              <p-button label="Upgrade" icon="pi pi-arrow-up" severity="info" size="small" (onClick)="openUpgradeDialog(subscription)"></p-button>
+            }
+            @if (subscription.status !== 'Canceled') {
+              <p-button label="Cancel" icon="pi pi-times" severity="danger" size="small" (onClick)="openCancelDialog(subscription)"></p-button>
+            }
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center p-4">
+          No subscriptions found.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
 
-<app-create-subscription [(visible)]="visibleCreateSubscription"></app-create-subscription>
+<app-create-subscription-dialog [visible]="createDialogVisible()" (visibleChange)="createDialogVisible.set($event)" (created)="onSubscriptionCreated($event)"></app-create-subscription-dialog>
+
+<app-upgrade-subscription-dialog [visible]="upgradeDialogVisible()" (visibleChange)="upgradeDialogVisible.set($event)" [subscription]="subscriptionToUpgrade()" (upgraded)="onSubscriptionUpgraded($event)"></app-upgrade-subscription-dialog>
+
+<app-cancel-subscription-dialog [visible]="cancelDialogVisible()" (visibleChange)="cancelDialogVisible.set($event)" [subscription]="subscriptionToCancel()" (canceled)="onSubscriptionCanceled($event)"></app-cancel-subscription-dialog>

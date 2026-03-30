@@ -220,6 +220,7 @@ export interface BillingPlanResponse {
   currency: string;
   createdAt: string;
   updatedAt: string;
+  isActive: boolean,
 }
 
 export interface CreateBillingPlanRequest {
@@ -238,4 +239,40 @@ export interface UpdateBillingPlanRequest {
   billingCycle?: BillingPlanInterval;
   description?: string;
   currency?: string;
+}
+
+export interface BillingSubscriptionResponse {
+  id: string;
+  planId: string;
+  planName: string;
+  status: BillingSubscriptionStatus;
+  startDate: string;
+  endDate: string | null;
+  renewalDate: string | null;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+  price: number;
+  currency: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBillingSubscriptionRequest {
+  planId: string;
+}
+
+export interface UpgradeBillingSubscriptionRequest {
+  planId: string;
+}
+
+export interface CancelBillingSubscriptionRequest {
+  reason?: string;
+}
+
+export enum BillingSubscriptionStatus {
+  Active = 'Active',
+  Pending = 'Pending',
+  Canceled = 'Canceled',
+  Expired = 'Expired',
+  Paused = 'Paused'
 }

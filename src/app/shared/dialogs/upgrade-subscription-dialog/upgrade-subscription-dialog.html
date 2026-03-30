@@ -1,0 +1,12 @@
+<p-dialog header="Upgrade Subscription" [visible]="visible()" (visibleChange)="visibleChange.emit($event)" modal="true" styleClass="w-full max-w-2xl">
+  <form [formGroup]="form" (ngSubmit)="save()" class="space-y-4">
+    <div class="mb-4">
+      <p class="text-sm text-gray-600">Current Plan: <strong>{{ subscription()?.planName }}</strong></p>
+    </div>
+    <app-select [form]="form" [formSubmitted]="formSubmitted()" controlName="planId" title="Select New Plan" [options]="planOptions()"></app-select>
+    <div class="flex justify-end space-x-2">
+      <p-button label="Cancel" icon="pi pi-times" severity="secondary" (onClick)="close()"></p-button>
+      <p-button label="Upgrade" icon="pi pi-check" type="submit" [disabled]="form.invalid"></p-button>
+    </div>
+  </form>
+</p-dialog>
