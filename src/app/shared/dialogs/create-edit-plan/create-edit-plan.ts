@@ -3,7 +3,6 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
-import { Textarea } from 'primeng/textarea';
 import { InputTextComponent } from '../../input-text/input-text';
 import { SelectComponent } from '../../select/select';
 import { InputNumberComponent } from '../../input-number/input-number';
@@ -15,7 +14,6 @@ import {
   UpdateBillingPlanRequest,
   BillingPlanInterval
 } from '../../../core/interfaces/billing/billing.interface';
-import {Checkbox} from '../../checkbox/checkbox';
 
 @Component({
   selector: 'app-create-edit-plan',
@@ -28,7 +26,6 @@ import {Checkbox} from '../../checkbox/checkbox';
     InputTextComponent,
     SelectComponent,
     InputNumberComponent,
-    Checkbox,
   ],
   templateUrl: './create-edit-plan.html',
   styleUrl: './create-edit-plan.scss'
@@ -46,17 +43,16 @@ export class CreateEditPlan implements OnInit, OnChanges {
 
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
-    description: ['', Validators.required],
+    slug: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
-    currency: ['USD', Validators.required],
-    interval: [BillingPlanInterval.Monthly, Validators.required],
-    features: [[]],
-    isActive: [true]
+    billingCycle: [BillingPlanInterval.Monthly, Validators.required],
+    description: ['', Validators.required],
+    currency: ['EUR', Validators.required],
   });
 
   formSubmitted = signal(false);
 
-  intervalOptions = [
+  billingCycleOptions = [
     { label: 'Daily', value: BillingPlanInterval.Daily },
     { label: 'Weekly', value: BillingPlanInterval.Weekly },
     { label: 'Monthly', value: BillingPlanInterval.Monthly },
@@ -78,20 +74,20 @@ export class CreateEditPlan implements OnInit, OnChanges {
     if (plan) {
       this.form.patchValue({
         name: plan.name,
+        slug: plan.slug,
         description: plan.description,
         price: plan.price,
         currency: plan.currency,
-        interval: plan.interval,
-        isActive: plan.isActive
+        billingCycle: plan.billingCycle,
       });
     } else {
       this.form.reset({
         name: '',
+        slug: '',
         description: '',
         price: 0,
         currency: 'EUR',
-        interval: BillingPlanInterval.Monthly,
-        isActive: true
+        billingCycle: BillingPlanInterval.Monthly,
       });
     }
   }
@@ -110,16 +106,15 @@ export class CreateEditPlan implements OnInit, OnChanges {
 
   private createPlan(): void {
     const request: CreateBillingPlanRequest = this.form.value;
-    console.log(request)
-    // this.billingService.createAdminPlan(request).subscribe({
-    //   next: (newPlan) => {
-    //     this.saved.emit(newPlan);
-    //     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan created successfully' });
-    //   },
-    //   error: (error) => {
-    //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create plan' });
-    //   }
-    // });
+    this.billingService.createAdminPlan(request).subscribe({
+      next: (newPlan) => {
+        this.saved.emit(newPlan);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan created successfully' });
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create plan' });
+      }
+    });
   }
 
   private updatePlan(planId: string): void {
@@ -129,7 +124,7 @@ export class CreateEditPlan implements OnInit, OnChanges {
         this.saved.emit(updatedPlan);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan updated successfully' });
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update plan' });
       }
     });

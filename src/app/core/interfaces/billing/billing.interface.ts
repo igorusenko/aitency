@@ -213,32 +213,29 @@ export interface ErrorResponse {
 export interface BillingPlanResponse {
   id: string;
   name: string;
-  description: string;
+  slug: string;
   price: number;
-  currency: CurrencyCode;
-  interval: BillingPlanInterval;
-  features: string[];
-  isActive: boolean;
+  billingCycle: BillingPlanInterval;
+  description: string;
+  currency: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface CreateBillingPlanRequest {
   name: string;
-  description: string;
+  slug: string;
   price: number;
-  currency: CurrencyCode;
-  interval: BillingPlanInterval;
-  features: string[];
-  isActive: boolean;
+  billingCycle: BillingPlanInterval;
+  description: string;
+  currency: string;
 }
 
 export interface UpdateBillingPlanRequest {
   name?: string;
-  description?: string;
+  slug?: string;
   price?: number;
-  currency?: CurrencyCode;
-  interval?: BillingPlanInterval;
-  features?: string[];
-  isActive?: boolean;
+  billingCycle?: BillingPlanInterval;
+  description?: string;
+  currency?: string;
 }
