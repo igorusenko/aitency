@@ -1,0 +1,15 @@
+.content-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  min-height: 200px;
+}
+
+.content-loader p {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

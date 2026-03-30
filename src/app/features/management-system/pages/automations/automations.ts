@@ -11,15 +11,16 @@ import {Button} from 'primeng/button';
 import {MessageService} from 'primeng/api';
 import {AutomationsStore} from '../../../../core/stores/automations.store';
 import {UserStore} from '../../../../core/stores/user.store';
+import {ProgressSpinner} from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-automations',
-  imports: [CommonModule, FormsModule, TableModule, RouterLink, Button],
+  imports: [CommonModule, FormsModule, TableModule, RouterLink, Button, ProgressSpinner],
   standalone: true,
   templateUrl: './automations.html',
   styleUrl: './automations.scss',
 })
-export class Automations {
+export class Automations implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   automationAdminService = inject(AutomationAdminService);
@@ -27,12 +28,20 @@ export class Automations {
   messageService = inject(MessageService);
   userStore = inject(UserStore);
 
-
+  loading: boolean = false;
   first: number = 1;
   rows: number = 10;
   totalRecords = this.automationAdminStore.automations()?.totalCount;
 
   constructor() {}
+
+  ngOnInit() {
+    this.loadInitialData();
+  }
+
+  loadInitialData(): void {
+    this.loadData({first: 0, rows: this.rows});
+  }
 
   selectRow(row: TableRowSelectEvent) {
     this.router.navigate([row.data.id], {relativeTo: this.route});
@@ -46,14 +55,22 @@ export class Automations {
   }
 
   loadData(event: any): void {
+    this.loading = true;
     this.first = event.first;
     this.rows = event.rows;
 
     const page = (event.first / event.rows) + 1;
     const count = event.rows;
 
-    this.automationAdminService.getAutomations(page, count).subscribe(x => {
-      this.totalRecords = x.totalCount;
+    this.automationAdminService.getAutomations(page, count).subscribe({
+      next: (x) => {
+        this.totalRecords = x.totalCount;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading automations:', error);
+        this.loading = false;
+      }
     })
   }
 }

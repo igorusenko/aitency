@@ -10,6 +10,7 @@ import {SelectChangeEvent, SelectLazyLoadEvent} from 'primeng/select';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
 import {DatePipe} from '@angular/common';
+import {ProgressSpinner} from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,8 @@ import {DatePipe} from '@angular/common';
     ReactiveFormsModule,
     DatePicker,
     FloatLabel,
-    DatePipe
+    DatePipe,
+    ProgressSpinner
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -31,6 +33,7 @@ export class Home implements OnInit{
   analyticsForm: FormGroup;
   formSubmitted: boolean = false;
   usersLoading: boolean = false;
+  analyticsLoading: boolean = false;
   users: Array<IUser> = [];
   userId: any;
   from: any;
@@ -45,11 +48,15 @@ export class Home implements OnInit{
   ngOnInit() {
     this.userId = this.userStore.currentUser().id
     this.initAnalyticsForm();
+    this.loadInitialData();
+  }
+
+  loadInitialData(): void {
     if (this.userStore.currentUser().role === 'Admin') {
       this.userId = null;
       this.getUsers();
-      this.onDateChange();
     }
+    this.getAnalytics();
   }
 
   initAnalyticsForm(): void {
@@ -70,7 +77,17 @@ export class Home implements OnInit{
   }
 
   getAnalytics(): void {
-    this.analyticsService.getAnalyticsByUserId(this.userId, this.from, this.to).subscribe(res => {})
+    this.analyticsLoading = true;
+    this.analyticsService.getAnalyticsByUserId(this.userId, this.from, this.to).subscribe({
+      next: (res) => {
+        // Обработка данных аналитики
+        this.analyticsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading analytics:', error);
+        this.analyticsLoading = false;
+      }
+    })
   }
 
   onDateChange(): void {

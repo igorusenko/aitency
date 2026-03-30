@@ -7,15 +7,21 @@
 <!--    <button-->
 <!--      class="sidebar-toggle-btn"-->
 <!--      [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }"-->
-<!--      (click)="isSidebarCollapsed = !isSidebarCollapsed"-->
+<!--      (click)="isSidebarCollapsed = !isSidebarToggle"-->
 <!--    >-->
 <!--      <i class="pi" [ngClass]="[isSidebarCollapsed ? 'pi-angle-double-right' : 'pi-angle-double-left']" style="font-size: 1rem"></i>-->
 <!--    </button>-->
   </div>
 
   <main class="content" [ngClass]="{ 'content-expanded': isSidebarCollapsed }">
-    <div class="content-inner">
+    <div class="content-inner" [class.h-full]="isNavigating">
+    @if (isNavigating) {
+      <div class="flex size-full items-center justify-center">
+      <p-progressSpinner></p-progressSpinner>
+      </div>
+    } @else {
       <router-outlet></router-outlet>
+    }
     </div>
   </main>
 </div>

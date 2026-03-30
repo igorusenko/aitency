@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://api-116.aitency.net",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

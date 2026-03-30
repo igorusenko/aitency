@@ -8,6 +8,7 @@ import {AuthService} from '../../../../core/services/management-system/auth/auth
 import {concatMap} from 'rxjs';
 import {UserService} from '../../../../core/services/management-system/user/user.service';
 import {InputTextComponent} from '../../../../shared/input-text/input-text';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class Login implements OnInit {
   userService = inject(UserService);
   router = inject(Router);
   fb = inject(FormBuilder);
+  messageService = inject(MessageService);
   loginForm: FormGroup;
   formSubmitted: boolean = false;
 
@@ -53,12 +55,9 @@ export class Login implements OnInit {
       }))
       .subscribe(user => {
         this.router.navigate(['/home'])
-    });
-  }
+    }, error => {
 
-  isInvalidControl(controlName: string) {
-    const control = this.loginForm.get(controlName);
-    return control?.invalid && (control.touched || this.formSubmitted);
+      });
   }
 
 }
