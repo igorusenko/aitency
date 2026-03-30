@@ -44,6 +44,13 @@ export enum BillingInvoiceLineType {
   Manual = 'Manual'
 }
 
+export enum BillingPlanInterval {
+  Daily = 'Daily',
+  Weekly = 'Weekly',
+  Monthly = 'Monthly',
+  Yearly = 'Yearly'
+}
+
 export type CurrencyCode = string; // Или можно расширить до конкретных кодов, если нужно
 
 export interface BillingBalanceResponse {
@@ -201,4 +208,37 @@ export interface ErrorResponse {
   message?: string;
   errors?: Record<string, string[]>;
   code?: string;
+}
+
+export interface BillingPlanResponse {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  currency: CurrencyCode;
+  interval: BillingPlanInterval;
+  features: string[];
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBillingPlanRequest {
+  name: string;
+  description: string;
+  price: number;
+  currency: CurrencyCode;
+  interval: BillingPlanInterval;
+  features: string[];
+  isActive: boolean;
+}
+
+export interface UpdateBillingPlanRequest {
+  name?: string;
+  description?: string;
+  price?: number;
+  currency?: CurrencyCode;
+  interval?: BillingPlanInterval;
+  features?: string[];
+  isActive?: boolean;
 }

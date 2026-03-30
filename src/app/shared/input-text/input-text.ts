@@ -23,6 +23,7 @@ export class InputTextComponent {
   form: InputSignal<FormGroup> = input.required<FormGroup>();
   formSubmitted: InputSignal<boolean | undefined> = input<boolean>();
   textarea: InputSignal<boolean> = input<boolean>(false);
+  readonly: InputSignal<boolean> = input<boolean>(false);
   controlName: InputSignal<string> = input.required<string>();
   type: InputSignal<string> = input('text');
   title: InputSignal<string> = input('');

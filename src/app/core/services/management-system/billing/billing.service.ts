@@ -17,7 +17,10 @@ import {
   BillingAdminInvoiceParams,
   CreateManualBillingInvoiceRequest,
   UpdateManualBillingInvoiceRequest,
-  BillingAdminPaymentParams
+  BillingAdminPaymentParams,
+  BillingPlanResponse,
+  CreateBillingPlanRequest,
+  UpdateBillingPlanRequest
 } from '../../../interfaces/billing/billing.interface';
 import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
 
@@ -108,5 +111,29 @@ export class BillingService {
 
   getAdminPayments(params?: BillingAdminPaymentParams): Observable<IPaginatedList<BillingPaymentListItemResponse>> {
     return this.http.get<IPaginatedList<BillingPaymentListItemResponse>>(`${this.apiUrl}/admin/payments`, { params: params as any });
+  }
+
+  getPlan(planId: string): Observable<BillingPlanResponse> {
+    return this.http.get<BillingPlanResponse>(`${this.apiUrl}/plans/${planId}`);
+  }
+
+  getAdminPlans(): Observable<BillingPlanResponse[]> {
+    return this.http.get<BillingPlanResponse[]>(`${this.apiUrl}/admin/plans`);
+  }
+
+  createAdminPlan(request: CreateBillingPlanRequest): Observable<BillingPlanResponse> {
+    return this.http.post<BillingPlanResponse>(`${this.apiUrl}/admin/plans`, request);
+  }
+
+  getAdminPlan(planId: string): Observable<BillingPlanResponse> {
+    return this.http.get<BillingPlanResponse>(`${this.apiUrl}/admin/plans/${planId}`);
+  }
+
+  updateAdminPlan(planId: string, request: UpdateBillingPlanRequest): Observable<BillingPlanResponse> {
+    return this.http.patch<BillingPlanResponse>(`${this.apiUrl}/admin/plans/${planId}`, request);
+  }
+
+  deleteAdminPlan(planId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/plans/${planId}`);
   }
 }

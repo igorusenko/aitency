@@ -101,6 +101,11 @@ export const routes: Routes = [
               import('./features/management-system/pages/billing/usage/usage').then((m) => m.Usage),
           },
           {
+            path: 'plans',
+            loadComponent: () =>
+              import('./features/management-system/pages/billing/plans/plans').then((m) => m.Plans),
+          },
+          {
             path: 'coupons',
             loadComponent: () =>
               import('./features/management-system/pages/billing/coupons/coupons').then((m) => m.Coupons),
