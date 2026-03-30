@@ -1,12 +1,12 @@
 :host {
   & {
-    @apply h-full flex items-center justify-center;
+    @apply size-full sm:flex sm:items-center sm:justify-center sm:min-h-screen;
   }
 
   .login-wrapper {
-    @apply flex flex-col items-center;
+    @apply flex flex-col items-center size-full sm:size-auto justify-center px-4;
     .login {
-      @apply flex items-center border border-transparent rounded-[16px] min-w-[512px];
+      @apply flex items-center border border-transparent rounded-[16px] w-full sm:min-w-[512px];
       color: var(--text);
       background: #1018278c;
       border-color: rgba(124,92,255,.25);
