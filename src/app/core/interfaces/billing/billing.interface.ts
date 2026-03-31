@@ -276,3 +276,13 @@ export enum BillingSubscriptionStatus {
   Expired = 'Expired',
   Paused = 'Paused'
 }
+
+export interface IClient {
+  billingEmail: string,
+  companyName: string,
+  vatNumber: string,
+  streetAddress: string,
+  city: string,
+  state: string,
+  zip: string
+}

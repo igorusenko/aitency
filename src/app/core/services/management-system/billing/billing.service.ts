@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import {
   BillingBalanceResponse,
@@ -24,15 +24,17 @@ import {
   BillingSubscriptionResponse,
   CreateBillingSubscriptionRequest,
   UpgradeBillingSubscriptionRequest,
-  CancelBillingSubscriptionRequest
+  CancelBillingSubscriptionRequest, IClient
 } from '../../../interfaces/billing/billing.interface';
 import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
+import {UserStore} from '../../../stores/user.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BillingService {
   private readonly http = inject(HttpClient);
+  private readonly userStore = inject(UserStore);
   private readonly apiUrl = `${environment.apiUrl}/billing`;
 
   balance = signal<BillingBalanceResponse | undefined>(undefined);
@@ -159,5 +161,16 @@ export class BillingService {
 
   cancelSubscription(subscriptionId: string, request: CancelBillingSubscriptionRequest): Observable<BillingSubscriptionResponse> {
     return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/cancel`, request);
+  }
+
+  getProfile(): Observable<IClient> {
+    return this.http.get(`${this.apiUrl}/settings/profile`).pipe(
+      map((data: any) => data.billingDetails as IClient),
+      tap(billingDetails => this.userStore.profile.set(billingDetails))
+    );
+  }
+
+  updateCurrentClient(clientData: IClient): Observable<any> {
+    return this.http.put(`${this.apiUrl}/client/me`, clientData);
   }
 }

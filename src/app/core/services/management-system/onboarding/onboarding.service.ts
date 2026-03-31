@@ -1,4 +1,4 @@
-import {inject, Injectable} from '@angular/core';
+import {inject, Injectable, signal, WritableSignal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
@@ -15,6 +15,8 @@ import {OnboardingStatus} from '../../../enums/common.enums';
 export class OnboardingService {
   http = inject(HttpClient);
   apiUrl = environment.apiUrl;
+
+  onboardingStatus: WritableSignal<IOnboardingStatus | undefined> = signal(undefined);
 
   getOnboardingStatus(): Observable<IOnboardingStatus> {
     return this.http.get<IOnboardingStatus>(`${this.apiUrl}/onboardings/status`);

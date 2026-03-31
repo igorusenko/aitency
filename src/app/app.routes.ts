@@ -116,7 +116,13 @@ export const routes: Routes = [
               import('./features/management-system/pages/billing/settings/settings').then((m) => m.Settings),
           }
         ]
-      }
+      },
+      {
+        path: 'onboarding',
+        title: 'Onboarding',
+        loadComponent: () =>
+          import('./features/management-system/onboarding/onboarding').then((m) => m.Onboarding),
+      },
     ]
   },
   {
@@ -156,11 +162,5 @@ export const routes: Routes = [
     title: 'Reset password',
     loadComponent: () =>
       import('./features/management-system/pages/register/create-password/create-password').then((m) => m.CreatePassword),
-  },
-  {
-    path: 'onboarding',
-    title: 'Onboarding',
-    loadComponent: () =>
-      import('./features/management-system/onboarding/onboarding').then((m) => m.Onboarding),
-  },
+  }
 ];

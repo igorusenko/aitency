@@ -10,6 +10,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {PanelMenu} from 'primeng/panelmenu';
 import {Ripple} from 'primeng/ripple';
 import {MenuItem} from 'primeng/api';
+import {OnboardingService} from '../../core/services/management-system/onboarding/onboarding.service';
 
 /*
  * The side menu component. Template for the side menu.
@@ -26,6 +27,7 @@ export class SideMenuComponent implements OnInit {
   userStore = inject(UserStore);
   destroyRef = inject(DestroyRef);
   router = inject(Router);
+  onboardingService = inject(OnboardingService);
 
   isSidebarCollapsed = input.required();
   sidebarToggle = output<boolean>();
@@ -144,6 +146,17 @@ export class SideMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getOnboardingStatus();
+    this.resizeListener();
+  }
+
+  getOnboardingStatus(): void {
+    this.onboardingService.getOnboardingStatus().subscribe(x => {
+      this.onboardingService.onboardingStatus.set(x);
+    })
+  }
+
+  resizeListener(): void {
     if (window.innerWidth < this.MOBILE_BREAKPOINT) {
       this.sidebarToggle.emit(true);
     }

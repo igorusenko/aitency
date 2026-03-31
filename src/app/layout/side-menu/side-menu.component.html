@@ -34,7 +34,7 @@
     <aside>
       <div class="flex flex-col gap-4">
         <img src="logo.png" alt="" class="w-40">
-        <div class="brand" [routerLink]="['/onboarding']">
+        <div class="brand">
           <div class="logo">AI</div>
           <div class="brand-text">
             <div class="brand-name">{{userStore.currentUser().fullName}}</div>
@@ -56,19 +56,37 @@
 
           <p-panel-menu [model]="filteredItems()" class="nav">
             <ng-template #item let-item>
-              <a pRipple
-                 class="nav-item flex items-center justify-between"
-                 [ngClass]="{'active': isItemActive(item)}"
-                 [routerLink]="item.path === 'billing' ? null: [item.path]"
-              >
-                <div class="flex items-center gap-3">
-                  <div class="nav-dot"></div>
-                  <div>{{item.title}}</div>
-                </div>
-                @if (item.items && item.items.length > 0) {
-                  <i class="pi pi-chevron-down transition-transform duration-200" [style.transform]="item.expanded ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+              @if (item.path === 'billing') {
+                @if (onboardingService.onboardingStatus()?.status !== 'NotStarted') {
+                  <a pRipple
+                     class="nav-item flex items-center justify-between"
+                     [ngClass]="{'active': isItemActive(item)}"
+                     [routerLink]="item.path === 'billing' ? null: [item.path]"
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="nav-dot"></div>
+                      <div>{{item.title}}</div>
+                    </div>
+                    @if (item.items && item.items.length > 0) {
+                      <i class="pi pi-chevron-down transition-transform duration-200" [style.transform]="item.expanded ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+                    }
+                  </a>
                 }
-              </a>
+              } @else {
+                <a pRipple
+                   class="nav-item flex items-center justify-between"
+                   [ngClass]="{'active': isItemActive(item)}"
+                   [routerLink]="item.path === 'billing' ? null: [item.path]"
+                >
+                  <div class="flex items-center gap-3">
+                    <div class="nav-dot"></div>
+                    <div>{{item.title}}</div>
+                  </div>
+                  @if (item.items && item.items.length > 0) {
+                    <i class="pi pi-chevron-down transition-transform duration-200" [style.transform]="item.expanded ? 'rotate(180deg)' : 'rotate(0deg)'"></i>
+                  }
+                </a>
+              }
             </ng-template>
           </p-panel-menu>
 <!--        </nav>-->
@@ -80,6 +98,10 @@
             <p>DEMO MODE</p>
             <p>Limited functionality</p>
           </div>
+        }
+
+        @if (onboardingService.onboardingStatus()?.status !== 'Completed') {
+          <button id="btn-onboarding" class="btn" [routerLink]="['/onboarding']">Onboarding</button>
         }
 
         @if (userStore.currentUser().role !== 'Demo') {

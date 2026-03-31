@@ -14,6 +14,7 @@ import {ONBOARDING_STEP, INDUSTRY_TYPE, COMPANY_SIZE, BUSINESS_MODEL, MAIN_GOAL,
 import {Select} from 'primeng/select';
 import {MessageService} from 'primeng/api';
 import {OnboardingStepFirstRequest} from '../../../core/interfaces/onboarding/onboarding.iterface';
+import {concatMap} from 'rxjs';
 
 @Component({
   selector: 'app-onboarding',
@@ -60,12 +61,10 @@ export class Onboarding implements OnInit {
   }
 
   getOnboardingStatus(): void {
-    this.onboardingService.getOnboardingStatus().subscribe(x => {
-      if (x.step === ONBOARDING_STEP.First) {
-        this.firstStepCompleted = true;
-        this.stepValue = 2;
-      }
-    })
+    if (this.onboardingService.onboardingStatus()?.step === ONBOARDING_STEP.First) {
+      this.firstStepCompleted = true;
+      this.stepValue = 2;
+    }
   }
 
   initPrivateForm(): void {
@@ -211,7 +210,9 @@ export class Onboarding implements OnInit {
       }
     }
 
-    this.onboardingService.setOnboardingFirstStep(firstStepModel).subscribe(x => {
+    this.onboardingService.setOnboardingFirstStep(firstStepModel)
+      .pipe(concatMap(() => this.onboardingService.getOnboardingStatus()))
+      .subscribe(x => {
       this.companyForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Onboarding I completed Successfully!', life: 2000 });
       this.firstStepCompleted = true;
@@ -248,7 +249,9 @@ export class Onboarding implements OnInit {
       }
     }
 
-    this.onboardingService.setOnboardingFirstStep(firstStepModel).subscribe(x => {
+    this.onboardingService.setOnboardingFirstStep(firstStepModel)
+      .pipe(concatMap(() => this.onboardingService.getOnboardingStatus()))
+      .subscribe(x => {
       this.companyForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Onboarding I completed Successfully!', life: 2000 });
       activateCallback(2);

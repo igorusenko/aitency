@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {Component, inject, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { Checkbox } from '../../../../../shared/checkbox/checkbox';
@@ -8,6 +8,7 @@ import { InputTextComponent } from '../../../../../shared/input-text/input-text'
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
 import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
 import {UserStore} from '../../../../../core/stores/user.store';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-settings',
@@ -24,20 +25,23 @@ import {UserStore} from '../../../../../core/stores/user.store';
   templateUrl: './settings.html',
   styleUrl: './settings.scss'
 })
-export class Settings {
+export class Settings implements OnInit {
   private fb = inject(FormBuilder);
   billingService = inject(BillingService);
   userStore = inject(UserStore);
+  messageService = inject(MessageService);
   visibleCreatePaymentMethod: WritableSignal<boolean> = signal(false);
   paymentMethods$ = this.billingService.getPaymentMethods();
+  billingDetailsLoader: boolean = false;
 
   billingForm: FormGroup = this.fb.group({
-    companyName: [this.userStore.currentUser().fullName ?? ''],
-    vatNumber: [this.userStore.currentUser().vatNumber ?? ''],
-    address: [this.userStore.currentUser().address ?? ''],
-    city: [this.userStore.currentUser().city ?? ''],
-    country: [this.userStore.currentUser().country ?? ''],
-    email: [this.userStore.currentUser().email ?? '']
+    companyName: [''],
+    vatNumber: [''],
+    streetAddress: [''],
+    city: [''],
+    state: [''],
+    zip: [''],
+    billingEmail: ['']
   });
 
   autoRechargeForm: FormGroup = this.fb.group({
@@ -64,12 +68,41 @@ export class Settings {
     { controlName: 'marketing', label: 'Billing-related marketing' }
   ];
 
-  updateBillingDetails() {
-    console.log('Update Billing Details', this.billingForm.value);
+  ngOnInit() {
+    this.getClient();
   }
 
-  saveAutoRecharge() {
-    console.log('Save Auto-Recharge', this.autoRechargeForm.value);
+  getClient(): void {
+    this.billingService.getProfile().subscribe(client => {
+      this.billingForm.patchValue({
+        companyName: client.companyName,
+        vatNumber: client.vatNumber,
+        billingEmail: client.billingEmail,
+        streetAddress: client.streetAddress,
+        city: client.city,
+        state: client.state,
+        zip: client.zip
+      });
+    });
+  }
+
+  updateBillingDetails(): void {
+    this.billingDetailsLoader = true;
+    this.billingService.updateCurrentClient(this.billingForm.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Billing details updated successfully!' });
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update billing details. Please try again.' });
+      },
+      complete: () => {
+        this.billingDetailsLoader = false;
+      }
+    })
+  }
+
+  saveAutoRecharge(): void {
+
   }
 
   setDefault(id: string) {

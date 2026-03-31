@@ -1,4 +1,4 @@
-import { Component, inject, model, ModelSignal, output, signal } from '@angular/core';
+import {Component, effect, inject, model, ModelSignal, output, signal} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
 import { BillingPaymentMethodResponse } from '../../../core/interfaces/billing/billing.interface';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { StripeService } from 'ngx-stripe';
 import { UserStore } from '../../../core/stores/user.store';
+import {OnboardingService} from '../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-top-up-balance',
@@ -28,6 +29,7 @@ import { UserStore } from '../../../core/stores/user.store';
 })
 export class TopUpBalance {
   messageService = inject(MessageService);
+  onboardingService = inject(OnboardingService);
   visible: ModelSignal<boolean> = model.required();
   onTopUp = output<void>();
 
@@ -36,14 +38,22 @@ export class TopUpBalance {
   private readonly router = inject(Router);
   private readonly stripeService = inject(StripeService);
   private readonly userStore = inject(UserStore);
+  paymentMethods$: Observable<{ label: string, value: string, gatewayPaymentMethodId: string | null }[]>;
 
-  paymentMethods$: Observable<{ label: string, value: string, gatewayPaymentMethodId: string | null }[]> = this.billingService.getPaymentMethods().pipe(
-    map(methods => methods.map(m => ({
-      label: `${m.brand} **** ${m.last4} ${m.isDefault ? '(Default)' : ''}`,
-      value: m.id,
-      gatewayPaymentMethodId: m.gatewayPaymentMethodId
-    })))
-  );
+  constructor() {
+    effect(() => {
+      if (this.onboardingService.onboardingStatus()) {
+        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted')
+        this.paymentMethods$ = this.billingService.getPaymentMethods().pipe(
+          map(methods => methods.map(m => ({
+            label: `${m.brand} **** ${m.last4} ${m.isDefault ? '(Default)' : ''}`,
+            value: m.id,
+            gatewayPaymentMethodId: m.gatewayPaymentMethodId
+          })))
+        );
+      }
+    });
+  }
 
   topUpForm = this.fb.group({
     amount: [null as number | null, [Validators.required, Validators.min(0.1)]],

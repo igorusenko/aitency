@@ -19,29 +19,34 @@
         <div class="flex flex-col gap-2">
           <app-input-text
             [form]="billingForm"
-            controlName="address"
+            controlName="streetAddress"
             title="Street address"
           ></app-input-text>
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-3 gap-2">
             <app-input-text
               [form]="billingForm"
               controlName="city"
-              title="City, State, ZIP"
+              title="City"
             ></app-input-text>
             <app-input-text
               [form]="billingForm"
-              controlName="country"
-              title="Country"
+              controlName="state"
+              title="State"
+            ></app-input-text>
+            <app-input-text
+              [form]="billingForm"
+              controlName="zip"
+              title="ZIP"
             ></app-input-text>
           </div>
         </div>
         <app-input-text
           [form]="billingForm"
-          controlName="email"
+          controlName="billingEmail"
           title="Billing Email"
           type="email"
         ></app-input-text>
-        <p-button label="Update Billing Details" type="submit" size="small"></p-button>
+        <p-button label="Update Billing Details" type="submit" size="small" [loading]="billingDetailsLoader"></p-button>
       </form>
     </div>
 

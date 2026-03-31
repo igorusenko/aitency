@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, effect, inject, OnInit, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,7 @@ import {BillingService} from '../../../../../core/services/management-system/bil
 import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-balance';
 import {UserStore} from '../../../../../core/stores/user.store';
 import {Tooltip} from 'primeng/tooltip';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-overview',
@@ -16,15 +17,26 @@ import {Tooltip} from 'primeng/tooltip';
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
-export class BillingOverview {
+export class BillingOverview implements OnInit {
   billingService = inject(BillingService);
+  onboardingService = inject(OnboardingService);
   userStore = inject(UserStore);
   balance = this.billingService.balance;
   visibleTopUpDialog = signal(false);
 
   constructor() {
-    this.refreshBalance();
+    effect(() => {
+      if (this.onboardingService.onboardingStatus()) {
+        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted')
+        this.refreshBalance();
+      }
+    });
   }
+
+  ngOnInit() {
+
+  }
+
   clientInfo = {
     companyName: 'TechFlow Solutions Ltd',
     vatNumber: 'EL999999999',

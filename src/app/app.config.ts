@@ -40,7 +40,7 @@ export const appConfig: ApplicationConfig = {
       const authService = inject(AuthService);
       return csrfService.loadCsrfToken()
         .pipe(
-          // concatMap(() => authService.validateAccessToken()),
+          concatMap(() => authService.validateAccessToken()),
           concatMap(() => userService.getCurrentUser()),
           catchError(( ) => of(null))
         )
