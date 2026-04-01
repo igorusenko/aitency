@@ -286,3 +286,13 @@ export interface IClient {
   state: string,
   zip: string
 }
+
+export interface RecentTransaction {
+  id: string,
+  date: string,
+  description: string,
+  type: string,
+  amount: number,
+  balanceAfter: number,
+  currency: string
+}

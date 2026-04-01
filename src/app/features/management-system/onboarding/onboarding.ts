@@ -216,6 +216,7 @@ export class Onboarding implements OnInit {
       this.companyForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Onboarding I completed Successfully!', life: 2000 });
       this.firstStepCompleted = true;
+      this.refreshOnboardingStatus();
       activateCallback(2);
     })
   }
@@ -250,11 +251,11 @@ export class Onboarding implements OnInit {
     }
 
     this.onboardingService.setOnboardingFirstStep(firstStepModel)
-      .pipe(concatMap(() => this.onboardingService.getOnboardingStatus()))
       .subscribe(x => {
       this.companyForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Onboarding I completed Successfully!', life: 2000 });
       activateCallback(2);
+      this.refreshOnboardingStatus();
     })
   }
 
@@ -267,6 +268,7 @@ export class Onboarding implements OnInit {
         this.privateForm.reset()
         this.companyForm.reset()
         this.router.navigate(['/home'])
+        this.refreshOnboardingStatus();
       })
     }
   }
@@ -274,6 +276,7 @@ export class Onboarding implements OnInit {
   skipOnboarding(): void {
     this.onboardingService.skipOnboarding().subscribe(x => {
       this.router.navigate(['/home']);
+      this.refreshOnboardingStatus();
     })
   }
 
@@ -282,5 +285,11 @@ export class Onboarding implements OnInit {
   }
   onTabChanged(tabValue: string | number | undefined): void {
     console.log(tabValue)
+  }
+
+  refreshOnboardingStatus(): void {
+    this.onboardingService.getOnboardingStatus().subscribe(x => {
+      this.onboardingService.onboardingStatus.set(x);
+    })
   }
 }

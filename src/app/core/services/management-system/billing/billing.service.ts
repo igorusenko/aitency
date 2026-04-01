@@ -24,7 +24,7 @@ import {
   BillingSubscriptionResponse,
   CreateBillingSubscriptionRequest,
   UpgradeBillingSubscriptionRequest,
-  CancelBillingSubscriptionRequest, IClient
+  CancelBillingSubscriptionRequest, IClient, RecentTransaction
 } from '../../../interfaces/billing/billing.interface';
 import { IPaginatedList } from '../../../interfaces/paginated-list-interface';
 import {UserStore} from '../../../stores/user.store';
@@ -172,5 +172,9 @@ export class BillingService {
 
   updateCurrentClient(clientData: IClient): Observable<any> {
     return this.http.put(`${this.apiUrl}/client/me`, clientData);
+  }
+
+  getRecentTransactions(): Observable<Array<RecentTransaction>> {
+    return this.http.get<Array<RecentTransaction>>(`${this.apiUrl}/recent-transactions`);
   }
 }
