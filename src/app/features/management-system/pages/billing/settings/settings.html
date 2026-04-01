@@ -85,7 +85,7 @@
             }
           }
         </div>
-        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2" (onClick)="visibleCreatePaymentMethod.set(true)"></p-button>
+        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2" (onClick)="openCreatePaymentMethodDialog()"></p-button>
       </div>
 
       <!-- Auto-Recharge Settings -->
@@ -137,5 +137,3 @@
     </div>
   </div>
 </div>
-
-<app-create-payment-method [(visible)]="visibleCreatePaymentMethod" (onCreated)="refreshPaymentMethods()"></app-create-payment-method>

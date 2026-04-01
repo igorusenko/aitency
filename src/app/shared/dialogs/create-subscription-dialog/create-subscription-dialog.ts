@@ -1,11 +1,11 @@
-import { Component, inject, input, output, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { SelectComponent } from '../../select/select';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
 import { MessageService } from 'primeng/api';
 import { UserStore } from '../../../core/stores/user.store';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import {
   BillingSubscriptionResponse,
   CreateBillingSubscriptionRequest,
@@ -16,7 +16,6 @@ import {
   selector: 'app-create-subscription-dialog',
   standalone: true,
   imports: [
-    Dialog,
     Button,
     ReactiveFormsModule,
     SelectComponent,
@@ -29,11 +28,8 @@ export class CreateSubscriptionDialog implements OnInit {
   billingService = inject(BillingService);
   messageService = inject(MessageService);
   userStore = inject(UserStore);
-
-  visible = input.required<boolean>();
-
-  created = output<BillingSubscriptionResponse>();
-  visibleChange = output<boolean>();
+  ref = inject(DynamicDialogRef);
+  config = inject(DynamicDialogConfig);
 
   form: FormGroup = this.fb.group({
     planId: ['', Validators.required],
@@ -73,9 +69,8 @@ export class CreateSubscriptionDialog implements OnInit {
     const request: CreateBillingSubscriptionRequest = this.form.value;
     this.billingService.createSubscription(request).subscribe({
       next: (subscription) => {
-        this.created.emit(subscription);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription created successfully' });
-        this.close();
+        this.ref.close(subscription);
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create subscription' });
@@ -84,7 +79,7 @@ export class CreateSubscriptionDialog implements OnInit {
   }
 
   close(): void {
-    this.visibleChange.emit(false);
+    this.ref.close();
     this.form.reset();
     this.formSubmitted.set(false);
   }

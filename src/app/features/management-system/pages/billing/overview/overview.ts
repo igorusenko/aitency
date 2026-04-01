@@ -9,11 +9,13 @@ import {TopUpBalance} from '../../../../../shared/dialogs/top-up-balance/top-up-
 import {UserStore} from '../../../../../core/stores/user.store';
 import {Tooltip} from 'primeng/tooltip';
 import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-overview',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule, TopUpBalance, Tooltip],
+  imports: [CommonModule, TableModule, ButtonModule, CardModule, TagModule, Tooltip],
+  providers: [DialogService],
   templateUrl: './overview.html',
   styleUrl: './overview.scss'
 })
@@ -21,8 +23,9 @@ export class BillingOverview implements OnInit {
   billingService = inject(BillingService);
   onboardingService = inject(OnboardingService);
   userStore = inject(UserStore);
+  dialogService = inject(DialogService);
   balance = this.billingService.balance;
-  visibleTopUpDialog = signal(false);
+  topUpDialogRef: DynamicDialogRef | null = null;
 
   constructor() {
     effect(() => {
@@ -80,5 +83,16 @@ export class BillingOverview implements OnInit {
 
   refreshBalance() {
     this.billingService.refreshBalance();
+  }
+
+  openTopUpDialog() {
+    this.topUpDialogRef = this.dialogService.open(TopUpBalance, {
+      header: 'Top Up Balance',
+      width: '35rem',
+      closable: true,
+    });
+    this.topUpDialogRef?.onClose.subscribe(() => {
+      this.refreshBalance();
+    });
   }
 }

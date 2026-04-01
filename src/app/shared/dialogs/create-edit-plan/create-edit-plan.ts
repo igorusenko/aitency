@@ -1,6 +1,5 @@
-import { Component, inject, input, output, signal, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextComponent } from '../../input-text/input-text';
@@ -9,6 +8,7 @@ import { InputNumberComponent } from '../../input-number/input-number';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
 import { MessageService } from 'primeng/api';
 import { UserStore } from '../../../core/stores/user.store';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import {
   BillingPlanResponse,
   CreateBillingPlanRequest,
@@ -21,7 +21,6 @@ import {Checkbox} from '../../checkbox/checkbox';
   selector: 'app-create-edit-plan',
   standalone: true,
   imports: [
-    Dialog,
     Button,
     ReactiveFormsModule,
     FloatLabel,
@@ -33,17 +32,15 @@ import {Checkbox} from '../../checkbox/checkbox';
   templateUrl: './create-edit-plan.html',
   styleUrl: './create-edit-plan.scss'
 })
-export class CreateEditPlan implements OnInit, OnChanges {
+export class CreateEditPlan implements OnInit {
   fb = inject(FormBuilder);
   billingService = inject(BillingService);
   messageService = inject(MessageService);
   userStore = inject(UserStore);
+  ref = inject(DynamicDialogRef);
+  config = inject(DynamicDialogConfig);
 
-  visible = input.required<boolean>();
-  plan = input<BillingPlanResponse | null>();
-
-  saved = output<BillingPlanResponse>();
-  visibleChange = output<boolean>();
+  plan: BillingPlanResponse | null = this.config.data?.plan || null;
 
   form: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -68,23 +65,16 @@ export class CreateEditPlan implements OnInit, OnChanges {
     this.initializeForm();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['plan']) {
-      this.initializeForm();
-    }
-  }
-
   private initializeForm(): void {
-    const plan = this.plan();
-    if (plan) {
+    if (this.plan) {
       this.form.patchValue({
-        name: plan.name,
-        slug: plan.slug,
-        description: plan.description,
-        price: plan.price,
-        currency: plan.currency,
-        billingCycle: plan.billingCycle,
-        isActive: plan.isActive,
+        name: this.plan.name,
+        slug: this.plan.slug,
+        description: this.plan.description,
+        price: this.plan.price,
+        currency: this.plan.currency,
+        billingCycle: this.plan.billingCycle,
+        isActive: this.plan.isActive,
       });
     } else {
       this.form.reset({
@@ -103,9 +93,8 @@ export class CreateEditPlan implements OnInit, OnChanges {
     this.formSubmitted.set(true);
     if (this.form.invalid) return;
 
-    const plan = this.plan();
-    if (plan) {
-      this.updatePlan(plan.id);
+    if (this.plan) {
+      this.updatePlan(this.plan.id);
     } else {
       this.createPlan();
     }
@@ -115,8 +104,8 @@ export class CreateEditPlan implements OnInit, OnChanges {
     const request: CreateBillingPlanRequest = this.form.value;
     this.billingService.createAdminPlan(request).subscribe({
       next: (newPlan) => {
-        this.saved.emit(newPlan);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan created successfully' });
+        this.ref.close(newPlan);
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create plan' });
@@ -128,12 +117,18 @@ export class CreateEditPlan implements OnInit, OnChanges {
     const request: UpdateBillingPlanRequest = this.form.value;
     this.billingService.updateAdminPlan(planId, request).subscribe({
       next: (updatedPlan) => {
-        this.saved.emit(updatedPlan);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Plan updated successfully' });
+        this.ref.close(updatedPlan);
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update plan' });
       }
     });
+  }
+
+  close(): void {
+    this.ref.close();
+    this.form.reset();
+    this.formSubmitted.set(false);
   }
 }

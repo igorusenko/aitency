@@ -16,7 +16,7 @@
         <th>Plan Name</th>
         <th>Status</th>
         <th>Price</th>
-        <th>Current Period</th>
+        <th>Start Date</th>
         <th>Renewal Date</th>
         <th>Actions</th>
       </tr>
@@ -27,9 +27,9 @@
         <td>
           <p-tag [value]="subscription.status" [severity]="getStatusSeverity(subscription.status)"></p-tag>
         </td>
-        <td>{{ subscription.price | currency:subscription.currency }}</td>
-        <td>{{ subscription.currentPeriodStart | date }} - {{ subscription.currentPeriodEnd | date }}</td>
-        <td>{{ subscription.renewalDate | date }}</td>
+        <td>{{ subscription.planPrice | currency: 'EUR' }}</td>
+        <td>{{ subscription.startDate | date }}</td>
+        <td>{{ subscription.nextRenewalDate | date }}</td>
         <td>
           <div class="flex gap-2">
             @if (subscription.status === 'Active') {
@@ -51,9 +51,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<app-create-subscription-dialog [visible]="createDialogVisible()" (visibleChange)="createDialogVisible.set($event)" (created)="onSubscriptionCreated($event)"></app-create-subscription-dialog>
-
-<app-upgrade-subscription-dialog [visible]="upgradeDialogVisible()" (visibleChange)="upgradeDialogVisible.set($event)" [subscription]="subscriptionToUpgrade()" (upgraded)="onSubscriptionUpgraded($event)"></app-upgrade-subscription-dialog>
-
-<app-cancel-subscription-dialog [visible]="cancelDialogVisible()" (visibleChange)="cancelDialogVisible.set($event)" [subscription]="subscriptionToCancel()" (canceled)="onSubscriptionCanceled($event)"></app-cancel-subscription-dialog>

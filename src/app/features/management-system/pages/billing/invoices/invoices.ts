@@ -20,6 +20,7 @@ import {
   BillingInvoiceStatus
 } from '../../../../../core/interfaces/billing/billing.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-invoices',
@@ -31,15 +32,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     NgClass,
     DatePipe,
     Button,
-    CreateInvoice,
-    InvoiceInfo,
-    PayInvoice,
     SelectComponent,
     DatePicker,
     FloatLabel,
     InputTextComponent,
     ReactiveFormsModule
   ],
+  providers: [DialogService],
   templateUrl: './invoices.html',
   styleUrl: './invoices.scss'
 })
@@ -48,9 +47,10 @@ export class Invoices implements OnInit {
   fb = inject(FormBuilder);
   messageService = inject(MessageService);
   billingService = inject(BillingService);
-  visibleCreateInvoice: WritableSignal<boolean> = signal(false);
-  visibleInvoiceInfo: WritableSignal<boolean> = signal(false);
-  visiblePayInvoice: WritableSignal<boolean> = signal(false);
+  dialogService = inject(DialogService);
+
+  dialogRef: DynamicDialogRef | null = null;
+
   filterForm: FormGroup;
   invoiceStatuses = [
     { name: 'All statuses', value: '' },
@@ -62,8 +62,6 @@ export class Invoices implements OnInit {
     { name: 'Refunded', value: BillingInvoiceStatus.Refunded },
   ]
   invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
-  selectedInvoice: WritableSignal<BillingInvoiceResponse | null> = signal(null);
-  selectedInvoiceForPayment: WritableSignal<BillingInvoiceListItemResponse | null> = signal(null);
   totalCount = signal(0);
   loading = signal(false);
   page = signal(1);
@@ -136,9 +134,35 @@ export class Invoices implements OnInit {
     return this.filterForm.get(control) as FormControl;
   }
 
-  viewInvoice(invoice: BillingInvoiceResponse): void {
-    this.visibleInvoiceInfo.set(true);
-    this.selectedInvoice.set(invoice);
+  openCreateInvoiceDialog(): void {
+    this.dialogRef = this.dialogService.open(CreateInvoice, {
+      header: 'Create new invoice',
+      width: '35rem'
+    });
+    this.dialogRef?.onClose.subscribe(() => {
+      this.loadInvoices();
+    });
+  }
+
+  viewInvoice(invoice: BillingInvoiceListItemResponse): void {
+    this.dialogRef = this.dialogService.open(InvoiceInfo, {
+      header: 'Invoice details',
+      width: '35rem',
+      data: { invoiceId: invoice.id }
+    });
+  }
+
+  payInvoice(invoice: BillingInvoiceListItemResponse): void {
+    this.dialogRef = this.dialogService.open(PayInvoice, {
+      header: 'Pay Invoice',
+      width: '35rem',
+      data: { invoice }
+    });
+    this.dialogRef?.onClose.subscribe((success: boolean) => {
+      if (success) {
+        this.loadInvoices();
+      }
+    });
   }
 
   releaseInvoice(invoiceId: string): void {
@@ -153,15 +177,6 @@ export class Invoices implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Invoice cancelled!', life: 2000 });
       this.loadInvoices();
     })
-  }
-
-  openPayInvoiceDialog(invoice: BillingInvoiceListItemResponse): void {
-    this.selectedInvoiceForPayment.set(invoice);
-    this.visiblePayInvoice.set(true);
-  }
-
-  payInvoice(invoice: BillingInvoiceListItemResponse): void {
-    this.openPayInvoiceDialog(invoice);
   }
 
   getStatusSeverity(status: string): any {

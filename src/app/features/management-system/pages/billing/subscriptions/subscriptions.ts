@@ -10,6 +10,7 @@ import {
   BillingSubscriptionResponse,
   BillingSubscriptionStatus
 } from '../../../../../core/interfaces/billing/billing.interface';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CreateSubscriptionDialog } from '../../../../../shared/dialogs/create-subscription-dialog/create-subscription-dialog';
 import { UpgradeSubscriptionDialog } from '../../../../../shared/dialogs/upgrade-subscription-dialog/upgrade-subscription-dialog';
 import { CancelSubscriptionDialog } from '../../../../../shared/dialogs/cancel-subscription-dialog/cancel-subscription-dialog';
@@ -24,27 +25,20 @@ import { CancelSubscriptionDialog } from '../../../../../shared/dialogs/cancel-s
     Button,
     ReactiveFormsModule,
     DatePipe,
-    CreateSubscriptionDialog,
-    UpgradeSubscriptionDialog,
-    CancelSubscriptionDialog,
     CurrencyPipe
   ],
   templateUrl: './subscriptions.html',
+  providers: [DialogService],
   styleUrl: './subscriptions.scss'
 })
 export class Subscriptions implements OnInit {
   messageService = inject(MessageService);
   billingService = inject(BillingService);
+  dialogService = inject(DialogService);
+  ref: DynamicDialogRef | null;
 
   subscriptions: WritableSignal<BillingSubscriptionResponse[]> = signal([]);
   loading: WritableSignal<boolean> = signal(false);
-
-  createDialogVisible: WritableSignal<boolean> = signal(false);
-  upgradeDialogVisible: WritableSignal<boolean> = signal(false);
-  subscriptionToUpgrade: WritableSignal<BillingSubscriptionResponse | null> = signal(null);
-
-  cancelDialogVisible: WritableSignal<boolean> = signal(false);
-  subscriptionToCancel: WritableSignal<BillingSubscriptionResponse | null> = signal(null);
 
   ngOnInit(): void {
     this.loadSubscriptions();
@@ -65,22 +59,53 @@ export class Subscriptions implements OnInit {
   }
 
   openCreateDialog(): void {
-    this.createDialogVisible.set(true);
+    this.ref = this.dialogService.open(CreateSubscriptionDialog, {
+      header: 'Create Subscription',
+      width: '35rem',
+      baseZIndex: 10000
+    });
+
+    this.ref?.onClose.subscribe((subscription: BillingSubscriptionResponse) => {
+      if (subscription) {
+        this.onSubscriptionCreated(subscription);
+      }
+    });
   }
 
   openUpgradeDialog(subscription: BillingSubscriptionResponse): void {
-    this.subscriptionToUpgrade.set(subscription);
-    this.upgradeDialogVisible.set(true);
+    this.ref = this.dialogService.open(UpgradeSubscriptionDialog, {
+      header: 'Upgrade Subscription',
+      width: '35rem',
+      contentStyle: { 'max-height': '600px', overflow: 'auto' },
+      baseZIndex: 10000,
+      data: subscription
+    });
+
+    this.ref?.onClose.subscribe((subscription: BillingSubscriptionResponse) => {
+      if (subscription) {
+        this.onSubscriptionUpgraded(subscription);
+      }
+    });
   }
 
   openCancelDialog(subscription: BillingSubscriptionResponse): void {
-    this.subscriptionToCancel.set(subscription);
-    this.cancelDialogVisible.set(true);
+    this.ref = this.dialogService.open(CancelSubscriptionDialog, {
+      header: 'Cancel Subscription',
+      width: '35rem',
+      contentStyle: { 'max-height': '600px', overflow: 'auto' },
+      baseZIndex: 10000,
+      data: subscription
+    });
+
+    this.ref?.onClose.subscribe((subscription: BillingSubscriptionResponse) => {
+      if (subscription) {
+        this.onSubscriptionCanceled(subscription);
+      }
+    });
   }
 
   onSubscriptionCreated(subscription: BillingSubscriptionResponse): void {
     this.subscriptions.update(subs => [...subs, subscription]);
-    this.createDialogVisible.set(false);
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription created successfully' });
   }
 
@@ -93,8 +118,6 @@ export class Subscriptions implements OnInit {
         return newSubs;
       });
     }
-    this.upgradeDialogVisible.set(false);
-    this.subscriptionToUpgrade.set(null);
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription upgraded successfully' });
   }
 
@@ -107,8 +130,6 @@ export class Subscriptions implements OnInit {
         return newSubs;
       });
     }
-    this.cancelDialogVisible.set(false);
-    this.subscriptionToCancel.set(null);
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription canceled successfully' });
   }
 

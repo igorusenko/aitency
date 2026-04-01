@@ -6,9 +6,10 @@ import { Checkbox } from '../../../../../shared/checkbox/checkbox';
 import { InputNumberComponent } from '../../../../../shared/input-number/input-number';
 import { InputTextComponent } from '../../../../../shared/input-text/input-text';
 import {BillingService} from '../../../../../core/services/management-system/billing/billing.service';
-import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
 import {UserStore} from '../../../../../core/stores/user.store';
 import {MessageService} from 'primeng/api';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
 
 @Component({
   selector: 'app-settings',
@@ -19,9 +20,9 @@ import {MessageService} from 'primeng/api';
     ButtonModule,
     InputTextComponent,
     InputNumberComponent,
-    Checkbox,
-    CreatePaymentMethod
+    Checkbox
   ],
+  providers: [DialogService],
   templateUrl: './settings.html',
   styleUrl: './settings.scss'
 })
@@ -30,7 +31,8 @@ export class Settings implements OnInit {
   billingService = inject(BillingService);
   userStore = inject(UserStore);
   messageService = inject(MessageService);
-  visibleCreatePaymentMethod: WritableSignal<boolean> = signal(false);
+  dialogService = inject(DialogService);
+  ref: DynamicDialogRef | null;
   paymentMethods$ = this.billingService.getPaymentMethods();
   billingDetailsLoader: boolean = false;
 
@@ -129,5 +131,15 @@ export class Settings implements OnInit {
     if (b.includes('mastercard')) return '💳';
     if (b.includes('amex')) return '💳';
     return '💳';
+  }
+
+  openCreatePaymentMethodDialog() {
+    this.ref = this.dialogService.open(CreatePaymentMethod, {
+      header: 'Add Payment Method',
+      width: '35rem'
+    });
+    this.ref?.onClose.subscribe(() => {
+      this.refreshPaymentMethods();
+    });
   }
 }

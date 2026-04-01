@@ -9,6 +9,7 @@ import {
   BillingPlanResponse
 } from '../../../../../core/interfaces/billing/billing.interface';
 import { CreateEditPlan } from '../../../../../shared/dialogs/create-edit-plan/create-edit-plan';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-plans',
@@ -20,6 +21,7 @@ import { CreateEditPlan } from '../../../../../shared/dialogs/create-edit-plan/c
     ReactiveFormsModule,
     CreateEditPlan
   ],
+  providers: [DialogService],
   templateUrl: './plans.html',
   styleUrl: './plans.scss'
 })
@@ -27,12 +29,11 @@ export class Plans implements OnInit {
   userStore = inject(UserStore);
   messageService = inject(MessageService);
   billingService = inject(BillingService);
+  dialogService = inject(DialogService);
 
   plans: WritableSignal<BillingPlanResponse[]> = signal([]);
   loading: WritableSignal<boolean> = signal(false);
-
-  planDialogVisible: WritableSignal<boolean> = signal(false);
-  planToEdit: WritableSignal<BillingPlanResponse | null> = signal(null);
+  dialogRef: DynamicDialogRef | null = null;
 
   ngOnInit(): void {
     this.loadPlans();
@@ -56,30 +57,35 @@ export class Plans implements OnInit {
   }
 
   openCreateDialog(): void {
-    this.planToEdit.set(null);
-    this.planDialogVisible.set(true);
+    this.dialogRef = this.dialogService.open(CreateEditPlan, {
+      header: 'Create Plan',
+      width: '35rem'
+    });
+    this.dialogRef?.onClose.subscribe((savedPlan: BillingPlanResponse) => {
+      if (savedPlan) {
+        this.plans.update(plans => [...plans, savedPlan]);
+      }
+    });
   }
 
   openEditDialog(plan: BillingPlanResponse): void {
-    this.planToEdit.set(plan);
-    this.planDialogVisible.set(true);
-  }
-
-  onPlanSaved(savedPlan: BillingPlanResponse): void {
-    const existingIndex = this.plans().findIndex(p => p.id === savedPlan.id);
-    if (existingIndex >= 0) {
-      // Update
-      this.plans.update(plans => {
-        const newPlans = [...plans];
-        newPlans[existingIndex] = savedPlan;
-        return newPlans;
-      });
-    } else {
-      // Create
-      this.plans.update(plans => [...plans, savedPlan]);
-    }
-    this.planDialogVisible.set(false);
-    this.planToEdit.set(null);
+    this.dialogRef = this.dialogService.open(CreateEditPlan, {
+      header: 'Edit Plan',
+      width: '35rem',
+      data: { plan }
+    });
+    this.dialogRef?.onClose.subscribe((savedPlan: BillingPlanResponse) => {
+      if (savedPlan) {
+        const existingIndex = this.plans().findIndex(p => p.id === savedPlan.id);
+        if (existingIndex >= 0) {
+          this.plans.update(plans => {
+            const newPlans = [...plans];
+            newPlans[existingIndex] = savedPlan;
+            return newPlans;
+          });
+        }
+      }
+    });
   }
 
   deletePlan(plan: BillingPlanResponse): void {

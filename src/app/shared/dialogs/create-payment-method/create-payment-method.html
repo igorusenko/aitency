@@ -1,7 +1,4 @@
-<p-dialog header="Create new invoice" [modal]="true" [(visible)]="visible" [style]="{ width: '35rem' }">
 <div class="flex flex-col gap-6" [formGroup]="paymentElementForm">
-  <h2 class="text-xl text-white font-bold">Add Payment Method</h2>
-
   <div class="flex flex-col gap-4">
     <app-input-text
       [form]="paymentElementForm"
@@ -72,4 +69,3 @@
     styleClass="w-full"
   ></p-button>
 </div>
-</p-dialog>

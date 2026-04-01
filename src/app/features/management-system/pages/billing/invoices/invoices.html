@@ -47,7 +47,7 @@
     ></app-input-text>
   </div>
   @if (userStore.currentUser()?.role === 'Admin') {
-    <p-button label="Create Invoice" severity="primary" size="small" (onClick)="visibleCreateInvoice.set(true)"/>
+    <p-button label="Create Invoice" severity="primary" size="small" (onClick)="openCreateInvoiceDialog()"/>
   }
   <p-table
     [value]="invoices()"
@@ -109,7 +109,3 @@
     </ng-template>
   </p-table>
 </div>
-
-<app-create-invoice [(visible)]="visibleCreateInvoice" (created)="loadInvoices()"></app-create-invoice>
-<app-invoice-info [(visible)]="visibleInvoiceInfo" [(invoice)]="selectedInvoice"></app-invoice-info>
-<app-pay-invoice [(visible)]="visiblePayInvoice" [(invoice)]="selectedInvoiceForPayment" (paid)="loadInvoices()"></app-pay-invoice>

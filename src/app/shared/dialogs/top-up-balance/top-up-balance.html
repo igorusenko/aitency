@@ -1,34 +1,47 @@
-<p-dialog header="Top Up Balance" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
-  <div class="flex flex-col gap-6 pt-4" [formGroup]="topUpForm">
-    <div class="flex flex-col gap-4">
-      <app-input-number
-        [form]="topUpForm"
-        controlName="amount"
-        label="Amount"
-        [min]="0.1"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        [formSubmitted]="formSubmitted()"
-      ></app-input-number>
+<div class="flex flex-col gap-6 pt-4" [formGroup]="topUpForm">
+  @if (paymentMethods$ | async; as payMethods) {
 
-      <app-select
-        [form]="topUpForm"
-        controlName="paymentMethodId"
-        title="Payment Method"
-        [options]="(paymentMethods$ | async) || []"
-        optionLabel="label"
-        optionValue="value"
-        [formSubmitted]="formSubmitted()"
-        appendTo="body"
-      ></app-select>
+  <div class="flex flex-col gap-4">
+    <app-input-number
+      [form]="topUpForm"
+      controlName="amount"
+      label="Amount"
+      [min]="0.1"
+      [minFractionDigits]="2"
+      [maxFractionDigits]="2"
+      [formSubmitted]="formSubmitted()"
+    ></app-input-number>
+
+    <app-select
+      [form]="topUpForm"
+      controlName="paymentMethodId"
+      title="Payment Method"
+      [options]="payMethods || []"
+      optionLabel="label"
+      optionValue="value"
+      [formSubmitted]="formSubmitted()"
+      appendTo="body"
+    ></app-select>
+  </div>
+
+    <div class="flex gap-2">
+      <p-button
+        (click)="save()"
+        [loading]="saving()"
+        label="Top Up"
+        icon="pi pi-plus"
+        styleClass="w-full"
+        class="w-full"
+      ></p-button>
+        <p-button
+          (onClick)="openPayMethodDialog()"
+          [loading]="saving()"
+          label="Add Pay Method"
+          icon="pi pi-plus"
+          styleClass="w-full"
+          class="w-full"
+        ></p-button>
     </div>
 
-    <p-button
-      (click)="save()"
-      [loading]="saving()"
-      label="Top Up"
-      icon="pi pi-plus"
-      styleClass="w-full"
-    ></p-button>
-  </div>
-</p-dialog>
+  }
+</div>

@@ -1,11 +1,11 @@
-import { Component, inject, input, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import { Dialog } from 'primeng/dialog';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { Textarea } from 'primeng/textarea';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
 import { MessageService } from 'primeng/api';
+import { DynamicDialogRef, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import {
   BillingSubscriptionResponse,
   CancelBillingSubscriptionRequest
@@ -15,7 +15,6 @@ import {
   selector: 'app-cancel-subscription-dialog',
   standalone: true,
   imports: [
-    Dialog,
     Button,
     ReactiveFormsModule,
     FloatLabel,
@@ -28,26 +27,23 @@ export class CancelSubscriptionDialog {
   fb = inject(FormBuilder);
   billingService = inject(BillingService);
   messageService = inject(MessageService);
+  ref = inject(DynamicDialogRef);
+  config = inject(DynamicDialogConfig);
 
-  visible = input.required<boolean>();
-  subscription = input<BillingSubscriptionResponse | null>();
-
-  canceled = output<BillingSubscriptionResponse>();
-  visibleChange = output<boolean>();
+  subscription: BillingSubscriptionResponse | null = this.config.data?.subscription || null;
 
   form: FormGroup = this.fb.group({
     reason: [''],
   });
 
   save(): void {
-    if (!this.subscription()) return;
+    if (!this.subscription) return;
 
     const request: CancelBillingSubscriptionRequest = this.form.value;
-    this.billingService.cancelSubscription(this.subscription()!.id, request).subscribe({
+    this.billingService.cancelSubscription(this.subscription.id, request).subscribe({
       next: (subscription) => {
-        this.canceled.emit(subscription);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription canceled successfully' });
-        this.close();
+        this.ref.close(subscription);
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to cancel subscription' });
@@ -56,7 +52,7 @@ export class CancelSubscriptionDialog {
   }
 
   close(): void {
-    this.visibleChange.emit(false);
+    this.ref.close();
     this.form.reset();
   }
 

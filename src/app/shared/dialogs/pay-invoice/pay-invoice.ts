@@ -1,6 +1,5 @@
-import {Component, inject, model, ModelSignal, OnInit, output, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {Button} from 'primeng/button';
-import {Dialog} from 'primeng/dialog';
 import {SelectComponent} from '../../select/select';
 import {BillingService} from '../../../core/services/management-system/billing/billing.service';
 import {BillingPaymentMethodResponse, BillingInvoiceListItemResponse} from '../../../core/interfaces/billing/billing.interface';
@@ -10,12 +9,12 @@ import {FormsModule, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular
 import {StripeService} from 'ngx-stripe';
 import {Router} from '@angular/router';
 import {switchMap, of} from 'rxjs';
+import {DynamicDialogRef, DynamicDialogConfig} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-pay-invoice',
   imports: [
     Button,
-    Dialog,
     SelectComponent,
     FormsModule,
     ReactiveFormsModule
@@ -30,20 +29,20 @@ export class PayInvoice implements OnInit {
   stripeService = inject(StripeService);
   router = inject(Router);
   fb = inject(FormBuilder);
+  ref = inject(DynamicDialogRef);
+  config = inject(DynamicDialogConfig);
+
+  invoice: BillingInvoiceListItemResponse = this.config.data?.invoice;
+
   invoiceForm: FormGroup = this.fb.group({
     paymentMethod: ['']
   });
 
-  visible: ModelSignal<boolean> = model.required();
-  invoice: ModelSignal<BillingInvoiceListItemResponse | null> = model<BillingInvoiceListItemResponse | null>(null);
-
   paymentMethods: WritableSignal<BillingPaymentMethodResponse[]> = signal([]);
-
-  paid = output<boolean>();
 
   ngOnInit(): void {
     if (this.userStore.currentUser().role !== 'Admin')
-    this.loadPaymentMethods();
+      this.loadPaymentMethods();
   }
 
   loadPaymentMethods(): void {
@@ -63,7 +62,7 @@ export class PayInvoice implements OnInit {
   }
 
   payInvoice(): void {
-    if (!this.invoice() || !this.invoiceForm.value.paymentMethod) {
+    if (!this.invoice || !this.invoiceForm.value.paymentMethod) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please select a payment method', life: 2000 });
       return;
     }
@@ -76,11 +75,11 @@ export class PayInvoice implements OnInit {
 
     const request = {
       paymentMethodId: this.invoiceForm.value.paymentMethod,
-      idempotencyKey: `invoice-${this.invoice()!.id}-${Date.now()}`,
+      idempotencyKey: `invoice-${this.invoice!.id}-${Date.now()}`,
       returnUrl: window.location.origin + this.router.url
     };
 
-    this.billingService.payInvoice(this.invoice()!.id, request).pipe(
+    this.billingService.payInvoice(this.invoice!.id, request).pipe(
       switchMap(response => {
         if (response.clientSecret && selectedMethod.gatewayPaymentMethodId) {
           return this.stripeService.confirmCardPayment(response.clientSecret, {
@@ -96,14 +95,17 @@ export class PayInvoice implements OnInit {
           return;
         }
 
-        this.visible.set(false);
-        this.paid.emit(true);
+        this.ref.close(true);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Invoice paid successfully!', life: 2000 });
       },
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to pay invoice', life: 5000 });
       }
     });
+  }
+
+  close(): void {
+    this.ref.close();
   }
 
   getPaymentMethodOptions(): Array<{ label: string; value: string }> {

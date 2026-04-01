@@ -1,6 +1,5 @@
-import {Component, inject, model, ModelSignal, OnDestroy, OnInit, output, signal, WritableSignal} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit, signal, WritableSignal} from '@angular/core';
 import {Button} from 'primeng/button';
-import {Dialog} from 'primeng/dialog';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
 import {FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -17,12 +16,12 @@ import {SelectFilterEvent} from 'primeng/select';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import {InputTextComponent} from '../../input-text/input-text';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-create-invoice',
   imports: [
     Button,
-    Dialog,
     DatePicker,
     FloatLabel,
     FormsModule,
@@ -40,13 +39,10 @@ export class CreateInvoice implements OnInit, OnDestroy {
   billingService = inject(BillingService);
   userService = inject(UserService);
   userStore = inject(UserStore);
+  ref = inject(DynamicDialogRef);
 
   private filterSubject = new Subject<string>();
   private destroy$ = new Subject<void>();
-
-  visible: ModelSignal<boolean> = model.required();
-
-  created = output<boolean>();
 
   clientOptions: WritableSignal<Array<{ label: string; value: string }>> = signal([]);
   lineTypeOptions = [
@@ -136,10 +132,9 @@ export class CreateInvoice implements OnInit, OnDestroy {
 
     this.billingService.createAdminInvoice(request).subscribe({
       next: () => {
-        this.visible.set(false);
+        this.ref.close(true);
         // Сброс формы для следующего раза
         this.resetForm();
-        this.created.emit(true);
       },
       error: () => {
         // оставить форму открытой для исправления

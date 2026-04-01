@@ -1,4 +1,4 @@
-import {Component, inject, model, ModelSignal, output, signal, ViewChild} from '@angular/core';
+import {Component, inject, signal, ViewChild} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {injectStripe, StripeElementsDirective, StripePaymentElementComponent} from 'ngx-stripe';
 import {BillingService} from '../../../core/services/management-system/billing/billing.service';
@@ -10,8 +10,8 @@ import {BillingPaymentGateway} from '../../../core/interfaces/billing/billing.in
 import {InputTextComponent} from '../../input-text/input-text';
 import {Checkbox} from '../../checkbox/checkbox';
 import {ButtonModule} from 'primeng/button';
-import {Dialog} from 'primeng/dialog';
 import {MessageService} from 'primeng/api';
+import {DynamicDialogRef} from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-create-payment-method',
@@ -23,14 +23,12 @@ import {MessageService} from 'primeng/api';
     ButtonModule,
     StripePaymentElementComponent,
     StripeElementsDirective,
-    Dialog
   ],
   templateUrl: './create-payment-method.html',
   styleUrl: './create-payment-method.scss',
 })
 export class CreatePaymentMethod {
-  visible: ModelSignal<boolean> = model.required();
-  onCreated = output<void>();
+  ref = inject(DynamicDialogRef);
   @ViewChild(StripePaymentElementComponent)
   paymentElement!: StripePaymentElementComponent;
 
@@ -118,8 +116,7 @@ export class CreatePaymentMethod {
             }).subscribe({
               next: () => {
                 this.saving.set(false);
-                this.visible.set(false);
-                this.onCreated.emit();
+                this.ref.close(true);
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Payment method created successfully!', life: 2000 });
               },
               error: (err) => {

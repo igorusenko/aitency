@@ -1,11 +1,9 @@
-import {Component, effect, inject, model, ModelSignal, output, signal} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BillingService } from '../../../core/services/management-system/billing/billing.service';
-import { BillingPaymentMethodResponse } from '../../../core/interfaces/billing/billing.interface';
 import { InputNumberComponent } from '../../input-number/input-number';
 import { SelectComponent } from '../../select/select';
 import { ButtonModule } from 'primeng/button';
-import { Dialog } from 'primeng/dialog';
 import { CommonModule } from '@angular/common';
 import { map, Observable, switchMap, of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -13,6 +11,8 @@ import { MessageService } from 'primeng/api';
 import { StripeService } from 'ngx-stripe';
 import { UserStore } from '../../../core/stores/user.store';
 import {OnboardingService} from '../../../core/services/management-system/onboarding/onboarding.service';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {CreatePaymentMethod} from '../create-payment-method/create-payment-method';
 
 @Component({
   selector: 'app-top-up-balance',
@@ -23,15 +23,15 @@ import {OnboardingService} from '../../../core/services/management-system/onboar
     InputNumberComponent,
     SelectComponent,
     ButtonModule,
-    Dialog
   ],
+  providers: [DialogService],
   templateUrl: './top-up-balance.html',
 })
 export class TopUpBalance {
   messageService = inject(MessageService);
   onboardingService = inject(OnboardingService);
-  visible: ModelSignal<boolean> = model.required();
-  onTopUp = output<void>();
+  dialogService = inject(DialogService);
+  ref = inject(DynamicDialogRef);
 
   private readonly fb = inject(FormBuilder);
   private readonly billingService = inject(BillingService);
@@ -39,18 +39,13 @@ export class TopUpBalance {
   private readonly stripeService = inject(StripeService);
   private readonly userStore = inject(UserStore);
   paymentMethods$: Observable<{ label: string, value: string, gatewayPaymentMethodId: string | null }[]>;
+  paymentMethodRef: DynamicDialogRef | null = null;
 
   constructor() {
     effect(() => {
       if (this.onboardingService.onboardingStatus()) {
         if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted')
-        this.paymentMethods$ = this.billingService.getPaymentMethods().pipe(
-          map(methods => methods.map(m => ({
-            label: `${m.brand} **** ${m.last4} ${m.isDefault ? '(Default)' : ''}`,
-            value: m.id,
-            gatewayPaymentMethodId: m.gatewayPaymentMethodId
-          })))
-        );
+          this.getPayMethods();
       }
     });
   }
@@ -98,9 +93,8 @@ export class TopUpBalance {
         }
 
         this.saving.set(false);
-        this.visible.set(false);
+        this.ref.close(true);
         this.billingService.refreshBalance();
-        this.onTopUp.emit();
         this.topUpForm.reset();
         this.formSubmitted.set(false);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Balance topped up successfully!', life: 2000 });
@@ -110,5 +104,28 @@ export class TopUpBalance {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error topping up balance', life: 5000 });
       }
     });
+  }
+
+  openPayMethodDialog() {
+    this.paymentMethodRef = this.dialogService.open(CreatePaymentMethod, {header: 'Add Payment Method', closable: true, width: '35rem'});
+    this.paymentMethodRef?.onClose.pipe(
+      switchMap(() => this.billingService.getPaymentMethods())
+    ).subscribe(methods => {
+      this.paymentMethods$ = of(methods.map(m => ({
+        label: `${m.brand} **** ${m.last4} ${m.isDefault ? '(Default)' : ''}`,
+        value: m.id,
+        gatewayPaymentMethodId: m.gatewayPaymentMethodId
+      })));
+    });
+  }
+
+  getPayMethods(): void {
+    this.paymentMethods$ = this.billingService.getPaymentMethods().pipe(
+      map(methods => methods.map(m => ({
+        label: `${m.brand} **** ${m.last4} ${m.isDefault ? '(Default)' : ''}`,
+        value: m.id,
+        gatewayPaymentMethodId: m.gatewayPaymentMethodId
+      })))
+    );
   }
 }
