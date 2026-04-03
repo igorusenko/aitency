@@ -8,43 +8,56 @@
     <ng-template #icons>
       <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
     </ng-template>
-    <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-2">
-        <div class="flex items-center gap-2">
-          <p>ID:</p>
-          <p>{{userStore.userById().id}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Email:</p>
-          <p class="text-green-400">{{userStore.userById().email || '-'}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Registration date:</p>
-          <p>{{userStore.userById().registrationDate | date }}</p>
-        </div>
-        @if (userPassword$ | async; as password) {
+
+    @if (userStore.userById(); as user) {
+      <div class="flex flex-col gap-4">
+        <div class="grid grid-cols-2 gap-3">
           <div class="flex items-center gap-2">
-            <p>Password:</p>
-            <p class="text-green-400">{{password.password}}</p>
+            <p class="font-medium">ID:</p>
+            <p>{{ user.id || '-' }}</p>
           </div>
-        }
-        <div class="flex items-center gap-2">
-          <p>Address:</p>
-          <p>{{userStore.userById().address || '-'}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Billing:</p>
-          <p>{{userStore.userById().billing?.account || '-'}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Company name:</p>
-          <p>{{userStore.userById().companyName || '-'}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Contact person:</p>
-          <p>{{userStore.userById().contactPerson || '-'}}</p>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Full name:</p>
+            <p>{{ user.fullName || '-' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Email:</p>
+            <p class="text-green-400">{{ user.email || '-' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Email confirmed:</p>
+            <p>{{ user.emailConfirmed ? 'Yes' : 'No' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Role:</p>
+            <p>{{ user.role || '-' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Active:</p>
+            <p>{{ user.isActive ? 'Active' : 'Disabled' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Onboarding status:</p>
+            <p>{{ user.onboardingStatus || '-' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Onboarding step:</p>
+            <p>{{ user.onboardingStep || '-' }}</p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <p class="font-medium">Demo data:</p>
+            <p>{{ user.demoData ? (user.demoData | json) : 'null' }}</p>
+          </div>
         </div>
       </div>
-    </div>
+    }
   </p-panel>
 </div>

@@ -14,12 +14,12 @@
     <div class="flex flex-col gap-2 pt-4 !max-w-full text-xs sm:text-base">
       <p>This demo showcases the core capabilities of our AI voice assistant.</p>
       <p>The assistant can:
-        <p>• Handle reception calls</p>
-        <p>• Answer frequently asked questions</p>
-        <p>• Make appointment booking</p>
-        <p>• Connect to databases and provide information to client</p>
-        <p>• Integrate with CRM and booking systems</p>
-        <p>• Work via phone, website or messaging platforms</p>
+      <p>• Handle reception calls</p>
+      <p>• Answer frequently asked questions</p>
+      <p>• Make appointment booking</p>
+      <p>• Connect to databases and provide information to client</p>
+      <p>• Integrate with CRM and booking systems</p>
+      <p>• Work via phone, website or messaging platforms</p>
     </div>
 
   </section>
@@ -42,7 +42,7 @@
     <!-- SYSTEM ACTIVITY -->
     <div id="system-activity" class="panel-column">
       <h2>System Activity Monitor</h2>
-      @if (automationsStore.intents().length > 0) {
+      @if (automationsStore.intents()?.length > 0) {
         <div class="systems-grid">
           @for (intent of automationsStore.intents(); track intent.key) {
             <div

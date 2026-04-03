@@ -44,6 +44,7 @@ export class Automations implements OnInit {
   }
 
   selectRow(row: TableRowSelectEvent) {
+    this.automationAdminStore.automation.set(row.data)
     this.router.navigate([row.data.id], {relativeTo: this.route});
   }
 

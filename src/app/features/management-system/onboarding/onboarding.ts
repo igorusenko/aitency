@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit} from '@angular/core';
 import {StepperModule} from 'primeng/stepper';
 import {Button} from 'primeng/button';
 import {TabsModule} from 'primeng/tabs';
@@ -53,8 +53,13 @@ export class Onboarding implements OnInit {
   mainGoalOptions = Object.values(MAIN_GOAL);
   crmTypeOptions = Object.values(CRM_TYPE);
 
+  constructor() {
+    effect(() => {
+      this.getOnboardingStatus();
+    });
+  }
+
   ngOnInit() {
-    this.getOnboardingStatus();
     this.initPrivateForm();
     this.initCompanyForm();
     this.initBusinessForm();

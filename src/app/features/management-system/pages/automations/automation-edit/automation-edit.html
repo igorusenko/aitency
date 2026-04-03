@@ -310,7 +310,7 @@
 
   <!--  </form>-->
 
-  @if (automationStore.automation()?.id && workspacesStore.workspaces()?.items.length > 0) {
+  @if (workspacesStore.workspaces()?.items.length > 0) {
   <p-panel [toggleable]="true" [collapsed]="true">
     <ng-template #header>
       <div class="flex items-center gap-2">

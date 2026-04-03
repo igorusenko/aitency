@@ -66,24 +66,22 @@
       <tr>
         <th>Date</th>
         <th>Reference</th>
-        <th>Gateway</th>
+        <th>Payment Method</th>
         <th>Status</th>
         <th>Amount</th>
-        <th>Description</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-tr>
       <tr>
         <td>{{ tr.createdAt | date:'medium' }}</td>
         <td>{{ tr.reference }}</td>
-        <td>{{ tr.gateway }}</td>
+        <td>{{ tr.paymentMethod }}</td>
         <td>
           <p-tag [value]="tr.status" [severity]="getStatusSeverity(tr.status)"></p-tag>
         </td>
         <td [ngClass]="getAmountClass(tr.amount)">
           {{ (tr.amount >= 0 ? '+' : '') + formatCurrency(tr.amount, tr.currency) }}
         </td>
-        <td class="max-w-xs truncate" [title]="tr.description">{{ tr.description }}</td>
       </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">

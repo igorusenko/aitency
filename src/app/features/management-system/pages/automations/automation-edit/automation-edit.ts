@@ -9,7 +9,7 @@ import {
   Validators
 } from "@angular/forms";
 import {AutomationAdminService} from '../../../../../core/services/management-system/automation/automation-admin.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
 import {concatMap} from 'rxjs';
 import {AutomationsStore} from '../../../../../core/stores/automations.store';
@@ -52,6 +52,7 @@ export class AutomationEdit implements OnInit, OnDestroy {
   workspacesStore = inject(WorkspacesStore);
   workspacesService = inject(WorkspacesService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   fb = inject(FormBuilder);
   messageService = inject(MessageService);
   usersMappedToAppend: IAppendUserModel;
@@ -118,11 +119,29 @@ export class AutomationEdit implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.initAutomationForm();
+    if (this.route.snapshot.params['id'] !== 'new') {
+      this.editMode = true;
+      this.automationAdminService.getAutomationAdmin(this.route.snapshot.params['id']).subscribe(automation => {
+        this.automationStore.automation.set(automation);
+        this.initAutomationForm();
+      });
+      this.getWorkspaces();
+    }
+    else {
+      this.initAutomationForm();
+      this.editMode = false;
+    }
     this.usersMappedToAppend = {
       automationId: this.automationStore.automation()?.id!,
-      userIds: this.workspacesStore.workspaces().items.map((workspace: any) => workspace.id)
+      userIds: this.workspacesStore.workspaces()?.items?.map((workspace: any) => workspace.id)
     }
+  }
+
+  getWorkspaces(): void {
+    this.workspacesService.getWorkspaces().subscribe(workspaces => {
+      this.workspacesStore.workspaces.set(workspaces);
+      this.linkedUsers = this.workspacesStore.workspaces()?.items?.map((workspace: any) => workspace.id) ?? [];
+    })
   }
 
   initAutomationForm(): void {
@@ -211,16 +230,18 @@ export class AutomationEdit implements OnInit, OnDestroy {
   }
 
   appendWorkspace(workSpaceId: string): void {
-    this.workspacesService.appendWorkspace(this.automationStore.automation()?.id!, [workSpaceId])
-      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
+    const automationId = this.route.snapshot.params['id'];
+    this.workspacesService.appendWorkspace(automationId, [workSpaceId])
+      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(automationId)))
       .subscribe(() => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace appended to automation!', life: 2000 });
     })
   }
 
   detachWorkspace(workSpaceId: string): void {
-    this.workspacesService.detachWorkspace(this.automationStore.automation()?.id!, [workSpaceId])
-      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(this.automationStore.automation()?.id!)))
+    const automationId = this.route.snapshot.params['id'];
+    this.workspacesService.detachWorkspace(automationId, [workSpaceId])
+      .pipe(concatMap(() => this.automationAdminService.getAutomationAdmin(automationId)))
       .subscribe(() => {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace detached from automation!', life: 2000 });
     })

@@ -97,7 +97,7 @@ export class SideMenuComponent implements OnInit {
         {
           path: 'billing/settings',
           title: 'Settings',
-          roles: ['Default', 'Admin', 'Demo']
+          roles: ['Default', 'Demo']
         }
       ]
     }
@@ -146,7 +146,9 @@ export class SideMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getOnboardingStatus();
+    if (this.userStore.currentUser().role !== 'Demo') {
+      this.getOnboardingStatus();
+    }
     this.resizeListener();
   }
 

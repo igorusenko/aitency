@@ -133,7 +133,7 @@ export class ChatComponent implements OnInit, OnDestroy{
         },
         error: err => {
           console.error(err);
-          this.addMessage('❌ Ошибка доступа к микрофону', 'assistant');
+          this.addMessage('❌ Server error', 'assistant');
         }
       });
   }

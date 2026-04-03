@@ -1,5 +1,5 @@
-<div class="flex justify-between items-center mb-4">
-  <h1 class="text-2xl font-bold">Billing Plans</h1>
+<div class="flex justify-between items-start mb-4">
+  <h1 class="text-xl text-white font-bold">Plans</h1>
   @if (userStore.currentUser()?.role === 'Admin') {
     <p-button label="Create Plan" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
   }

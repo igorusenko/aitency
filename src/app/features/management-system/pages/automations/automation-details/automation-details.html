@@ -1,153 +1,132 @@
-@if (automation(); as automation) {
-<div class="flex flex-col gap-4">
-  <p-panel [toggleable]="true">
-    <ng-template #header>
-      <div class="flex items-center gap-2">
-        <span class="font-bold">Automation Info</span>
-      </div>
-    </ng-template>
-    <!--  <ng-template #footer>-->
-    <!--    <div class="flex flex-wrap items-center justify-between gap-4">-->
-    <!--      <div class="flex items-center gap-2">-->
-    <!--        <p-button icon="pi pi-user" rounded text></p-button>-->
-    <!--        <p-button icon="pi pi-bookmark" severity="secondary" rounded text></p-button>-->
-    <!--      </div>-->
-    <!--    </div>-->
-    <!--  </ng-template>-->
-    <ng-template #icons>
-      <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
-    </ng-template>
-    <div class="flex flex-col gap-4">
-      <div class="grid grid-cols-2">
+@if (automation; as automation) {
+  <div class="flex flex-col gap-4">
+    <p-panel [toggleable]="true">
+      <ng-template #header>
         <div class="flex items-center gap-2">
-          <p>ID:</p>
-          <p>{{automation.id}}</p>
+          <span class="font-bold">Automation Info</span>
         </div>
-        @if (userStore.currentUser().role === 'Admin') {
-        <div class="flex items-center gap-2">
-          <p>User ID:</p>
-          <p>{{automation.userId}}</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <p>Server ID:</p>
-          <p>{{automation.serverId}}</p>
-        </div>
-        }
-        <div class="flex items-center gap-2">
-          <p>Active:</p>
-          <p>{{automation.isActive}}</p>
-        </div>
-      </div>
-
-    @if (automation.config) {
-      <div class="flex flex-col">
-        <div class="">
-          <span class="font-bold">Config</span>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <p>Voice:</p>
-          <p>{{automation.config.voice}}</p>
-        </div>
-<!--        <div class="flex items-center gap-2">-->
-<!--          <p>Volume:</p>-->
-<!--          <p>{{automation.config.volume}}</p>-->
-<!--        </div>-->
-        <div class="flex items-center gap-2">
-          <p>Speed:</p>
-          <p>{{automation.config.speed}}</p>
-        </div>
-
-<!--        @if (automation.config.tools) {-->
-<!--          <div class="flex items-center gap-2">-->
-<!--            <p>Tools:</p>-->
-<!--            <p>{{JSON.stringify(automation.config.tools)}}</p>-->
-<!--          </div>-->
-<!--        }-->
-      </div>
-    }
-      @if (automationStore.automation()?.isDemo || userStore.currentUser().role === 'Demo') {
-        <p class="text-green-300">Demo, limited capabilities</p>
-      }
-      @if (automationStore.intents().length > 0) {
-        <div class="flex flex-col">
-          @for (intent of automationStore.intents(); track intent.key) {
-            <div>
-              <p>
-                {{intent.title}} <span class="text-green-300">Connected</span>
-                @if (automationStore.automation()?.isDemo || userStore.currentUser().role === 'Demo') {
-                  (Demo Mode)
-                }
-              </p>
+      </ng-template>
+      <ng-template #icons>
+        <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+      </ng-template>
+      <div class="flex flex-col gap-4">
+        <div class="grid grid-cols-2">
+          <div class="flex items-center gap-2">
+            <p>ID:</p>
+            <p>{{automation.id}}</p>
+          </div>
+          @if (userStore.currentUser().role === 'Admin') {
+            <div class="flex items-center gap-2">
+              <p>Server ID:</p>
+              <p>{{automation.serverId}}</p>
             </div>
           }
-        </div>
-      }
-    </div>
-  </p-panel>
-  @if (userStore.currentUser().role === 'Admin') {
-    @if (automationLogs) {
-      <p-panel [toggleable]="true">
-        <ng-template #header>
           <div class="flex items-center gap-2">
-            <span class="font-bold">Automation Logs</span>
+            <p>Active:</p>
+            <p>{{automation.isActive}}</p>
           </div>
-        </ng-template>
-        <ng-template #icons>
-          <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
-        </ng-template>
-        @if (automationLogs.items.length > 0) {
-          <div class="flex flex-col gap-4">
-            @for (log of automationLogs.items; track log.id) {
-              <div class="flex flex-col bg-[#19263f8c] rounded-xl p-2">
-                <div class="flex gap-2">
-                  <p>Date:</p>
-                  <p>{{log.dateTime | date:'medium'}}</p>
-                </div>
+        </div>
 
-                <div class="flex gap-2">
-                  <p>User ID:</p>
-                  <p>{{log.userId}}</p>
-                </div>
+        @if (automation.config) {
+          <div class="flex flex-col">
+            <div>
+              <span class="font-bold">Config</span>
+            </div>
 
-                <div class="flex gap-2">
-                  <p>Action type:</p>
-                  <p>{{log.logs.action}}</p>
-                </div>
+            <div class="flex items-center gap-2">
+              <p>Voice:</p>
+              <p>{{automation.config.voice}}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <p>Speed:</p>
+              <p>{{automation.config.speed}}</p>
+            </div>
+          </div>
+        }
 
-                @if (log.logs.payload) {
-                  @if (log.logs.payload?.text) {
-                    <div class="flex gap-2">
-                      <p>Response:</p>
-                      <p>{{log.logs.payload?.text}}</p>
-                    </div>
+        @if (automation.isDemo || userStore.currentUser().role === 'Demo') {
+          <p class="text-green-300">Demo, limited capabilities</p>
+        }
+
+        @if (automationStore.intents()?.length > 0) {
+          <div class="flex flex-col">
+            @for (intent of automationStore.intents(); track intent.key) {
+              <div>
+                <p>
+                  {{intent.title}} <span class="text-green-300">Connected</span>
+                  @if (automation.isDemo || userStore.currentUser().role === 'Demo') {
+                    (Demo Mode)
                   }
-
-                  @if (log.logs.payload?.message) {
-                    <div class="flex gap-2">
-                      <p>Payload message:</p>
-                      <p>{{log.logs.payload?.message}}</p>
-                    </div>
-                  }
-
-                  @if (log.logs.payload?.context) {
-                    <div class="flex gap-2">
-                      <p>Payload context:</p>
-                      <p>{{log.logs.payload?.context}}</p>
-                    </div>
-                  }
-
-                  @if (log.logs.payload?.remainingCalls) {
-                    <div class="flex gap-2">
-                      <p>Remain calls:</p>
-                      <p>{{log.logs.payload?.remainingCalls}}</p>
-                    </div>
-                  }
-                }
+                </p>
               </div>
             }
+          </div>
+        }
+      </div>
+    </p-panel>
 
-<!--            <div class="card flex justify-center">-->
+    @if (userStore.currentUser().role === 'Admin') {
+      @if (automationLogs) {
+        <p-panel [toggleable]="true">
+          <ng-template #header>
+            <div class="flex items-center gap-2">
+              <span class="font-bold">Automation Logs</span>
+            </div>
+          </ng-template>
+          <ng-template #icons>
+            <p-menu #menu id="config_menu1" [model]="items" [popup]="true" />
+          </ng-template>
+          @if (automationLogs.items.length > 0) {
+            <div class="flex flex-col gap-4">
+              @for (log of automationLogs.items; track log.id) {
+                <div class="flex flex-col bg-[#19263f8c] rounded-xl p-2">
+                  <div class="flex gap-2">
+                    <p>Date:</p>
+                    <p>{{log.dateTime | date:'medium'}}</p>
+                  </div>
+
+                  <div class="flex gap-2">
+                    <p>User ID:</p>
+                    <p>{{log.userId}}</p>
+                  </div>
+
+                  <div class="flex gap-2">
+                    <p>Action type:</p>
+                    <p>{{log.logs.action}}</p>
+                  </div>
+
+                  @if (log.logs.payload) {
+                    @if (log.logs.payload?.text) {
+                      <div class="flex gap-2">
+                        <p>Response:</p>
+                        <p>{{log.logs.payload?.text}}</p>
+                      </div>
+                    }
+
+                    @if (log.logs.payload?.message) {
+                      <div class="flex gap-2">
+                        <p>Payload message:</p>
+                        <p>{{log.logs.payload?.message}}</p>
+                      </div>
+                    }
+
+                    @if (log.logs.payload?.context) {
+                      <div class="flex gap-2">
+                        <p>Payload context:</p>
+                        <p>{{log.logs.payload?.context}}</p>
+                      </div>
+                    }
+
+                    @if (log.logs.payload?.remainingCalls) {
+                      <div class="flex gap-2">
+                        <p>Remain calls:</p>
+                        <p>{{log.logs.payload?.remainingCalls}}</p>
+                      </div>
+                    }
+                  }
+                </div>
+              }
+
               <p-paginator
                 (onPageChange)="onPageChange($event)"
                 [first]="logsPaginator.first"
@@ -155,16 +134,14 @@
                 [totalRecords]="logsPaginator.totalRecords"
                 [rowsPerPageOptions]="[10, 20, 50, 100, 200]"
               />
-<!--            </div>-->
-
-          </div>
-        } @else {
-          <p>There are no logs yet</p>
-        }
-      </p-panel>
+            </div>
+          } @else {
+            <p>There are no logs yet</p>
+          }
+        </p-panel>
+      }
     }
-  }
 
-  <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/demo', automation.id]">Go to demo</button>
-</div>
+    <button id="btn-reset" class="btn btn-ghost" [routerLink]="['/demo', automation.id]">Go to demo</button>
+  </div>
 }

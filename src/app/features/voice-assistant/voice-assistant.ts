@@ -1,7 +1,9 @@
-import {Component, effect, inject, signal, WritableSignal} from '@angular/core';
+import {Component, effect, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {AssistantService} from '../../core/services/voice-assistant/assistant.service';
 import {ChatComponent} from './chat/chat.component';
 import {AutomationsStore} from '../../core/stores/automations.store';
+import {ActivatedRoute} from '@angular/router';
+import {AutomationAdminService} from '../../core/services/management-system/automation/automation-admin.service';
 
 interface ChatMessage {
   author: 'ai' | 'user';
@@ -16,9 +18,11 @@ interface ChatMessage {
   templateUrl: './voice-assistant.html',
   styleUrl: './voice-assistant.scss',
 })
-export class VoiceAssistant {
+export class VoiceAssistant implements OnInit {
   public assistantService = inject(AssistantService);
   public automationsStore = inject(AutomationsStore);
+  private readonly route = inject(ActivatedRoute);
+  private readonly automationAdminService = inject(AutomationAdminService);
 
   calendarProcessing: WritableSignal<boolean> = signal(false);
   bookingProcessing: WritableSignal<boolean> = signal(false);
@@ -30,35 +34,38 @@ export class VoiceAssistant {
 
   currentYear = new Date().getFullYear();
 
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.automationAdminService.getAutomationIntents(id).subscribe();
+    }
+  }
+
   constructor() {
     effect(() => {
-      const calendarIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'calendar')
-      if (this.automationsStore.intents()[calendarIndex])
-      this.automationsStore.intents()[calendarIndex].active = this.calendarProcessing();
+      const intents = this.automationsStore.intents() ?? [];
 
-      const bookingIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'booking')
-      if (bookingIndex > -1)
-      this.automationsStore.intents()[bookingIndex].active = this.bookingProcessing();
+      const calendarIndex = intents.findIndex((intent: any) => intent.key === 'calendar');
+      if (calendarIndex > -1) intents[calendarIndex].active = this.calendarProcessing();
 
-      const priceInquiryIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'price_inquiry')
-      if (priceInquiryIndex > -1)
-      this.automationsStore.intents()[priceInquiryIndex].active = this.priceInquiryProcessing();
+      const bookingIndex = intents.findIndex((intent: any) => intent.key === 'booking');
+      if (bookingIndex > -1) intents[bookingIndex].active = this.bookingProcessing();
 
-      const serviceInfoIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'service_info')
-      if (serviceInfoIndex > -1)
-      this.automationsStore.intents()[serviceInfoIndex].active = this.serviceInfoProcessing();
+      const priceInquiryIndex = intents.findIndex((intent: any) => intent.key === 'price_inquiry');
+      if (priceInquiryIndex > -1) intents[priceInquiryIndex].active = this.priceInquiryProcessing();
 
-      const cancelAppointmentIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'cancel_appointment')
-      if (cancelAppointmentIndex > -1)
-      this.automationsStore.intents()[cancelAppointmentIndex].active = this.cancelAppointmentProcessing();
+      const serviceInfoIndex = intents.findIndex((intent: any) => intent.key === 'service_info');
+      if (serviceInfoIndex > -1) intents[serviceInfoIndex].active = this.serviceInfoProcessing();
 
-      const rescheduleAppointmentIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'reschedule_appointment')
-      if (rescheduleAppointmentIndex > -1)
-      this.automationsStore.intents()[rescheduleAppointmentIndex].active = this.rescheduleAppointmentProcessing();
+      const cancelAppointmentIndex = intents.findIndex((intent: any) => intent.key === 'cancel_appointment');
+      if (cancelAppointmentIndex > -1) intents[cancelAppointmentIndex].active = this.cancelAppointmentProcessing();
 
-      const handoffToHumanIndex = this.automationsStore.intents().findIndex((intent: any) => intent.key === 'handoff_to_human')
-      if (handoffToHumanIndex > -1)
-      this.automationsStore.intents()[handoffToHumanIndex].active = this.handoffToHumanProcessing();
+      const rescheduleAppointmentIndex = intents.findIndex((intent: any) => intent.key === 'reschedule_appointment');
+      if (rescheduleAppointmentIndex > -1) intents[rescheduleAppointmentIndex].active = this.rescheduleAppointmentProcessing();
+
+      const handoffToHumanIndex = intents.findIndex((intent: any) => intent.key === 'handoff_to_human');
+      if (handoffToHumanIndex > -1) intents[handoffToHumanIndex].active = this.handoffToHumanProcessing();
     });
   }
 

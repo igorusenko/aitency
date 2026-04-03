@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Button} from 'primeng/button';
 import {TableModule, TableRowSelectEvent} from 'primeng/table';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
@@ -18,7 +18,7 @@ import {MessageService} from 'primeng/api';
   templateUrl: './users.html',
   styleUrl: './users.scss',
 })
-export class Users {
+export class Users implements OnInit {
   router = inject(Router);
   route = inject(ActivatedRoute);
   usersStore = inject(UserStore);
@@ -29,15 +29,12 @@ export class Users {
   rows: number = 10;
   totalRecords = this.usersStore.users()?.totalCount;
 
-  selectRow(row: TableRowSelectEvent) {
-    this.router.navigate([row.data.id], {relativeTo: this.route});
+  ngOnInit() {
+    this.loadData({first: this.first - 1, rows: this.rows});
   }
 
-  deleteUser(userId: string): void {
-      this.userService.deleteUser(userId).subscribe(x => {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'User Deleted Successfully!', life: 2000 });
-        this.loadData({first: this.first, rows: this.rows});
-      });
+  selectRow(row: TableRowSelectEvent) {
+    this.router.navigate([row.data.id], {relativeTo: this.route});
   }
 
   loadData(event: any): void {

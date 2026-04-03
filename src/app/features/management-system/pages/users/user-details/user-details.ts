@@ -1,9 +1,11 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {UserStore} from '../../../../../core/stores/user.store';
 import {Menu} from 'primeng/menu';
 import {Panel} from 'primeng/panel';
-import {AsyncPipe, DatePipe} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe} from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
 import {UserService} from '../../../../../core/services/management-system/user/user.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -11,15 +13,28 @@ import {UserService} from '../../../../../core/services/management-system/user/u
     Menu,
     Panel,
     DatePipe,
-    AsyncPipe
+    AsyncPipe,
+    JsonPipe
   ],
   templateUrl: './user-details.html',
   styleUrl: './user-details.scss',
 })
-export class UserDetails {
+export class UserDetails implements OnInit {
   readonly userStore = inject(UserStore);
   readonly userService = inject(UserService);
-  userPassword$ = this.userService.getUserPassword()
+  private readonly route = inject(ActivatedRoute);
+  userPassword$: Observable<{password: string}>;
+
+  ngOnInit() {
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (id) {
+      this.userService.getUserById(id).subscribe(() => {
+        this.userPassword$ = this.userService.getUserPassword();
+      });
+    }
+  }
+
   items = [
     {
       label: 'Refresh',

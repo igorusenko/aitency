@@ -100,11 +100,11 @@
           </div>
         }
 
-        @if (onboardingService.onboardingStatus()?.status !== 'Completed') {
-          <button id="btn-onboarding" class="btn" [routerLink]="['/onboarding']">Onboarding</button>
-        }
-
         @if (userStore.currentUser().role !== 'Demo') {
+          @if (onboardingService.onboardingStatus()?.status !== 'Completed') {
+            <button id="btn-onboarding" class="btn" [routerLink]="['/onboarding']">Onboarding</button>
+          }
+
           <button id="btn-reset" class="btn btn-ghost" (click)="authService.logout()">Logout</button>
         }
       </div>

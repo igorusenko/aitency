@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, effect, inject, OnInit, signal, WritableSignal} from '@angular/core';
 import {UserStore} from '../../../../core/stores/user.store';
 import {AnalyticsService} from '../../../../core/services/management-system/analytics/analytics.service';
 import {SelectComponent} from '../../../../shared/select/select';
@@ -9,8 +9,18 @@ import {ScrollerOptions} from 'primeng/api';
 import {SelectChangeEvent, SelectLazyLoadEvent} from 'primeng/select';
 import {DatePicker} from 'primeng/datepicker';
 import {FloatLabel} from 'primeng/floatlabel';
-import {DatePipe} from '@angular/common';
+import {CurrencyPipe, DatePipe, NgClass, UpperCasePipe} from '@angular/common';
 import {ProgressSpinner} from 'primeng/progressspinner';
+import {Button} from 'primeng/button';
+import {TableModule, TableRowSelectEvent} from 'primeng/table';
+import {AutomationAdminService} from '../../../../core/services/management-system/automation/automation-admin.service';
+import {AutomationsStore} from '../../../../core/stores/automations.store';
+import {Router, RouterLink} from '@angular/router';
+import {Tooltip} from 'primeng/tooltip';
+import {BillingService} from '../../../../core/services/management-system/billing/billing.service';
+import {OnboardingService} from '../../../../core/services/management-system/onboarding/onboarding.service';
+import {Tag} from 'primeng/tag';
+import {BillingInvoiceListItemResponse, RecentTransaction} from '../../../../core/interfaces/billing/billing.interface';
 
 @Component({
   selector: 'app-home',
@@ -20,16 +30,30 @@ import {ProgressSpinner} from 'primeng/progressspinner';
     DatePicker,
     FloatLabel,
     DatePipe,
-    ProgressSpinner
+    Button,
+    TableModule,
+    UpperCasePipe,
+    NgClass,
+    RouterLink,
+    CurrencyPipe,
+    Tooltip,
+    Tag
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
-export class Home implements OnInit{
+export class Home implements OnInit {
   userStore = inject(UserStore);
   analyticsService = inject(AnalyticsService);
   userService = inject(UserService);
   fb = inject(FormBuilder);
+  automationAdminService = inject(AutomationAdminService);
+  automationsStore = inject(AutomationsStore);
+  billingService = inject(BillingService);
+  onboardingService = inject(OnboardingService);
+  router = inject(Router);
+  balance = this.billingService.balance;
+  invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
   analyticsForm: FormGroup;
   formSubmitted: boolean = false;
   usersLoading: boolean = false;
@@ -45,10 +69,68 @@ export class Home implements OnInit{
     delay: 250,
   };
 
+  automationsLoading: boolean = false;
+  invoicesLoading: boolean = false;
+  transactions: Array<RecentTransaction> = [];
+
+  constructor() {
+    effect(() => {
+      if (this.onboardingService.onboardingStatus()) {
+        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted' && this.userStore.currentUser().role !== 'Admin')
+          this.billingService.refreshBalance();
+      }
+    });
+  }
+
   ngOnInit() {
     this.userId = this.userStore.currentUser().id
     this.initAnalyticsForm();
     this.loadInitialData();
+    this.getAutomations();
+    if (this.userStore.currentUser().role !== 'Demo') {
+      this.getInvoices();
+      if (this.userStore.currentUser().role === 'Default')
+      this.getRecentTransactions();
+    }
+  }
+
+  getAutomations(): void {
+    this.automationsLoading = true;
+    this.automationAdminService.getAutomations(1, 3).subscribe({
+      next: (x) => {
+        this.totalRecords = x.totalCount;
+        this.automationsLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading automations:', error);
+        this.automationsLoading = false;
+      }
+    })
+  }
+
+  getInvoices(): void {
+    this.invoicesLoading = true;
+    const role = this.userStore.currentUser()?.role;
+
+    const request$ = role === 'Admin'
+      ? this.billingService.getAdminInvoices({page: 1, count: 3})
+      : this.billingService.getInvoices({page: 1, count: 3});
+
+    request$.subscribe({
+      next: (response) => {
+        this.invoices.set(response.items);
+        this.invoicesLoading = false;
+      },
+      error: () => {
+        this.invoicesLoading = false;
+      }
+    });
+  }
+
+  getRecentTransactions() {
+    this.billingService.getRecentTransactions().subscribe(transactions => {
+      this.transactions = transactions;
+    });
   }
 
   loadInitialData(): void {
@@ -134,5 +216,28 @@ export class Home implements OnInit{
   onChangeUser(event: SelectChangeEvent): void {
     this.userId = event.value;
     this.getAnalytics();
+  }
+
+  getAmountClass(amount: number): string {
+    return amount >= 0 ? 'text-green-600' : 'text-red-600';
+  }
+
+  formatCurrency(value: number, currency: string = 'EUR'): string {
+    return new Intl.NumberFormat('en-IE', { style: 'currency', currency }).format(value);
+  }
+
+  getInvoiceStatusSeverity(status: string): any {
+    switch (status) {
+      case 'Cancelled': return 'danger';
+      case 'Draft': return 'secondary';
+      case 'Overdue': return 'warn';
+      case 'Issued': return 'info';
+      case 'Paid': return 'primary';
+    }
+  }
+
+  selectRow(row: TableRowSelectEvent) {
+    this.automationsStore.automation.set(row.data);
+    this.router.navigate(['/automations', row.data.id]);
   }
 }

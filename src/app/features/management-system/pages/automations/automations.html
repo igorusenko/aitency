@@ -1,5 +1,5 @@
 <div class="flex flex-col gap-4">
-  @if (automationAdminStore.automations()?.items?.length! > 0) {
+  <h1 class="text-xl text-white font-bold">Automations</h1>
     <p-table
       class="p-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
       [value]="automationAdminStore.automations()?.items!"
@@ -60,10 +60,14 @@
           }
         </tr>
       </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center p-4 text-white/50">
+            No automations found.
+          </td>
+        </tr>
+      </ng-template>
     </p-table>
-  } @else {
-    You don't have any automation yet
-  }
   @if (userStore.currentUser().role === 'Admin') {
     <button id="btn-reset" class="btn btn-ghost w-full" [routerLink]="['edit', 'new']">Create automation</button>
   }

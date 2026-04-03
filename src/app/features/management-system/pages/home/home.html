@@ -1,30 +1,10 @@
 <div class="app">
-  <!--    <header class="topbar">-->
-<!--      <div class="search">-->
-<!--        <input id="global-search" type="search" placeholder="Search: customer / automation / run-id…" autocomplete="off"/>-->
-<!--        <div id="search-results" class="search-results hidden"></div>-->
-<!--      </div>-->
-
-<!--      <div class="topbar-actions">-->
-<!--&lt;!&ndash;        <button id="btn-notifications" class="icon-btn" title="Notifications">&ndash;&gt;-->
-<!--&lt;!&ndash;          <span class="icon">🔔</span>&ndash;&gt;-->
-<!--&lt;!&ndash;          <span id="notif-badge" class="badge hidden">0</span>&ndash;&gt;-->
-<!--&lt;!&ndash;        </button>&ndash;&gt;-->
-<!--        <div class="user">-->
-<!--          <div class="avatar">AT</div>-->
-<!--          <div class="user-meta">-->
-<!--            <div class="user-name">{{userStore.currentUser().role}}</div>-->
-<!--&lt;!&ndash;            <div class="user-sub">admin@aitency.demo</div>&ndash;&gt;-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </header>-->
 
     <section id="view" class="view">
 
       <div class="flex items-center justify-between">
         <div>
-          <div class="h1">Overview</div>
+          <h1 class="text-xl text-white font-bold">Overview</h1>
           <div class="sub">Stats + integration health + recent activity (demo).</div>
         </div>
         @if (userStore.currentUser().role === 'Admin') {
@@ -106,110 +86,206 @@
           </div>
         </div>
       }
-
-      <div class="card flex flex-col justify-between">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Recent activity</div>
-            <div class="card-note">Click any row to open the log drawer</div>
+      <p class="text-sm uppercase tracking-wider opacity-80">Automations</p>
+      <div class="grid gap-4" [class.grid-cols-2]="userStore.currentUser().role !== 'Admin'">
+        <p-table
+          class=" bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
+          [value]="automationsStore.automations()?.items!"
+          [rows]="5"
+          [loading]="automationsLoading"
+          (onRowSelect)="selectRow($event)"
+          selectionMode="single"
+        >
+          <ng-template #header>
+            <tr>
+              <th pSortableColumn="id" style="width:20%">
+                <div class="flex items-center gap-2">
+                  Id
+                  <p-sortIcon field="id" />
+                </div>
+              </th>
+              <th style="width:20%">Active</th>
+              <th style="width:20%">Demo</th>
+              <th pSortableColumn="serverId" style="width:20%">
+                <div class="flex items-center gap-2">
+                  Server ID
+                  <p-sortIcon field="serverId" />
+                </div>
+              </th>
+              @if (userStore.currentUser().role === 'Admin') {
+                <th pSortableColumn="actions" style="width:20%">
+                  <div class="flex items-center gap-2">
+                    Actions
+                  </div>
+                </th>
+              }
+            </tr>
+          </ng-template>
+          <ng-template #body let-automation>
+            <tr class="cursor-pointer" [pSelectableRow]="automation">
+              <td>{{ automation.id }}</td>
+              <td class="right">
+                <span class="pill" [ngClass]="[automation.isActive ? 'good' : 'warn']">{{ (automation.isActive ? 'Active' : 'Disabled') | uppercase }}</span>
+              </td>
+              <!--          <td>{{ automation.isActive }}</td>-->
+              <td>
+                <span class="pill" [ngClass]="[automation.isDemo ? 'warn' : 'good']">{{ (automation.isDemo ? 'Demo' : 'Production') | uppercase }}</span>
+              </td>
+              <td>{{ automation.serverId }}</td>
+              @if (userStore.currentUser().role === 'Admin') {
+                <td (click)="$event.stopPropagation()">
+                  <div class="flex gap-2">
+                    <p-button [routerLink]="['edit', automation.id]">Edit</p-button>
+                    <!--              <p-button severity="danger" (click)="deleteAutomation(automation.id)">Delete</p-button>-->
+                  </div>
+                </td>
+              }
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4 text-white/50">
+                No automations found.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        @if (userStore.currentUser().role !== 'Admin') {
+          <div class="bg-indigo-900 text-white p-6 rounded-2xl flex flex-col justify-center items-center text-center relative border border-[#FFFFFF14]">
+            <p-button
+              [disabled]="!balance()"
+              (onClick)="billingService.refreshBalance()"
+              [loading]="billingService.balanceLoading()"
+              severity="secondary"
+              icon="pi pi-refresh"
+              aria-label="Refresh Balance"
+              size="small"
+              pTooltip="Refresh Balance"
+              tooltipPosition="left"
+              class="absolute top-0 right-0 p-4"
+            />
+            <span class="text-sm uppercase tracking-wider opacity-80 mb-2">Account Balance</span>
+            <div class="text-4xl font-bold mb-2">
+              @if (balance(); as b) {
+                {{ b.balance | currency:'EUR' }}
+                <p class="text-xs opacity-70">Available for billing</p>
+              } @else if(userStore.currentUser().role === 'Demo') {
+                <p class="text-sm text-red-300">
+                  Demo mode, limited functionality.
+                </p>
+              }
+              @else {
+                <p class="text-sm text-red-300">
+                  Please, complete at least the first step of the onboarding process to gain access to profile features.
+                </p>
+              }
+            </div>
           </div>
-        </div>
-
-        <table class="table">
-          <thead>
-          <tr>
-            <th style="width:170px;">Time</th>
-            <th>Source</th>
-            <th>Details</th>
-            <th class="right" style="width:120px;">Status</th>
-          </tr>
-          </thead>
-          <tbody>
-
-          <tr data-activity-id="act_2041">
-            <td>2025-12-16 11:42</td>
-            <td>AI Data Analyst Agent</td>
-            <td>NovaDent Clinic • run_2041 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2040">
-            <td>2025-12-16 11:37</td>
-            <td>AI Booking Management Agent</td>
-            <td>NovaDent Clinic • run_2040 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2039">
-            <td>2025-12-16 11:25</td>
-            <td>AI Lead Generation Automation</td>
-            <td>Street Bakers Central • run_2039 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2038">
-            <td>2025-12-16 11:18</td>
-            <td>AI Customer Support Automation</td>
-            <td>Portgate Offices • run_2038 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2037">
-            <td>2025-12-16 11:02</td>
-            <td>AI Sales Department Automation</td>
-            <td>NovaDent Clinic • run_2037 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2036">
-            <td>2025-12-16 10:54</td>
-            <td>AI Consultant Agent</td>
-            <td>MedCore Diagnostics • run_2036 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2035">
-            <td>2025-12-16 10:47</td>
-            <td>AI Marketing Department Automation</td>
-            <td>Street Bakers Central • run_2035 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2034">
-            <td>2025-12-16 10:39</td>
-            <td>AI Booking Management Agent</td>
-            <td>Skyline Business Center • run_2034 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2033">
-            <td>2025-12-16 10:31</td>
-            <td>AI Content Writer Automation</td>
-            <td>NovaDent Clinic • run_2033 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          <tr data-activity-id="act_2032">
-            <td>2025-12-16 10:22</td>
-            <td>AI Lead Generation Automation</td>
-            <td>Portgate Offices • run_2032 • Completed normally</td>
-            <td class="right"><span class="pill good">GOOD</span></td>
-
-          </tr>
-
-          </tbody>
-        </table>
+        }
       </div>
-    </section>
+      <p class="text-sm uppercase tracking-wider opacity-80">Invoices</p>
+      <p-table
+        [value]="invoices()"
+        [rows]="3"
+        [loading]="invoicesLoading"
+        class="bg-[#1018278c] px-4 rounded-2xl border border-[#FFFFFF14]"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Invoice#</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+<!--            <th>Actions</th>-->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tr>
+          <tr>
+            <td>{{ tr.invoiceNumber }}</td>
+            <td>{{ tr.dateIssued | date }}</td>
+            <td>{{ tr.dueDate | date }}</td>
+            <td [ngClass]="getAmountClass(tr.total)">
+              {{ formatCurrency(tr.total, tr.currency) }}
+            </td>
+            <td>
+              <p-tag [value]="tr.status" [severity]="getInvoiceStatusSeverity(tr.status)"></p-tag>
+            </td>
+<!--            <td class="font-medium">-->
+<!--              <div class="flex gap-2">-->
+<!--                <p-button (onClick)="viewInvoice(tr)" label="View" severity="primary" size="small"/>-->
+<!--                <p-button label="Pdf" severity="info" size="small"/>-->
+<!--                @if ((tr.status === 'Issued' || tr.status === 'Overdue') && tr.type !== 'CreditNote') {-->
+<!--                  <p-button label="Pay" severity="success" size="small" (onClick)="payInvoice(tr)"/>-->
+<!--                }-->
+<!--                @if (userStore.currentUser().role === 'Admin') {-->
+<!--                  @if (tr.status === 'Draft') {-->
+<!--                    <p-button label="Release" severity="primary" size="small" (onClick)="releaseInvoice(tr.id)"/>-->
+<!--                  } @else if (tr.status !== 'Cancelled') {-->
+<!--                    <p-button label="Cancel" severity="danger" size="small" (onClick)="cancelInvoice(tr.id)"/>-->
+<!--                  }-->
+<!--                }-->
+<!--              </div>-->
+<!--            </td>-->
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="6" class="text-center p-4 text-white/50">
+              @if(userStore.currentUser().role === 'Demo') {
+                <p class="text-sm text-red-300">
+                  Demo mode, limited functionality.
+                </p>
+              }
+              @else {
+                No invoices found.
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      @if (userStore.currentUser().role === 'Default') {
+        <p class="text-sm uppercase tracking-wider opacity-80">Recent Transactions</p>
+        <p-table [value]="transactions" class="px-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Balance After</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-tr>
+            <tr>
+              <td>{{ tr.date }}</td>
+              <td>{{ tr.description }}</td>
+              <td>
+                <p-tag [value]="tr.type" [severity]="tr.status"></p-tag>
+              </td>
+              <td [ngClass]="getAmountClass(tr.amount)">
+                {{ (tr.amount >= 0 ? '+' : '') + formatCurrency(tr.amount) }}
+              </td>
+              <td class="font-medium">{{ formatCurrency(tr.balanceAfter) }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4 text-white/50">
+                @if(userStore.currentUser().role === 'Demo') {
+                  <p class="text-sm text-red-300">
+                    Demo mode, limited functionality.
+                  </p>
+                }
+                @else {
+                  No transactions found.
+                }
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      }
+      </section>
 </div>
 
 <div id="drawer" class="drawer hidden" aria-hidden="true">
