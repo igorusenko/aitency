@@ -30,7 +30,7 @@ export class CancelSubscriptionDialog {
   ref = inject(DynamicDialogRef);
   config = inject(DynamicDialogConfig);
 
-  subscription: BillingSubscriptionResponse | null = this.config.data?.subscription || null;
+  subscription: BillingSubscriptionResponse | null = this.config.data || null;
 
   form: FormGroup = this.fb.group({
     reason: [''],

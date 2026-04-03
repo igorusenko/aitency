@@ -87,7 +87,7 @@
         </div>
       }
       <p class="text-sm uppercase tracking-wider opacity-80">Automations</p>
-      <div class="grid gap-4" [class.grid-cols-2]="userStore.currentUser().role !== 'Admin'">
+      <div class="flex flex-col sm:grid gap-4" [ngClass]="{'sm:grid-cols-2': userStore.currentUser().role !== 'Admin'}" [class.grid-cols-2]="">
         <p-table
           class=" bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
           [value]="automationsStore.automations()?.items!"
@@ -98,22 +98,22 @@
         >
           <ng-template #header>
             <tr>
-              <th pSortableColumn="id" style="width:20%">
+              <th pSortableColumn="id">
                 <div class="flex items-center gap-2">
                   Id
                   <p-sortIcon field="id" />
                 </div>
               </th>
-              <th style="width:20%">Active</th>
-              <th style="width:20%">Demo</th>
-              <th pSortableColumn="serverId" style="width:20%">
+              <th>Active</th>
+              <th>Demo</th>
+              <th pSortableColumn="serverId">
                 <div class="flex items-center gap-2">
                   Server ID
                   <p-sortIcon field="serverId" />
                 </div>
               </th>
               @if (userStore.currentUser().role === 'Admin') {
-                <th pSortableColumn="actions" style="width:20%">
+                <th pSortableColumn="actions">
                   <div class="flex items-center gap-2">
                     Actions
                   </div>

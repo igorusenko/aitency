@@ -55,10 +55,9 @@ export class CreateEditPlan implements OnInit {
   formSubmitted = signal(false);
 
   billingCycleOptions = [
-    { label: 'Daily', value: BillingPlanInterval.Daily },
-    { label: 'Weekly', value: BillingPlanInterval.Weekly },
     { label: 'Monthly', value: BillingPlanInterval.Monthly },
-    { label: 'Yearly', value: BillingPlanInterval.Yearly }
+    { label: 'Quarterly', value: BillingPlanInterval.Quarterly },
+    { label: 'Annual', value: BillingPlanInterval.Annual },
   ];
 
   ngOnInit(): void {

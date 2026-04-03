@@ -1,53 +1,74 @@
 <div class="flex flex-col gap-4">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-2xl font-bold">Subscriptions</h1>
-    <p-button label="Create Subscription" icon="pi pi-plus" (onClick)="openCreateDialog()"></p-button>
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold text-white">Subscriptions</h1>
+    <p-button
+      label="Create Subscription"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    ></p-button>
   </div>
 
-  <p-table
-    [value]="subscriptions()"
-    [loading]="loading()"
-    [paginator]="true"
-    [rows]="10"
-    [rowHover]="true"
-    class="p-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>Plan Name</th>
-        <th>Status</th>
-        <th>Price</th>
-        <th>Start Date</th>
-        <th>Renewal Date</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-subscription>
-      <tr>
-        <td>{{ subscription.planName }}</td>
-        <td>
-          <p-tag [value]="subscription.status" [severity]="getStatusSeverity(subscription.status)"></p-tag>
-        </td>
-        <td>{{ subscription.planPrice | currency: 'EUR' }}</td>
-        <td>{{ subscription.startDate | date }}</td>
-        <td>{{ subscription.nextRenewalDate | date }}</td>
-        <td>
-          <div class="flex gap-2">
-            @if (subscription.status === 'Active') {
-              <p-button label="Upgrade" icon="pi pi-arrow-up" severity="info" size="small" (onClick)="openUpgradeDialog(subscription)"></p-button>
-            }
-            @if (subscription.status !== 'Canceled') {
-              <p-button label="Cancel" icon="pi pi-times" severity="danger" size="small" (onClick)="openCancelDialog(subscription)"></p-button>
-            }
+  <div class="grid gap-5 grid-cols-3">
+    @for (subscription of subscriptions(); track subscription.id) {
+      <div class="rounded-2xl border border-white/10 bg-[#1018278c] p-5 shadow-lg backdrop-blur-sm">
+        <div class="mb-4">
+          <div class="mb-1 text-base font-semibold text-white">
+            {{ subscription.planName }}
           </div>
-        </td>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="emptymessage">
-      <tr>
-        <td colspan="6" class="text-center p-4">
-          No subscriptions found.
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+          <div class="text-3xl font-bold text-green-400">
+            {{ subscription.planPrice | currency: 'EUR' }}
+            <span class="ml-1 text-base font-normal text-white/70">/ month</span>
+          </div>
+          <div class="mt-1 text-xs text-white/50">Billed monthly</div>
+        </div>
+
+        <div class="my-4 border-t border-white/10"></div>
+
+        <div class="space-y-3 text-sm text-white/70">
+          <div class="flex items-center justify-between gap-3">
+            <span>Status:</span>
+            <p-tag
+              [value]="subscription.status"
+              [severity]="getStatusSeverity(subscription.status)">
+            </p-tag>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <span>Started:</span>
+            <span class="text-white">{{ subscription.startDate | date }}</span>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <span>Next Renewal:</span>
+            <span class="text-white">{{ subscription.nextRenewalDate | date }}</span>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-2">
+          @if (subscription.status === 'Active') {
+            <p-button
+              label="Upgrade"
+              icon="pi pi-arrow-up"
+              severity="info"
+              styleClass="w-full"
+              (onClick)="openUpgradeDialog(subscription)">
+            </p-button>
+          }
+          @if (subscription.status !== 'Canceled') {
+            <p-button
+              label="Cancel"
+              icon="pi pi-times"
+              severity="danger"
+              styleClass="w-full"
+              (onClick)="openCancelDialog(subscription)">
+            </p-button>
+          }
+        </div>
+      </div>
+    } @empty {
+      <div class="col-span-full rounded-2xl border border-white/10 bg-[#1018278c] p-4 text-center text-white/70">
+        No subscriptions found.
+      </div>
+    }
+  </div>
 </div>

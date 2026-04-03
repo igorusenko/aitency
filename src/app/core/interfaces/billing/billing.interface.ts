@@ -45,10 +45,9 @@ export enum BillingInvoiceLineType {
 }
 
 export enum BillingPlanInterval {
-  Daily = 'Daily',
-  Weekly = 'Weekly',
   Monthly = 'Monthly',
-  Yearly = 'Yearly'
+  Quarterly = 'Quarterly',
+  Annual = 'Annual'
 }
 
 export type CurrencyCode = string; // Или можно расширить до конкретных кодов, если нужно
@@ -248,10 +247,10 @@ export interface BillingSubscriptionResponse {
   status: BillingSubscriptionStatus;
   startDate: string;
   endDate: string | null;
-  renewalDate: string | null;
+  nextRenewalDate: string | null;
   currentPeriodStart: string;
   currentPeriodEnd: string;
-  price: number;
+  planPrice: number;
   currency: string;
   createdAt: string;
   updatedAt: string;
@@ -262,7 +261,7 @@ export interface CreateBillingSubscriptionRequest {
 }
 
 export interface UpgradeBillingSubscriptionRequest {
-  planId: string;
+  newPlanId: string;
 }
 
 export interface CancelBillingSubscriptionRequest {

@@ -160,7 +160,7 @@ export class BillingService {
   }
 
   cancelSubscription(subscriptionId: string, request: CancelBillingSubscriptionRequest): Observable<BillingSubscriptionResponse> {
-    return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/cancel`, request);
+    return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/cancel`, {mode: 'Immediate'});
   }
 
   getProfile(): Observable<IClient> {

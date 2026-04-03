@@ -122,14 +122,15 @@ export class Subscriptions implements OnInit {
   }
 
   onSubscriptionCanceled(subscription: BillingSubscriptionResponse): void {
-    const index = this.subscriptions().findIndex(s => s.id === subscription.id);
-    if (index >= 0) {
-      this.subscriptions.update(subs => {
-        const newSubs = [...subs];
-        newSubs[index] = subscription;
-        return newSubs;
-      });
-    }
+    // const index = this.subscriptions().findIndex(s => s.id === subscription.id);
+    // if (index >= 0) {
+    //   this.subscriptions.update(subs => {
+    //     const newSubs = [...subs];
+    //     newSubs[index] = subscription;
+    //     return newSubs;
+    //   });
+    // }
+    this.loadSubscriptions();
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Subscription canceled successfully' });
   }
 

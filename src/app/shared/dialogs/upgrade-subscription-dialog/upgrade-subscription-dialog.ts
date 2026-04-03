@@ -31,10 +31,10 @@ export class UpgradeSubscriptionDialog implements OnInit {
   ref = inject(DynamicDialogRef);
   config = inject(DynamicDialogConfig);
 
-  subscription: BillingSubscriptionResponse | null = this.config.data?.subscription || null;
+  subscription: BillingSubscriptionResponse | null = this.config.data || null;
 
   form: FormGroup = this.fb.group({
-    planId: ['', Validators.required],
+    newPlanId: ['', Validators.required],
   });
 
   formSubmitted = signal(false);
@@ -54,7 +54,6 @@ export class UpgradeSubscriptionDialog implements OnInit {
     planObservable.subscribe({
       next: (plans) => {
         this.plans.set(plans);
-        // Filter out the current plan
         const currentPlanId = this.subscription?.planId;
         this.planOptions.set(
           plans
