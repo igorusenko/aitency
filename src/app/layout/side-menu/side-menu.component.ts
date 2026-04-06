@@ -62,41 +62,49 @@ export class SideMenuComponent implements OnInit {
         {
           path: 'billing/overview',
           title: 'Overview',
+          icon: 'pi-chart-bar',
           roles: ['Default', /*'Demo'*/]
         },
         {
           path: 'billing/invoices',
           title: 'Invoices',
+          icon: 'pi-file',
           roles: ['Default', 'Admin', 'Demo']
         },
         {
           path: 'billing/payments',
           title: 'Payments',
+          icon: 'pi-credit-card',
           roles: ['Default', 'Admin', 'Demo']
         },
         {
           path: 'billing/subscriptions',
           title: 'Subscriptions',
+          icon: 'pi-calendar',
           roles: ['Default', 'Demo']
         },
         {
           path: 'billing/plans',
           title: 'Plans',
+          icon: 'pi-briefcase',
           roles: ['Admin']
         },
         {
           path: 'billing/usage',
           title: 'Usage',
+          icon: 'pi-chart-line',
           roles: ['Default', 'Admin', 'Demo']
         },
         {
           path: 'billing/coupons',
           title: 'Coupons',
+          icon: 'pi-ticket',
           roles: ['Admin']
         },
         {
           path: 'billing/settings',
           title: 'Settings',
+          icon: 'pi-cog',
           roles: ['Default', 'Demo']
         }
       ]

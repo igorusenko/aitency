@@ -44,7 +44,7 @@ export class BillingOverview implements OnInit {
 
   getRecentTransactions() {
     this.billingService.getRecentTransactions().subscribe(transactions => {
-      this.transactions = transactions;
+      this.transactions = transactions.items;
     });
   }
 

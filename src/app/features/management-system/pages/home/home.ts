@@ -87,7 +87,7 @@ export class Home implements OnInit {
     this.initAnalyticsForm();
     this.loadInitialData();
     this.getAutomations();
-    if (this.userStore.currentUser().role !== 'Demo') {
+    if (this.userStore.currentUser().role !== 'Demo' && this.userStore.onboarding()?.step) {
       this.getInvoices();
       if (this.userStore.currentUser().role === 'Default')
       this.getRecentTransactions();
@@ -129,7 +129,7 @@ export class Home implements OnInit {
 
   getRecentTransactions() {
     this.billingService.getRecentTransactions().subscribe(transactions => {
-      this.transactions = transactions;
+      this.transactions = transactions.items;
     });
   }
 
@@ -174,7 +174,6 @@ export class Home implements OnInit {
 
   onDateChange(): void {
     this.analyticsForm.get('dateRange')?.valueChanges.subscribe(dateRange => {
-      console.log(dateRange)
       if (dateRange && dateRange[0] && dateRange[1]) {
         const from = new Date(dateRange[0]);
         from.setHours(23, 59, 59, 999);

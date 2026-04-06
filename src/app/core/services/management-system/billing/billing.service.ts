@@ -174,7 +174,7 @@ export class BillingService {
     return this.http.put(`${this.apiUrl}/client/me`, clientData);
   }
 
-  getRecentTransactions(): Observable<Array<RecentTransaction>> {
-    return this.http.get<Array<RecentTransaction>>(`${this.apiUrl}/recent-transactions`);
+  getRecentTransactions(): Observable<IPaginatedList<RecentTransaction>> {
+    return this.http.get<IPaginatedList<RecentTransaction>>(`${this.apiUrl}/recent-transactions`);
   }
 }

@@ -21,7 +21,7 @@
           appendTo="body"
           class="w-full"
         ></p-date-picker>
-        <label for="over_label">Date from</label>
+        <label for="over_label">Issue Date from</label>
       </p-floatlabel>
     </div>
     <div class="flex flex-col gap-1 min-w-48">
@@ -35,7 +35,7 @@
           appendTo="body"
           class="w-full"
         ></p-date-picker>
-        <label for="over_label">Date to</label>
+        <label for="over_label">Issue Date to</label>
       </p-floatlabel>
     </div>
     <app-input-text
@@ -85,14 +85,14 @@
         <td class="font-medium">
           <div class="flex gap-2">
             <p-button (onClick)="viewInvoice(tr)" label="View" severity="primary" size="small"/>
-            <p-button label="Pdf" severity="info" size="small"/>
+            <p-button [disabled]="true" label="Pdf" severity="info" size="small"/>
             @if ((tr.status === 'Issued' || tr.status === 'Overdue') && tr.type !== 'CreditNote') {
               <p-button label="Pay" severity="success" size="small" (onClick)="payInvoice(tr)"/>
             }
             @if (userStore.currentUser().role === 'Admin') {
               @if (tr.status === 'Draft') {
                 <p-button label="Release" severity="primary" size="small" (onClick)="releaseInvoice(tr.id)"/>
-              } @else if (tr.status !== 'Cancelled') {
+              } @else if (tr.status !== 'Cancelled' && tr.type !== 'CreditNote') {
                 <p-button label="Cancel" severity="danger" size="small" (onClick)="cancelInvoice(tr.id)"/>
               }
             }

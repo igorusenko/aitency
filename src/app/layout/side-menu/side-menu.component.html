@@ -6,15 +6,26 @@
       <div class="flex flex-col items-center gap-4">
 
         <p class="text-[11px] text-[#4a1fb8]">AITENCY</p>
-
-        <p-button class="pb-4" icon="pi pi-user" size="small" pTooltip="Onboarding" [routerLink]="['/onboarding']" />
+        @if (userStore.currentUser().role !== 'Demo') {
+          @if (onboardingService.onboardingStatus()?.status !== 'Completed') {
+            <p-button class="pb-4" icon="pi pi-user" size="small" pTooltip="Onboarding" [routerLink]="['/onboarding']" />
+          }
+        }
 
         @if (userStore.currentUser().role === 'Demo') {
           <p-button icon="pi pi-user-plus" aria-label="Save" size="small" pTooltip="Register new account" />
         }
 
         @for (item of filteredItems(); track item) {
+          @if (item['path'] !== 'billing') {
             <p-button [icon]="'pi ' + item.icon" size="small" [pTooltip]="item.title" [routerLink]="[item['path']]" [ngClass]="{'active-button': isItemActive(item)}" />
+          }
+
+          @if (item['path'] === 'billing' && onboardingService.onboardingStatus()?.status !== 'NotStarted' && item.items?.length) {
+            @for (subItem of item.items; track subItem) {
+              <p-button [icon]="'pi ' + subItem.icon" size="small" [pTooltip]="subItem.title" [routerLink]="[subItem['path']]" [ngClass]="{'active-button': isItemActive(subItem)}" />
+            }
+          }
         }
       </div>
       <div class="flex flex-col gap-4">

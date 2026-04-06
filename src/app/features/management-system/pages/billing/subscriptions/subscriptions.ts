@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import { BillingService } from '../../../../../core/services/management-system/billing/billing.service';
 import {
+  BillingPlanResponse,
   BillingSubscriptionResponse,
   BillingSubscriptionStatus
 } from '../../../../../core/interfaces/billing/billing.interface';
@@ -37,11 +38,28 @@ export class Subscriptions implements OnInit {
   dialogService = inject(DialogService);
   ref: DynamicDialogRef | null;
 
+  plans: WritableSignal<BillingPlanResponse[]> = signal([]);
   subscriptions: WritableSignal<BillingSubscriptionResponse[]> = signal([]);
   loading: WritableSignal<boolean> = signal(false);
+  plansLoading: WritableSignal<boolean> = signal(false);
 
   ngOnInit(): void {
+    this.loadPlans();
     this.loadSubscriptions();
+  }
+
+  loadPlans(): void {
+    this.plansLoading.set(true);
+    this.billingService.getPlans().subscribe({
+      next: (plans) => {
+        this.plans.set(plans);
+        this.plansLoading.set(false);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load plans' });
+        this.plansLoading.set(false);
+      }
+    });
   }
 
   loadSubscriptions(): void {
@@ -54,6 +72,17 @@ export class Subscriptions implements OnInit {
       error: () => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to load subscriptions' });
         this.loading.set(false);
+      }
+    });
+  }
+
+  subscribeToPlan(planId: string): void {
+    this.billingService.createSubscription({ planId }).subscribe({
+      next: (subscription) => {
+        this.onSubscriptionCreated(subscription);
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to subscribe to plan' });
       }
     });
   }
@@ -149,5 +178,9 @@ export class Subscriptions implements OnInit {
       default:
         return 'secondary';
     }
+  }
+
+  isAlreadySubscribed(planId: string): boolean {
+    return this.subscriptions().some(s => s.planId === planId);
   }
 }

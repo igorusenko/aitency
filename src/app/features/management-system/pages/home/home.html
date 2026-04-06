@@ -112,13 +112,6 @@
                   <p-sortIcon field="serverId" />
                 </div>
               </th>
-              @if (userStore.currentUser().role === 'Admin') {
-                <th pSortableColumn="actions">
-                  <div class="flex items-center gap-2">
-                    Actions
-                  </div>
-                </th>
-              }
             </tr>
           </ng-template>
           <ng-template #body let-automation>
@@ -132,14 +125,6 @@
                 <span class="pill" [ngClass]="[automation.isDemo ? 'warn' : 'good']">{{ (automation.isDemo ? 'Demo' : 'Production') | uppercase }}</span>
               </td>
               <td>{{ automation.serverId }}</td>
-              @if (userStore.currentUser().role === 'Admin') {
-                <td (click)="$event.stopPropagation()">
-                  <div class="flex gap-2">
-                    <p-button [routerLink]="['edit', automation.id]">Edit</p-button>
-                    <!--              <p-button severity="danger" (click)="deleteAutomation(automation.id)">Delete</p-button>-->
-                  </div>
-                </td>
-              }
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
