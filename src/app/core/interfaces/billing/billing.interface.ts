@@ -217,9 +217,10 @@ export interface BillingPlanResponse {
   billingCycle: BillingPlanInterval;
   description: string;
   currency: string;
+  isActive: boolean,
+  usageRates: Array<BillingPlanUsageRate>;
   createdAt: string;
   updatedAt: string;
-  isActive: boolean,
 }
 
 export interface CreateBillingPlanRequest {
@@ -228,6 +229,8 @@ export interface CreateBillingPlanRequest {
   price: number;
   billingCycle: BillingPlanInterval;
   description: string;
+  isActive?: boolean;
+  usageRates: Array<BillingPlanUsageRate>;
   currency: string;
 }
 
@@ -237,7 +240,19 @@ export interface UpdateBillingPlanRequest {
   price?: number;
   billingCycle?: BillingPlanInterval;
   description?: string;
+  isActive?: boolean;
+  usageRates: Array<BillingPlanUsageRate>;
   currency?: string;
+}
+
+export interface BillingPlanUsageRate {
+  id: string,
+  "metricName": string,
+  "includedUnits": number,
+  "ratePerUnit": number,
+  "periodType": string,
+  "createdAt": string;
+  "updatedAt": string;
 }
 
 export interface BillingSubscriptionResponse {

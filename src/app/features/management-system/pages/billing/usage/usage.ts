@@ -1,38 +1,102 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import {CommonModule, DatePipe} from '@angular/common';
+import {Component, inject, OnInit} from '@angular/core';
 import { TableModule } from 'primeng/table';
+import {UsageService} from '../../../../../core/services/management-system/billing/usage/usage.service';
+import {ChartModule, UIChart} from 'primeng/chart';
 
 @Component({
   selector: 'app-usage',
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, UIChart, ChartModule],
+  providers: [DatePipe],
   templateUrl: './usage.html',
   styleUrl: './usage.scss'
 })
-export class Usage {
-  summaryCards = [
-    { label: 'Current Period', value: 'Mar 1–31', detail: '9 days remaining' },
-    { label: 'Total Usage', value: '45,231', detail: 'API calls used' },
-    { label: 'Current Period Cost', value: '€904.62', detail: '@ €0.02 per call' }
-  ];
+export class Usage implements OnInit {
+  usageService = inject(UsageService);
+  datePipe = inject(DatePipe);
+  chartData: any;
+  chartOptions: any;
 
-  usageTrend = [
-    { label: 'Mar 3', height: '45%' },
-    { label: 'Mar 4', height: '72%' },
-    { label: 'Mar 5', height: '85%' },
-    { label: 'Mar 6', height: '60%' },
-    { label: 'Mar 7', height: '90%' },
-    { label: 'Mar 8', height: '78%' },
-    { label: 'Mar 9', height: '55%' }
-  ];
+  ngOnInit() {
+    this.initializeUsageData();
+  }
 
-  usageDetails = [
-    { date: 'Mar 9, 2026', metric: 'API Calls (Usage-Based API)', quantity: '6,450', unitPrice: '€0.02', total: '€129.00' },
-    { date: 'Mar 8, 2026', metric: 'API Calls (Usage-Based API)', quantity: '8,231', unitPrice: '€0.02', total: '€164.62' },
-    { date: 'Mar 7, 2026', metric: 'API Calls (Usage-Based API)', quantity: '9,450', unitPrice: '€0.02', total: '€189.00' },
-    { date: 'Mar 6, 2026', metric: 'API Calls (Usage-Based API)', quantity: '7,200', unitPrice: '€0.02', total: '€144.00' },
-    { date: 'Mar 5, 2026', metric: 'API Calls (Usage-Based API)', quantity: '8,900', unitPrice: '€0.02', total: '€178.00' },
-    { date: 'Mar 4, 2026', metric: 'API Calls (Usage-Based API)', quantity: '3,200', unitPrice: '€0.02', total: '€64.00' },
-    { date: 'Mar 3, 2026', metric: 'API Calls (Usage-Based API)', quantity: '1,800', unitPrice: '€0.02', total: '€36.00' }
-  ];
+  initializeUsageData(): void {
+    this.usageService.getUsageOverview().subscribe();
+    this.usageService.getUsageSummary().subscribe();
+    this.getUsageTrends();
+    this.getUsageDetails();
+  }
+
+  getUsageTrends(): void {
+    this.usageService.getUsageTrends(7).subscribe(trends => {
+      this.initChart();
+    });
+  }
+
+  initChart(): void {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const textColor = documentStyle.getPropertyValue('--p-text-color');
+    const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
+    const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
+    const chartLabels = this.usageService.usageTrends()?.map(trend => this.datePipe.transform(trend.date, 'MMM d'))
+    const priceData = this.usageService.usageTrends()?.map(trend => trend.cost)
+    const tokensData = this.usageService.usageTrends()?.map(trend => trend.quantity)
+
+    this.chartData = {
+      labels: chartLabels || [],
+      datasets: [
+        {
+          label: 'Tokens spent',
+          data: tokensData,
+          backgroundColor: ['rgba(249, 115, 22, 0.2)'],
+          borderColor: ['rgb(249, 115, 22)'],
+          borderWidth: 1
+        },
+        {
+          label: 'Price €',
+          data: priceData,
+          backgroundColor: ['rgba(22,249,207,0.2)'],
+          borderColor: ['rgb(22, 249, 207)'],
+          borderWidth: 1
+        }
+      ]
+    };
+    // 'rgba(22,249,207,0.29)'
+    this.chartOptions = {
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary,
+            font: {
+              weight: 500
+            }
+          }
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false
+          }
+        }
+      }
+    };
+  }
+
+  getUsageDetails(): void {
+    this.usageService.getUsageDetails(1, 10, 'date', 'desc').subscribe();
+  }
 }

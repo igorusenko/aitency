@@ -102,7 +102,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
 
   private resolveWsUrl(): string {
-    return `${this.REMOTE_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
+    return `${this.LOCAL_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
   }
 
   private resolveSessionId(): string {

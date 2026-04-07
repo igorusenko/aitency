@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Button } from 'primeng/button';
 import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextComponent } from '../../input-text/input-text';
@@ -13,9 +13,10 @@ import {
   BillingPlanResponse,
   CreateBillingPlanRequest,
   UpdateBillingPlanRequest,
-  BillingPlanInterval
+  BillingPlanInterval, BillingInvoiceLineType, BillingPaymentMethodType
 } from '../../../core/interfaces/billing/billing.interface';
 import {Checkbox} from '../../checkbox/checkbox';
+import {UsageRateTypes} from '../../../core/interfaces/billing/usage/usage.interface';
 
 @Component({
   selector: 'app-create-edit-plan',
@@ -48,6 +49,7 @@ export class CreateEditPlan implements OnInit {
     price: [0, [Validators.required, Validators.min(0)]],
     billingCycle: [BillingPlanInterval.Monthly, Validators.required],
     description: ['', Validators.required],
+    usageRates: this.fb.array([]),
     currency: ['EUR', Validators.required],
     isActive: [true, Validators.required],
   });
@@ -58,6 +60,12 @@ export class CreateEditPlan implements OnInit {
     { label: 'Monthly', value: BillingPlanInterval.Monthly },
     { label: 'Quarterly', value: BillingPlanInterval.Quarterly },
     { label: 'Annual', value: BillingPlanInterval.Annual },
+  ];
+
+  usageRatePeriods = [
+    { label: 'Daily', value: UsageRateTypes.Daily },
+    { label: 'Weekly', value: UsageRateTypes.Weekly },
+    { label: 'Monthly', value: UsageRateTypes.Monthly },
   ];
 
   ngOnInit(): void {
@@ -75,6 +83,8 @@ export class CreateEditPlan implements OnInit {
         billingCycle: this.plan.billingCycle,
         isActive: this.plan.isActive,
       });
+      if (this.plan.usageRates.length === 0)
+        this.addUsageRate();
     } else {
       this.form.reset({
         name: '',
@@ -85,13 +95,13 @@ export class CreateEditPlan implements OnInit {
         billingCycle: BillingPlanInterval.Monthly,
         isActive: true,
       });
+      this.addUsageRate();
     }
   }
 
   save(): void {
     this.formSubmitted.set(true);
     if (this.form.invalid) return;
-
     if (this.plan) {
       this.updatePlan(this.plan.id);
     } else {
@@ -129,5 +139,29 @@ export class CreateEditPlan implements OnInit {
     this.ref.close();
     this.form.reset();
     this.formSubmitted.set(false);
+  }
+
+  get usageRates(): FormArray {
+    return this.form.get('usageRates') as FormArray;
+  }
+
+  getUsageRateForm(index: number): FormGroup {
+    return this.usageRates.at(index) as FormGroup;
+  }
+
+  addUsageRate(): void {
+    const usageRateGroup = this.fb.group({
+      metricName: ['', Validators.required],
+      includedUnits: [0, Validators.required],
+      ratePerUnit: [0, Validators.required],
+      periodType: [UsageRateTypes.Daily, Validators.required],
+    });
+    this.usageRates.push(usageRateGroup);
+  }
+
+  removeUsageRate(index: number): void {
+    if (this.usageRates.length > 1) {
+      this.usageRates.removeAt(index);
+    }
   }
 }
