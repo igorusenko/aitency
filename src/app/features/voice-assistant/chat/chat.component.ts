@@ -102,7 +102,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   }
 
   private resolveWsUrl(): string {
-    return `${this.LOCAL_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
+    return `${this.REMOTE_WS_URL}?automationId=${this.route.snapshot.params['id']}`;
   }
 
   private resolveSessionId(): string {
@@ -261,6 +261,19 @@ export class ChatComponent implements OnInit, OnDestroy{
                 severity: 'error',
                 summary: 'Error',
                 detail: 'You have reached the limit of using automation',
+                life: 3000
+              });
+              this.limitExceeded = true;
+              this.isRecording = false;
+              // this.stopAllPlayback();
+              this.ws.close();
+            }
+
+            if (msg.type === 'billing.usage_blocked') {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Usage has exceeded the plan limits and the balance is below zero / No active subscription',
                 life: 3000
               });
               this.limitExceeded = true;

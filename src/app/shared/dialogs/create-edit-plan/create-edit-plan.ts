@@ -83,8 +83,21 @@ export class CreateEditPlan implements OnInit {
         billingCycle: this.plan.billingCycle,
         isActive: this.plan.isActive,
       });
-      if (this.plan.usageRates.length === 0)
+      // Заполняем usageRates из плана, если они есть, иначе добавляем пустую запись
+      this.usageRates.clear();
+      if (Array.isArray(this.plan.usageRates) && this.plan.usageRates.length > 0) {
+        this.plan.usageRates.forEach((rate) => {
+          this.usageRates.push(this.createUsageRateGroup({
+            metricName: rate.metricName,
+            includedUnits: rate.includedUnits,
+            ratePerUnit: rate.ratePerUnit,
+            // periodType в интерфейсе — строка; приводим к нашему enum при совпадении
+            periodType: (rate.periodType as UsageRateTypes) ?? UsageRateTypes.Daily,
+          }));
+        });
+      } else {
         this.addUsageRate();
+      }
     } else {
       this.form.reset({
         name: '',
@@ -150,18 +163,21 @@ export class CreateEditPlan implements OnInit {
   }
 
   addUsageRate(): void {
-    const usageRateGroup = this.fb.group({
-      metricName: ['', Validators.required],
-      includedUnits: [0, Validators.required],
-      ratePerUnit: [0, Validators.required],
-      periodType: [UsageRateTypes.Daily, Validators.required],
-    });
-    this.usageRates.push(usageRateGroup);
+    this.usageRates.push(this.createUsageRateGroup());
   }
 
   removeUsageRate(index: number): void {
     if (this.usageRates.length > 1) {
       this.usageRates.removeAt(index);
     }
+  }
+
+  private createUsageRateGroup(init?: Partial<{ metricName: string; includedUnits: number; ratePerUnit: number; periodType: UsageRateTypes }>): FormGroup {
+    return this.fb.group({
+      metricName: [init?.metricName ?? '', Validators.required],
+      includedUnits: [init?.includedUnits ?? 0, Validators.required],
+      ratePerUnit: [init?.ratePerUnit ?? 0, Validators.required],
+      periodType: [init?.periodType ?? UsageRateTypes.Daily, Validators.required],
+    });
   }
 }
