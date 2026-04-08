@@ -4,7 +4,7 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import {provideRouter, Router} from '@angular/router';
 import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
@@ -38,11 +38,15 @@ export const appConfig: ApplicationConfig = {
       const csrfService = inject(CsrfService);
       const userService = inject(UserService);
       const authService = inject(AuthService);
+      const router = inject(Router);
       return csrfService.loadCsrfToken()
         .pipe(
           concatMap(() => authService.validateAccessToken()),
           concatMap(() => userService.getCurrentUser()),
-          catchError(( ) => of(null))
+          catchError(( ) => {
+            router.navigate(['/login']);
+            return of(null);
+          })
         )
     })
   ]
