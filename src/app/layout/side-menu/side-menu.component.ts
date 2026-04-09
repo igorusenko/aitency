@@ -63,7 +63,7 @@ export class SideMenuComponent implements OnInit {
           path: 'billing/overview',
           title: 'Overview',
           icon: 'pi-chart-bar',
-          roles: ['Default', /*'Demo'*/]
+          roles: ['Default']
         },
         {
           path: 'billing/invoices',
