@@ -11,6 +11,7 @@ import {Tooltip} from 'primeng/tooltip';
 import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {RecentTransaction} from '../../../../../core/interfaces/billing/billing.interface';
+import {UsageService} from '../../../../../core/services/management-system/billing/usage/usage.service';
 
 @Component({
   selector: 'app-overview',
@@ -23,10 +24,12 @@ import {RecentTransaction} from '../../../../../core/interfaces/billing/billing.
 export class BillingOverview implements OnInit {
   billingService = inject(BillingService);
   onboardingService = inject(OnboardingService);
+  usageService = inject(UsageService);
   userStore = inject(UserStore);
   dialogService = inject(DialogService);
   balance = this.billingService.balance;
   topUpDialogRef: DynamicDialogRef | null = null;
+  dashboardCards: Array<{ title: string; value: string; subtitle: string }> = [];
 
   constructor() {
     effect(() => {
@@ -40,6 +43,14 @@ export class BillingOverview implements OnInit {
   ngOnInit() {
     this.billingService.getProfile().subscribe(client => {})
     this.getRecentTransactions();
+    this.usageService.getUsageOverview().subscribe(() => {
+      this.dashboardCards = [
+        { title: 'Active Subscriptions', value: this.usageService.usageOverview()?.activeSubscriptionsCount.toString() || '', subtitle: this.usageService.usageOverview()?.activeSubscriptionNames.join(', ') || '' },
+        { title: 'Outstanding Invoices', value: this.usageService.usageOverview()?.outstandingInvoicesCount.toString() || '', subtitle: '' },
+        { title: "This Month's Usage", value: `€${this.usageService.usageOverview()?.thisMonthUsage || 0}`, subtitle: 'API calls and custom work' },
+        { title: 'Last Payment', value: this.usageService.usageOverview()?.lastPayment.dateLabel || '', subtitle: `€${this.usageService.usageOverview()?.lastPayment.amount} via ${this.usageService.usageOverview()?.lastPayment.method}` }
+      ];
+    });
   }
 
   getRecentTransactions() {
@@ -48,29 +59,14 @@ export class BillingOverview implements OnInit {
     });
   }
 
-  clientInfo = {
-    companyName: 'TechFlow Solutions Ltd',
-    vatNumber: 'EL999999999',
-    email: 'billing@techflow.gr',
-    location: 'Athens, Greece',
-    joined: 'Jan 15, 2024'
-  };
-
   accountBalance = 2450.00;
-
-  dashboardCards = [
-    { title: 'Active Subscriptions', value: '2', subtitle: 'AI Automation Pro + API Usage' },
-    { title: 'Outstanding Invoices', value: '1', subtitle: 'INV-2026-0047 overdue 5 days' },
-    { title: "This Month's Usage", value: '€847.32', subtitle: 'API calls and custom work' },
-    { title: 'Last Payment', value: 'Mar 1, 2026', subtitle: '€3,200.00 via SEPA transfer' }
-  ];
 
   transactions: Array<RecentTransaction> = [];
 
   upcoming = {
     renewalDate: 'Apr 5, 2026',
     renewalDesc: 'AI Automation Pro subscription',
-    pendingInvoices: '1 Overdue',
+    pendingInvoices: '0 Overdue',
     pendingDesc: 'INV-2026-0047 — 5 days overdue'
   };
 

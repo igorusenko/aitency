@@ -2,7 +2,7 @@
   <h1 class="text-xl text-white font-bold">Billing Overview</h1>
   <!-- Client Info & Balance -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <p-card header="Client Information">
+    <p-card header="Client Information" class="border border-[#FFFFFF14]">
       <div class="space-y-3">
         <div class="flex border-b pb-2 last:border-0 border-[rgba(255,255,255,.08)]">
           <span class="w-1/3 text-gray-500 font-medium">Company Name:</span>
@@ -27,7 +27,7 @@
       </div>
     </p-card>
 
-    <div class="bg-indigo-900 text-white p-6 rounded-lg flex flex-col justify-center items-center text-center relative">
+    <div class="bg-indigo-900 text-white p-6 rounded-lg flex flex-col justify-center items-center text-center relative border border-[#FFFFFF14]">
       <p-button
         [disabled]="!balance()"
         (onClick)="billingService.refreshBalance()"
@@ -75,7 +75,7 @@
   <!-- Recent Transactions -->
   <div>
     <h2 class="text-lg text-white font-bold mb-4">Recent Transactions</h2>
-      <p-table [value]="transactions" class="p-4 pb-0 bg-[#1018278c] rounded-2xl">
+      <p-table [value]="transactions" class="px-4 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]">
         <ng-template pTemplate="header">
           <tr>
             <th>Date</th>
@@ -111,17 +111,19 @@
   <!-- Upcoming -->
   <div>
     <h2 class="text-lg text-white font-bold mb-4">Upcoming</h2>
-    <div class="bg-[#1018278c] p-6 rounded">
+    <div class="bg-[#1018278c] p-6 rounded-2xl border border-[#FFFFFF14]">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <p class="font-semibold text-gray-700 mb-1">Next Renewal Date</p>
-          <p class="text-xl font-bold text-indigo-700">{{ upcoming.renewalDate }}</p>
-          <p class="text-xs text-gray-500 mt-1">{{ upcoming.renewalDesc }}</p>
-        </div>
+        @if (usageService.usageOverview()?.nextRenewal && usageService.usageOverview()?.nextRenewal?.dateLabel?.length! > 0) {
+          <div>
+            <p class="font-semibold text-gray-700 mb-1">Next Renewal Date</p>
+            <p class="text-xl font-bold text-indigo-700">{{ usageService.usageOverview()?.nextRenewal?.dateLabel }}</p>
+            <p class="text-xs text-gray-500 mt-1">{{ usageService.usageOverview()?.nextRenewal?.planName }}</p>
+          </div>
+        }
         <div>
           <p class="font-semibold text-gray-700 mb-1">Pending Invoices</p>
           <p class="text-xl font-bold text-red-500">{{ upcoming.pendingInvoices }}</p>
-          <p class="text-xs text-gray-500 mt-1">{{ upcoming.pendingDesc }}</p>
+<!--          <p class="text-xs text-gray-500 mt-1">{{ upcoming.pendingDesc }}</p>-->
         </div>
       </div>
     </div>
