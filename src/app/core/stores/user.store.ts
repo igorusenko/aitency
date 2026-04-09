@@ -11,4 +11,8 @@ export class UserStore {
   userById: WritableSignal<any> = signal(undefined);
   profile: WritableSignal<IClient | undefined> = signal(undefined);
   onboarding: WritableSignal<IOnboardingStatus | undefined> = signal(undefined);
+
+  get userRole(): string {
+    return this.currentUser()?.role;
+  }
 }

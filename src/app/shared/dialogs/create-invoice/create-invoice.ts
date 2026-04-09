@@ -73,7 +73,7 @@ export class CreateInvoice implements OnInit, OnDestroy {
     this.addLine();
 
     // Предзагрузка только для администратора
-    if (this.userStore.currentUser()?.role === 'Admin') {
+    if (this.userStore.userRole === 'Admin') {
       this.loadUsersForSelect();
     }
 

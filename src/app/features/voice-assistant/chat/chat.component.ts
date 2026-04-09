@@ -58,7 +58,7 @@ export class ChatComponent implements OnInit, OnDestroy{
   ngOnInit(): void {
     this.getAutomationAcess();
 
-    if (this.userStore.currentUser().role === 'Demo')
+    if (this.userStore.userRole === 'Demo')
     this.getAutomationLimits()
   }
 

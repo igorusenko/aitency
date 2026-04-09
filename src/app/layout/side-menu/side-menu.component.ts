@@ -112,7 +112,7 @@ export class SideMenuComponent implements OnInit {
   ];
 
   filteredItems = computed(() => {
-    const role = this.userStore.currentUser().role;
+    const role = this.userStore.userRole;
 
     const filterFn = (items: MenuItem[]): MenuItem[] => {
       return items
@@ -154,7 +154,7 @@ export class SideMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.userStore.currentUser().role !== 'Demo') {
+    if (this.userStore?.userRole !== 'Demo') {
       this.getOnboardingStatus();
     }
     this.resizeListener();

@@ -11,10 +11,10 @@ export const automationResolver: ResolveFn<IAutomation | boolean> = (route, stat
   const automationAdminService = inject(AutomationAdminService);
   const userStore = inject(UserStore);
   let req;
-  if (userStore.currentUser().role === 'Admin')
+  if (userStore.userRole === 'Admin')
     req = automationAdminService.getAutomationAdmin(route.params['id'])
   else req = automationAdminService.getAutomationUser(route.params['id']);
-  
+
   return automationAdminService.getAutomationIntents(route.params['id'])
     .pipe(concatMap(() => req));
 };

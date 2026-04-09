@@ -9,7 +9,7 @@ export const analyticsResolver: ResolveFn<Observable<IAnalytics>> = (route, stat
   const analyticsService = inject(AnalyticsService);
   const userStore = inject(UserStore);
 
-  if (userStore.currentUser().role === 'Admin')
+  if (userStore.userRole === 'Admin')
   return analyticsService.getAnalyticsByUserId(undefined)
   else
   return analyticsService.getMyAnalytics();

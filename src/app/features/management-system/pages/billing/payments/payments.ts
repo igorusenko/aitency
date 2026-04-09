@@ -79,7 +79,7 @@ export class Payments implements OnInit {
     }
 
     this.loading.set(true);
-    const role = this.userStore.currentUser()?.role;
+    const role = this.userStore.userRole;
     const filters = this.filterForm.value;
 
     const params: any = {

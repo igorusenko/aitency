@@ -41,7 +41,7 @@ export class Plans implements OnInit {
 
   loadPlans(): void {
     this.loading.set(true);
-    const isAdmin = this.userStore.currentUser()?.role === 'Admin';
+    const isAdmin = this.userStore.userRole === 'Admin';
     const plansObservable = isAdmin ? this.billingService.getAdminPlans() : this.billingService.getPlans();
 
     plansObservable.subscribe({

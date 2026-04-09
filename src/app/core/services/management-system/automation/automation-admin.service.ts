@@ -25,7 +25,7 @@ export class AutomationAdminService {
       .set('page', page)
       .set('count', count);
 
-    if (this.userStore.currentUser().role !== 'Admin') {
+    if (this.userStore.userRole !== 'Admin') {
       params = params.append('userId', this.userStore.currentUser().id)
     }
 

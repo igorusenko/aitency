@@ -8,7 +8,7 @@ function checkRole(allowed: string[] | undefined): boolean | UrlTree {
   const router = inject(Router);
   const messageService = inject(MessageService);
 
-  const role: string | undefined = userStore.currentUser()?.role ?? userStore.userRole;
+  const role: string | undefined = userStore.userRole ?? userStore.userRole;
 
   if (!allowed || allowed.length === 0) {
     return true;

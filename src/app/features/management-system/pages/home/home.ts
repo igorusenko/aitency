@@ -76,7 +76,7 @@ export class Home implements OnInit {
   constructor() {
     effect(() => {
       if (this.onboardingService.onboardingStatus()) {
-        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted' && this.userStore.currentUser().role !== 'Admin')
+        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted' && this.userStore.userRole !== 'Admin')
           this.billingService.refreshBalance();
       }
     });
@@ -87,9 +87,9 @@ export class Home implements OnInit {
     this.initAnalyticsForm();
     this.loadInitialData();
     this.getAutomations();
-    if (this.userStore.currentUser().role !== 'Demo' && this.userStore.onboarding()?.step) {
+    if (this.userStore.userRole !== 'Demo' && this.userStore.onboarding()?.step) {
       this.getInvoices();
-      if (this.userStore.currentUser().role === 'Default')
+      if (this.userStore.userRole === 'Default')
       this.getRecentTransactions();
     }
   }
@@ -110,7 +110,7 @@ export class Home implements OnInit {
 
   getInvoices(): void {
     this.invoicesLoading = true;
-    const role = this.userStore.currentUser()?.role;
+    const role = this.userStore.userRole;
 
     const request$ = role === 'Admin'
       ? this.billingService.getAdminInvoices({page: 1, count: 3})
@@ -134,7 +134,7 @@ export class Home implements OnInit {
   }
 
   loadInitialData(): void {
-    if (this.userStore.currentUser().role === 'Admin') {
+    if (this.userStore.userRole === 'Admin') {
       this.userId = null;
       this.getUsers();
       this.getAnalytics();

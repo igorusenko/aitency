@@ -41,7 +41,7 @@ export class PayInvoice implements OnInit {
   paymentMethods: WritableSignal<BillingPaymentMethodResponse[]> = signal([]);
 
   ngOnInit(): void {
-    if (this.userStore.currentUser().role !== 'Admin')
+    if (this.userStore.userRole !== 'Admin')
       this.loadPaymentMethods();
   }
 

@@ -193,4 +193,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/management-system/pages/register/create-password/create-password').then((m) => m.CreatePassword),
   }
+  ,
+  // Top-level wildcard 404 should be the very last route
+  {
+    path: '**',
+    title: 'Page not found',
+    loadComponent: () =>
+      import('./features/misc/not-found/not-found').then((m) => m.NotFound)
+  }
 ];

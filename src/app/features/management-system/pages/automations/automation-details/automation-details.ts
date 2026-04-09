@@ -59,7 +59,7 @@ export class AutomationDetails implements OnInit {
       return;
     }
 
-    if (this.userStore.currentUser().role === 'Admin') {
+    if (this.userStore.userRole === 'Admin') {
       this.automationAdminService.getAutomationAdmin(id).subscribe(automation => {
         this.automation = automation;
         this.getLogs();
@@ -67,7 +67,7 @@ export class AutomationDetails implements OnInit {
     } else {
       this.automationAdminService.getAutomationUser(id).subscribe(automation => {
         this.automation = automation;
-        if (this.userStore.currentUser().role !== 'Demo') {
+        if (this.userStore.userRole !== 'Demo') {
           this.getLogs();
         }
       });

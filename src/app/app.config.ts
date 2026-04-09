@@ -43,8 +43,22 @@ export const appConfig: ApplicationConfig = {
         .pipe(
           concatMap(() => authService.validateAccessToken()),
           concatMap(() => userService.getCurrentUser()),
-          catchError(( ) => {
-            router.navigate(['/login']);
+          catchError(() => {
+            // Allow unauthenticated access to public routes (no redirect to /login)
+            const publicPaths = [
+              '/login',
+              '/register',
+              '/confirm-email',
+              '/reset-password',
+              '/forgot-password',
+              '/demo-auth'
+            ];
+            // На ранней инициализации router.url может быть '/', используем фактический путь окна
+            const currentPath = typeof window !== 'undefined' && window.location ? window.location.pathname : '';
+            const isPublic = publicPaths.some((p) => currentPath.startsWith(p));
+            if (!isPublic) {
+              router.navigate(['/login']);
+            }
             return of(null);
           })
         )

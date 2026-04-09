@@ -46,7 +46,7 @@ export class CreateSubscriptionDialog implements OnInit {
 
   loadPlans(): void {
     this.plansLoading.set(true);
-    const isAdmin = this.userStore.currentUser()?.role === 'Admin';
+    const isAdmin = this.userStore.userRole === 'Admin';
     const planObservable = isAdmin ? this.billingService.getAdminPlans() : this.billingService.getPlans();
 
     planObservable.subscribe({

@@ -33,7 +33,7 @@ export class InvoiceInfo implements OnInit {
   }
 
   getInvoiceById(): void {
-    if (this.userStore.currentUser().role === 'Admin')
+    if (this.userStore.userRole === 'Admin')
       this.invoice$ = this.billingService.getAdminInvoiceById(this.invoiceId);
     else
       this.invoice$ = this.billingService.getInvoiceById(this.invoiceId);
