@@ -5,7 +5,7 @@ import {AuthService} from '../../core/services/management-system/auth/auth.servi
 import {UserStore} from '../../core/stores/user.store';
 import {Button} from 'primeng/button';
 import {Tooltip} from 'primeng/tooltip';
-import {debounceTime, fromEvent, map, takeUntil} from 'rxjs';
+import {debounceTime, fromEvent, map} from 'rxjs';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {PanelMenu} from 'primeng/panelmenu';
 import {Ripple} from 'primeng/ripple';
@@ -125,7 +125,8 @@ export class SideMenuComponent implements OnInit {
             const filteredChildren = filterFn(item.items as MenuItem[]);
             return {
               ...item,
-              items: filteredChildren.length > 0 ? filteredChildren : undefined
+              items: filteredChildren.length > 0 ? filteredChildren : undefined,
+              expanded: item['path'] === 'billing' && this.router.url.includes('/billing')
             };
           }
           return item;

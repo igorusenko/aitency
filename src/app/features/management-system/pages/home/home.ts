@@ -20,7 +20,8 @@ import {Tooltip} from 'primeng/tooltip';
 import {BillingService} from '../../../../core/services/management-system/billing/billing.service';
 import {OnboardingService} from '../../../../core/services/management-system/onboarding/onboarding.service';
 import {Tag} from 'primeng/tag';
-import {BillingInvoiceListItemResponse, RecentTransaction} from '../../../../core/interfaces/billing/billing.interface';
+import {BillingInvoiceListItemResponse, BillingSubscriptionResponse, RecentTransaction} from '../../../../core/interfaces/billing/billing.interface';
+import {ActiveSubscriptionsComponent} from '../../../../shared/components/billing/active-subscriptions/active-subscriptions';
 
 @Component({
   selector: 'app-home',
@@ -37,7 +38,8 @@ import {BillingInvoiceListItemResponse, RecentTransaction} from '../../../../cor
     RouterLink,
     CurrencyPipe,
     Tooltip,
-    Tag
+    Tag,
+    ActiveSubscriptionsComponent
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
@@ -54,6 +56,7 @@ export class Home implements OnInit {
   router = inject(Router);
   balance = this.billingService.balance;
   invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
+  subscriptions: WritableSignal<BillingSubscriptionResponse[]> = signal([]);
   analyticsForm: FormGroup;
   formSubmitted: boolean = false;
   usersLoading: boolean = false;
@@ -89,8 +92,10 @@ export class Home implements OnInit {
     this.getAutomations();
     if (this.userStore.userRole !== 'Demo' && this.userStore.onboarding()?.step) {
       this.getInvoices();
-      if (this.userStore.userRole === 'Default')
-      this.getRecentTransactions();
+      if (this.userStore.userRole === 'Default') {
+        this.getRecentTransactions();
+        this.getSubscriptions();
+      }
     }
   }
 
@@ -124,6 +129,13 @@ export class Home implements OnInit {
       error: () => {
         this.invoicesLoading = false;
       }
+    });
+  }
+
+  getSubscriptions(): void {
+    this.billingService.getSubscriptions().subscribe({
+      next: (subs) => this.subscriptions.set(subs),
+      error: () => {}
     });
   }
 

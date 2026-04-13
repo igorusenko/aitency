@@ -136,7 +136,8 @@ export class Settings implements OnInit {
   openCreatePaymentMethodDialog() {
     this.ref = this.dialogService.open(CreatePaymentMethod, {
       header: 'Add Payment Method',
-      width: '35rem'
+      width: '35rem',
+      closable: true,
     });
     this.ref?.onClose.subscribe(() => {
       this.refreshPaymentMethods();

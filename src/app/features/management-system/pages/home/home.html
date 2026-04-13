@@ -168,6 +168,12 @@
           </div>
         }
       </div>
+
+      @if (userStore.userRole === 'Default') {
+        <p class="text-sm uppercase tracking-wider opacity-80">Active Subscriptions</p>
+        <app-active-subscriptions [subscriptions]="subscriptions()"></app-active-subscriptions>
+      }
+
       <p class="text-sm uppercase tracking-wider opacity-80">Invoices</p>
       <p-table
         [value]="invoices()"
@@ -229,7 +235,7 @@
           </tr>
         </ng-template>
       </p-table>
-      @if (userStore.currentUser().role === 'Default') {
+      @if (userStore.userRole === 'Default') {
         <p class="text-sm uppercase tracking-wider opacity-80">Recent Transactions</p>
         <p-table [value]="transactions" class="px-4 pb-0 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]">
           <ng-template pTemplate="header">

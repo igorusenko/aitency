@@ -15,6 +15,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CreateSubscriptionDialog } from '../../../../../shared/dialogs/create-subscription-dialog/create-subscription-dialog';
 import { UpgradeSubscriptionDialog } from '../../../../../shared/dialogs/upgrade-subscription-dialog/upgrade-subscription-dialog';
 import { CancelSubscriptionDialog } from '../../../../../shared/dialogs/cancel-subscription-dialog/cancel-subscription-dialog';
+import {PlansListComponent} from '../../../../../shared/components/billing/plans-list/plans-list';
+import {ActiveSubscriptionsComponent} from '../../../../../shared/components/billing/active-subscriptions/active-subscriptions';
 
 @Component({
   selector: 'app-subscriptions',
@@ -26,7 +28,9 @@ import { CancelSubscriptionDialog } from '../../../../../shared/dialogs/cancel-s
     Button,
     ReactiveFormsModule,
     DatePipe,
-    CurrencyPipe
+    CurrencyPipe,
+    PlansListComponent,
+    ActiveSubscriptionsComponent
   ],
   templateUrl: './subscriptions.html',
   providers: [DialogService],
