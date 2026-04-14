@@ -79,7 +79,7 @@ export class Home implements OnInit {
   constructor() {
     effect(() => {
       if (this.onboardingService.onboardingStatus()) {
-        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted' && this.userStore.userRole !== 'Admin')
+        if (this.onboardingService.onboardingStatus()?.step && this.userStore.userRole !== 'Admin')
           this.billingService.refreshBalance();
       }
     });

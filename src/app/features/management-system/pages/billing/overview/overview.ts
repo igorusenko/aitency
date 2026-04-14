@@ -34,23 +34,25 @@ export class BillingOverview implements OnInit {
   constructor() {
     effect(() => {
       if (this.onboardingService.onboardingStatus()) {
-        if (this.onboardingService.onboardingStatus()?.status !== 'NotStarted')
+        if (this.onboardingService.onboardingStatus()?.step)
         this.refreshBalance();
       }
     });
   }
 
   ngOnInit() {
-    this.billingService.getProfile().subscribe(client => {})
-    this.getRecentTransactions();
-    this.usageService.getUsageOverview().subscribe(() => {
-      this.dashboardCards = [
-        { title: 'Active Subscriptions', value: this.usageService.usageOverview()?.activeSubscriptionsCount.toString() || '', subtitle: this.usageService.usageOverview()?.activeSubscriptionNames.join(', ') || '' },
-        { title: 'Outstanding Invoices', value: this.usageService.usageOverview()?.outstandingInvoicesCount.toString() || '', subtitle: '' },
-        { title: "This Month's Usage", value: `€${this.usageService.usageOverview()?.thisMonthUsage || 0}`, subtitle: 'API calls and custom work' },
-        { title: 'Last Payment', value: this.usageService.usageOverview()?.lastPayment.dateLabel || '', subtitle: `€${this.usageService.usageOverview()?.lastPayment.amount} via ${this.usageService.usageOverview()?.lastPayment.method}` }
-      ];
-    });
+    if (this.onboardingService.onboardingStatus()?.step) {
+      this.billingService.getProfile().subscribe(client => {})
+      this.getRecentTransactions();
+      this.usageService.getUsageOverview().subscribe(() => {
+        this.dashboardCards = [
+          { title: 'Active Subscriptions', value: this.usageService.usageOverview()?.activeSubscriptionsCount.toString() || '', subtitle: this.usageService.usageOverview()?.activeSubscriptionNames.join(', ') || '' },
+          { title: 'Outstanding Invoices', value: this.usageService.usageOverview()?.outstandingInvoicesCount.toString() || '', subtitle: '' },
+          { title: "This Month's Usage", value: `€${this.usageService.usageOverview()?.thisMonthUsage || 0}`, subtitle: 'API calls and custom work' },
+          { title: 'Last Payment', value: this.usageService.usageOverview()?.lastPayment.dateLabel || '', subtitle: `€${this.usageService.usageOverview()?.lastPayment.amount} via ${this.usageService.usageOverview()?.lastPayment.method}` }
+        ];
+      });
+    }
   }
 
   getRecentTransactions() {

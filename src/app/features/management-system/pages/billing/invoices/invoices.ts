@@ -21,6 +21,7 @@ import {
 } from '../../../../../core/interfaces/billing/billing.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-invoices',
@@ -48,7 +49,7 @@ export class Invoices implements OnInit {
   messageService = inject(MessageService);
   billingService = inject(BillingService);
   dialogService = inject(DialogService);
-
+  onboardingService = inject(OnboardingService);
   dialogRef: DynamicDialogRef | null = null;
 
   filterForm: FormGroup;
@@ -69,6 +70,9 @@ export class Invoices implements OnInit {
 
   ngOnInit() {
     this.initFilterForm();
+
+    if (this.onboardingService.onboardingStatus()?.step)
+      this.loadInvoices();
 
     this.filterForm.valueChanges.pipe(
       debounceTime(300),

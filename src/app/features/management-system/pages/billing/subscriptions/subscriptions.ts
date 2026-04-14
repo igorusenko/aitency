@@ -17,18 +17,14 @@ import { UpgradeSubscriptionDialog } from '../../../../../shared/dialogs/upgrade
 import { CancelSubscriptionDialog } from '../../../../../shared/dialogs/cancel-subscription-dialog/cancel-subscription-dialog';
 import {PlansListComponent} from '../../../../../shared/components/billing/plans-list/plans-list';
 import {ActiveSubscriptionsComponent} from '../../../../../shared/components/billing/active-subscriptions/active-subscriptions';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-subscriptions',
   standalone: true,
   imports: [
-    PrimeTemplate,
     TableModule,
-    Tag,
-    Button,
     ReactiveFormsModule,
-    DatePipe,
-    CurrencyPipe,
     PlansListComponent,
     ActiveSubscriptionsComponent
   ],
@@ -40,6 +36,7 @@ export class Subscriptions implements OnInit {
   messageService = inject(MessageService);
   billingService = inject(BillingService);
   dialogService = inject(DialogService);
+  onboardingService = inject(OnboardingService);
   ref: DynamicDialogRef | null;
 
   plans: WritableSignal<BillingPlanResponse[]> = signal([]);
@@ -67,6 +64,7 @@ export class Subscriptions implements OnInit {
   }
 
   loadSubscriptions(): void {
+    if (!this.onboardingService.onboardingStatus()?.step) return;
     this.loading.set(true);
     this.billingService.getSubscriptions().subscribe({
       next: (subscriptions) => {

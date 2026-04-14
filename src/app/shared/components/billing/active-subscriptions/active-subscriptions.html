@@ -61,6 +61,7 @@
         <p>
           No active subscriptions found.
         </p>
+        @if (iShowSubscribeButton) {
         <p-button
           label="Subscribe Now"
           severity="info"
@@ -68,6 +69,7 @@
           [routerLink]="['/billing/subscriptions']"
           >
         </p-button>
+        }
       </div>
     }
   </div>

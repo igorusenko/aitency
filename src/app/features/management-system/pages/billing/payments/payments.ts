@@ -13,6 +13,7 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular
 import { BillingService } from '../../../../../core/services/management-system/billing/billing.service';
 import { BillingPaymentGateway, BillingPaymentListItemResponse, BillingPaymentStatus } from '../../../../../core/interfaces/billing/billing.interface';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-payments',
@@ -37,6 +38,7 @@ export class Payments implements OnInit {
   userStore = inject(UserStore);
   fb = inject(FormBuilder);
   billingService = inject(BillingService);
+  onboardingService = inject(OnboardingService);
   visibleCreatePayment: WritableSignal<boolean> = signal(false);
   filterForm: FormGroup;
   paymentGateways = [
@@ -73,6 +75,7 @@ export class Payments implements OnInit {
   }
 
   loadPayments(event?: any): void {
+    if (!this.onboardingService.onboardingStatus()?.step) return;
     if (event) {
       this.page.set(event.first / event.rows + 1);
       this.rows.set(event.rows);

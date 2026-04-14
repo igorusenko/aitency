@@ -13,6 +13,7 @@ import {RouterLink} from '@angular/router';
 })
 export class ActiveSubscriptionsComponent {
   @Input() subscriptions: BillingSubscriptionResponse[] = [];
+  @Input() iShowSubscribeButton: boolean = false;
   @Output() upgrade = new EventEmitter<BillingSubscriptionResponse>();
   @Output() cancel = new EventEmitter<BillingSubscriptionResponse>();
 

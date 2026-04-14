@@ -3,6 +3,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import { TableModule } from 'primeng/table';
 import {UsageService} from '../../../../../core/services/management-system/billing/usage/usage.service';
 import {ChartModule, UIChart} from 'primeng/chart';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-usage',
@@ -15,10 +16,12 @@ import {ChartModule, UIChart} from 'primeng/chart';
 export class Usage implements OnInit {
   usageService = inject(UsageService);
   datePipe = inject(DatePipe);
+  onboardingService = inject(OnboardingService);
   chartData: any;
   chartOptions: any;
 
   ngOnInit() {
+    if (this.onboardingService.onboardingStatus()?.step)
     this.initializeUsageData();
   }
 

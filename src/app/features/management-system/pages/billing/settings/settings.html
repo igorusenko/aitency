@@ -85,7 +85,9 @@
             }
           }
         </div>
-        <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2" (onClick)="openCreatePaymentMethodDialog()"></p-button>
+        @if (onboardingService.onboardingStatus()?.step) {
+          <p-button label="Add Payment Method" severity="secondary" size="small" class="mt-2" (onClick)="openCreatePaymentMethodDialog()"></p-button>
+        }
       </div>
 
       <!-- Auto-Recharge Settings -->

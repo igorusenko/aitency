@@ -10,6 +10,7 @@ import {UserStore} from '../../../../../core/stores/user.store';
 import {MessageService} from 'primeng/api';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
+import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
 
 @Component({
   selector: 'app-settings',
@@ -32,6 +33,7 @@ export class Settings implements OnInit {
   userStore = inject(UserStore);
   messageService = inject(MessageService);
   dialogService = inject(DialogService);
+  onboardingService = inject(OnboardingService);
   ref: DynamicDialogRef | null;
   paymentMethods$ = this.billingService.getPaymentMethods();
   billingDetailsLoader: boolean = false;
@@ -75,6 +77,7 @@ export class Settings implements OnInit {
   }
 
   getClient(): void {
+    if (!this.onboardingService.onboardingStatus()?.step) return;
     this.billingService.getProfile().subscribe(client => {
       this.billingForm.patchValue({
         companyName: client.companyName,

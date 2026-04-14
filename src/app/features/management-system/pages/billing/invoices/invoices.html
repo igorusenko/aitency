@@ -57,6 +57,7 @@
     [totalRecords]="totalCount()"
     [lazy]="true"
     (onLazyLoad)="loadInvoices($event)"
+    [lazyLoadOnInit]="false"
     [rowsPerPageOptions]="[10, 20, 50]"
     [rowHover]="true"
     class="px-4 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"

@@ -169,9 +169,9 @@
         }
       </div>
 
-      @if (userStore.userRole === 'Default') {
+      @if (userStore.userRole === 'Default' && onboardingService.onboardingStatus()?.step) {
         <p class="text-sm uppercase tracking-wider opacity-80">Active Subscriptions</p>
-        <app-active-subscriptions [subscriptions]="subscriptions()"></app-active-subscriptions>
+        <app-active-subscriptions [subscriptions]="subscriptions()" [iShowSubscribeButton]="true"></app-active-subscriptions>
       }
 
       <p class="text-sm uppercase tracking-wider opacity-80">Invoices</p>

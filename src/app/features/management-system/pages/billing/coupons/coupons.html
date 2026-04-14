@@ -1,3 +1,71 @@
-<div class="billing-coupons">
-  <h1 class="text-xl text-white font-bold">Coupons</h1>
+<div class="flex flex-col gap-4">
+  <div class="flex items-center gap-4">
+    <span class="p-float-label">
+      <input pInputText [(ngModel)]="search" id="search" placeholder="Search code" />
+    </span>
+
+    <div class="flex items-center gap-2">
+      <p-checkbox inputId="activeOnly" binary="true" [(ngModel)]="isActive" [trueValue]="true" [falseValue]="null"></p-checkbox>
+      <label for="activeOnly" class="text-sm">Active only</label>
+    </div>
+
+    <p-button label="Apply" (onClick)="page = 1; loadCoupons()"></p-button>
+    <div class="flex-1"></div>
+    <p-button label="Create coupon" icon="pi pi-plus" (onClick)="openCreate()"></p-button>
+  </div>
+
+  <p-table
+    [value]="coupons()"
+    [loading]="loading()"
+    [paginator]="true"
+    [rows]="count"
+    [totalRecords]="totalCount()"
+    [lazy]="true"
+    (onLazyLoad)="onLazyLoad($event)"
+    [rowsPerPageOptions]="[10,20,50]"
+    class="px-4 bg-[#1018278c] rounded-2xl border border-[#FFFFFF14]"
+  >
+    <ng-template pTemplate="header">
+      <tr class="border-b border-[rgba(255,255,255,.08)]">
+        <th class="p-2 text-left">Code</th>
+        <th class="p-2 text-left">Type</th>
+        <th class="p-2 text-left">Value</th>
+        <th class="p-2 text-left">Usage</th>
+        <th class="p-2 text-left">Expiry</th>
+        <th class="p-2 text-left">Active</th>
+        <th class="p-2 text-left">Created</th>
+        <th class="p-2 text-left w-[260px]">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+      <tr class="border-b border-[rgba(255,255,255,.08)]">
+        <td class="p-2">{{ row.code }}</td>
+        <td class="p-2">{{ row.type }}</td>
+        <td class="p-2">{{ row.type === 'PercentageDiscount' ? (row.value + '%') : formatCurrency(row.value) }}</td>
+        <td class="p-2">{{ row.currentUsage }}{{ row.usageLimit ? (' / ' + row.usageLimit) : '' }}</td>
+        <td class="p-2">{{ row.expiryDate ? (row.expiryDate | date) : '-' }}</td>
+        <td class="p-2">{{ row.isActive ? 'Yes' : 'No' }}</td>
+        <td class="p-2">{{ row.createdAt | date }}</td>
+        <td class="p-2">
+          <div class="flex gap-2">
+            <p-button label="Duplicate" size="small" (onClick)="duplicate(row)" />
+            @if (row.isActive) {
+              <p-button label="Disable" size="small" severity="warn" (onClick)="disable(row)" />
+            } @else {
+              <p-button label="Reactivate" size="small" severity="success" (onClick)="reactivate(row)" />
+            }
+            <p-button label="Delete" size="small" severity="danger" (onClick)="delete(row)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="text-center p-4 text-white/50">
+          No coupons found.
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
 </div>

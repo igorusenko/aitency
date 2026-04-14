@@ -7,9 +7,7 @@ import {ITableColumn} from '../../core/interfaces/table/table.interface';
 @Component({
   selector: 'app-table',
   imports: [
-    PrimeTemplate,
     TableModule,
-    Tag
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
