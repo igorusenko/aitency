@@ -71,8 +71,8 @@ export class Invoices implements OnInit {
   ngOnInit() {
     this.initFilterForm();
 
-    if (this.onboardingService.onboardingStatus()?.step)
-      this.loadInvoices();
+    // if (this.onboardingService.onboardingStatus()?.step)
+    //   this.loadInvoices();
 
     this.filterForm.valueChanges.pipe(
       debounceTime(300),
@@ -160,7 +160,8 @@ export class Invoices implements OnInit {
     this.dialogRef = this.dialogService.open(PayInvoice, {
       header: 'Pay Invoice',
       width: '35rem',
-      data: { invoice }
+      data: { invoice },
+      closable: true,
     });
     this.dialogRef?.onClose.subscribe((success: boolean) => {
       if (success) {

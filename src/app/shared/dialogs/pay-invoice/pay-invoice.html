@@ -5,7 +5,17 @@
       <p><strong>Amount:</strong> {{ invoice.total }} {{ invoice.currency }}</p>
     </div>
   }
-
+  @if (invoice.type === 'Invoice' && (invoice.status === 'Issued' || invoice.status === 'Overdue')) {
+  <div class="flex gap-2">
+    <app-input-text
+      [form]="invoiceForm"
+      controlName="couponCode"
+      title="Coupon Code"
+      class="flex-1"
+    ></app-input-text>
+    <p-button label="Apply Coupon" severity="success" (onClick)="applyCoupon()"/>
+  </div>
+  }
   <app-select
     [form]="invoiceForm"
     [options]="getPaymentMethodOptions()"

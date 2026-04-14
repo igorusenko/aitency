@@ -89,6 +89,7 @@ export interface BillingInvoiceListItemResponse {
   total: number;
   currency: CurrencyCode;
   status: BillingInvoiceStatus;
+  type: string;
   dateIssued: string;
   dueDate: string;
   createdAt: string;
