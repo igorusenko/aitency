@@ -78,7 +78,7 @@
                 [form]="getUsageRateForm(i)"
                 [formSubmitted]="formSubmitted()"
                 [minFractionDigits]="2"
-                [maxFractionDigits]="2"
+                [maxFractionDigits]="6"
                 controlName="ratePerUnit"
                 label="Rate Per Unit"
                 type="text"
@@ -89,6 +89,7 @@
               <app-select
                 [form]="getUsageRateForm(i)"
                 [options]="usageRatePeriods"
+                appendTo="body"
                 controlName="periodType"
                 title="Period Type"
                 optionLabel="label"
