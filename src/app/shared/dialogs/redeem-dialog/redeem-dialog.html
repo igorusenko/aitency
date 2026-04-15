@@ -1,0 +1,14 @@
+<form [formGroup]="redeemForm" class="flex flex-col gap-4">
+
+  <app-input-text
+    [form]="redeemForm"
+    controlName="couponCode"
+    title="Coupon Code"
+    class="flex-1 pt-1"
+  ></app-input-text>
+
+  <div class="flex justify-end gap-2">
+    <p-button label="Cancel" severity="secondary" (onClick)="close()"/>
+    <p-button label="Apply" severity="success" (onClick)="redeemCoupon()" [disabled]="redeemForm.invalid"/>
+  </div>
+</form>

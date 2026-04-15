@@ -20,8 +20,16 @@ import {Tooltip} from 'primeng/tooltip';
 import {BillingService} from '../../../../core/services/management-system/billing/billing.service';
 import {OnboardingService} from '../../../../core/services/management-system/onboarding/onboarding.service';
 import {Tag} from 'primeng/tag';
-import {BillingInvoiceListItemResponse, BillingSubscriptionResponse, RecentTransaction} from '../../../../core/interfaces/billing/billing.interface';
+import {
+  BillingInvoiceListItemResponse,
+  BillingPlanResponse,
+  BillingSubscriptionResponse,
+  RecentTransaction
+} from '../../../../core/interfaces/billing/billing.interface';
 import {ActiveSubscriptionsComponent} from '../../../../shared/components/billing/active-subscriptions/active-subscriptions';
+import {CreateEditPlan} from '../../../../shared/dialogs/create-edit-plan/create-edit-plan';
+import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
+import {RedeemDialog} from '../../../../shared/dialogs/redeem-dialog/redeem-dialog';
 
 @Component({
   selector: 'app-home',
@@ -41,6 +49,7 @@ import {ActiveSubscriptionsComponent} from '../../../../shared/components/billin
     Tag,
     ActiveSubscriptionsComponent
   ],
+  providers: [DialogService],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -54,6 +63,8 @@ export class Home implements OnInit {
   billingService = inject(BillingService);
   onboardingService = inject(OnboardingService);
   router = inject(Router);
+  dialogService = inject(DialogService);
+  dialogRef: DynamicDialogRef | null = null;
   balance = this.billingService.balance;
   invoices: WritableSignal<BillingInvoiceListItemResponse[]> = signal([]);
   subscriptions: WritableSignal<BillingSubscriptionResponse[]> = signal([]);
@@ -250,5 +261,16 @@ export class Home implements OnInit {
   selectRow(row: TableRowSelectEvent) {
     this.automationsStore.automation.set(row.data);
     this.router.navigate(['/automations', row.data.id]);
+  }
+
+  openRedeemDialog(): void {
+    this.dialogRef = this.dialogService.open(RedeemDialog, {
+      header: 'Redeem Coupon',
+      width: '35rem',
+      closable: true,
+    });
+    // this.dialogRef?.onClose.subscribe((response: BillingPlanResponse) => {
+    //
+    // });
   }
 }
