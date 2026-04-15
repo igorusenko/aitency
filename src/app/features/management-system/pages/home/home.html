@@ -7,7 +7,9 @@
           <h1 class="text-xl text-white font-bold">Overview</h1>
           <div class="sub">Stats + integration health + recent activity (demo).</div>
         </div>
-        <p-button label="Apply Coupon" severity="primary" size="small" (onClick)="openRedeemDialog()"/>
+        @if (userStore.userRole === 'Default') {
+          <p-button label="Apply Coupon" severity="primary" size="small" (onClick)="openRedeemDialog()"/>
+        }
         @if (userStore.currentUser().role === 'Admin') {
           <form action="" [formGroup]="analyticsForm" class="flex gap-4">
             <p-floatlabel variant="on">
