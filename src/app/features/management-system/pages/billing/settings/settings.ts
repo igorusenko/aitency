@@ -11,6 +11,7 @@ import {MessageService} from 'primeng/api';
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {CreatePaymentMethod} from '../../../../../shared/dialogs/create-payment-method/create-payment-method';
 import {OnboardingService} from '../../../../../core/services/management-system/onboarding/onboarding.service';
+import {BillingSettingsService} from '../../../../../core/services/management-system/billing/billing-settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -34,6 +35,7 @@ export class Settings implements OnInit {
   messageService = inject(MessageService);
   dialogService = inject(DialogService);
   onboardingService = inject(OnboardingService);
+  billingSettingsService= inject(BillingSettingsService);
   ref: DynamicDialogRef | null;
   paymentMethods$ = this.billingService.getPaymentMethods();
   billingDetailsLoader: boolean = false;
@@ -49,46 +51,40 @@ export class Settings implements OnInit {
   });
 
   autoRechargeForm: FormGroup = this.fb.group({
-    enabled: [true],
-    threshold: [500],
-    amount: [2000]
+    autoRechargeEnabled: [false],
+    autoRechargeThreshold: [0],
+    autoRechargeAmount: [0]
   });
 
   notificationForm: FormGroup = this.fb.group({
-    invoiceIssued: [true],
-    paymentReceived: [true],
-    renewalReminders: [true],
-    lowBalance: [true],
-    usageAlerts: [false],
-    marketing: [false]
+    invoiceIssuedEnabled: [false],
+    paymentReceivedEnabled: [false],
+    subscriptionRenewalReminderEnabled: [false],
+    lowBalanceAlertEnabled: [false],
+    overdueInvoiceReminderEnabled: [false],
+    newFeatureAnnouncementEnabled: [false]
   });
 
   notifications = [
-    { controlName: 'invoiceIssued', label: 'Invoice issued notifications' },
-    { controlName: 'paymentReceived', label: 'Payment received notifications' },
-    { controlName: 'renewalReminders', label: 'Subscription renewal reminders' },
-    { controlName: 'lowBalance', label: 'Low balance alerts' },
-    { controlName: 'usageAlerts', label: 'Usage threshold alerts' },
-    { controlName: 'marketing', label: 'Billing-related marketing' }
+    { controlName: 'invoiceIssuedEnabled', label: 'Invoice issued notifications' },
+    { controlName: 'paymentReceivedEnabled', label: 'Payment received notifications' },
+    { controlName: 'subscriptionRenewalReminderEnabled', label: 'Subscription renewal reminders' },
+    { controlName: 'lowBalanceAlertEnabled', label: 'Low balance alerts' },
+    { controlName: 'overdueInvoiceReminderEnabled', label: 'Invoice reminder alerts' },
+    { controlName: 'newFeatureAnnouncementEnabled', label: 'New feature announcements' },
   ];
 
   ngOnInit() {
-    this.getClient();
+    this.getBillingSettings();
   }
 
-  getClient(): void {
-    if (!this.onboardingService.onboardingStatus()?.step) return;
-    this.billingService.getProfile().subscribe(client => {
-      this.billingForm.patchValue({
-        companyName: client.companyName,
-        vatNumber: client.vatNumber,
-        billingEmail: client.billingEmail,
-        streetAddress: client.streetAddress,
-        city: client.city,
-        state: client.state,
-        zip: client.zip
-      });
-    });
+  getBillingSettings(): void {
+    // if (!this.onboardingService.onboardingStatus()?.step) return;
+    this.billingSettingsService.getBillingSettings().subscribe(settings => {
+      this.autoRechargeForm.setValue(settings.autoRechargeSettings);
+      this.notificationForm.setValue(settings.notificationPreferences);
+      this.billingForm.setValue(settings.billingDetails);
+    })
   }
 
   updateBillingDetails(): void {
@@ -107,7 +103,25 @@ export class Settings implements OnInit {
   }
 
   saveAutoRecharge(): void {
+    this.billingSettingsService.updateAutoRecharge(this.autoRechargeForm.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Auto-recharge settings saved successfully!' });
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to save auto-recharge settings. Please try again.' });
+      }
+    })
+  }
 
+  saveNotificationSettings(): void {
+    this.billingSettingsService.updateNotificationPreferences(this.notificationForm.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Notification preferences saved successfully!' });
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to save notification preferences. Please try again.' });
+      }
+    })
   }
 
   setDefault(id: string) {

@@ -98,20 +98,20 @@
             <span class="text-white font-medium text-sm">Enable Auto-Recharge</span>
             <app-checkbox
               [form]="autoRechargeForm"
-              controlName="enabled"
+              controlName="autoRechargeEnabled"
               [formSubmitted]="false"
             ></app-checkbox>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <app-input-number
               [form]="autoRechargeForm"
-              controlName="threshold"
+              controlName="autoRechargeThreshold"
               label="Recharge When Balance Falls Below"
               [formSubmitted]="false"
             ></app-input-number>
             <app-input-number
               [form]="autoRechargeForm"
-              controlName="amount"
+              controlName="autoRechargeAmount"
               label="Auto-Recharge Amount"
               [formSubmitted]="false"
             ></app-input-number>
@@ -135,6 +135,7 @@
             </div>
           }
         </div>
+        <p-button label="Save Notification Settings" type="submit" size="small" (onClick)="saveNotificationSettings()"></p-button>
       </div>
     </div>
   </div>

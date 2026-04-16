@@ -49,7 +49,7 @@ export class BillingOverview implements OnInit {
           { title: 'Active Subscriptions', value: this.usageService.usageOverview()?.activeSubscriptionsCount.toString() || '', subtitle: this.usageService.usageOverview()?.activeSubscriptionNames.join(', ') || '' },
           { title: 'Outstanding Invoices', value: this.usageService.usageOverview()?.outstandingInvoicesCount.toString() || '', subtitle: '' },
           { title: "This Month's Usage", value: `€${this.usageService.usageOverview()?.thisMonthUsage || 0}`, subtitle: 'API calls and custom work' },
-          { title: 'Last Payment', value: this.usageService.usageOverview()?.lastPayment.dateLabel || '', subtitle: `€${this.usageService.usageOverview()?.lastPayment.amount} via ${this.usageService.usageOverview()?.lastPayment.method}` }
+          { title: 'Last Payment', value: this.usageService.usageOverview()?.lastPayment?.dateLabel || '', subtitle: `€${this.usageService.usageOverview()?.lastPayment.amount} via ${this.usageService.usageOverview()?.lastPayment.method}` }
         ];
       });
     }
