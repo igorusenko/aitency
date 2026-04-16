@@ -4,7 +4,7 @@ export interface IBillingSettings {
   "notificationPreferences": INotificationPreferences
 }
 
-interface IBillingDetails {
+export interface IBillingDetails {
   "billingEmail": string;
   "companyName": string;
   "vatNumber": string;

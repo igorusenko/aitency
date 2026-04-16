@@ -12,6 +12,7 @@ import {OnboardingService} from '../../../../../core/services/management-system/
 import {DialogService, DynamicDialogRef} from 'primeng/dynamicdialog';
 import {RecentTransaction} from '../../../../../core/interfaces/billing/billing.interface';
 import {UsageService} from '../../../../../core/services/management-system/billing/usage/usage.service';
+import {BillingSettingsService} from '../../../../../core/services/management-system/billing/billing-settings.service';
 
 @Component({
   selector: 'app-overview',
@@ -23,6 +24,7 @@ import {UsageService} from '../../../../../core/services/management-system/billi
 })
 export class BillingOverview implements OnInit {
   billingService = inject(BillingService);
+  billingSettingsService = inject(BillingSettingsService);
   onboardingService = inject(OnboardingService);
   usageService = inject(UsageService);
   userStore = inject(UserStore);
@@ -42,7 +44,9 @@ export class BillingOverview implements OnInit {
 
   ngOnInit() {
     if (this.onboardingService.onboardingStatus()?.step) {
-      this.billingService.getProfile().subscribe(client => {})
+      this.billingSettingsService.getBillingSettings().subscribe(client => {
+        this.userStore.profile.set(client.billingDetails);
+      })
       this.getRecentTransactions();
       this.usageService.getUsageOverview().subscribe(() => {
         this.dashboardCards = [

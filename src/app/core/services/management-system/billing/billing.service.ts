@@ -163,12 +163,12 @@ export class BillingService {
     return this.http.post<BillingSubscriptionResponse>(`${this.apiUrl}/subscriptions/${subscriptionId}/cancel`, {mode: 'Immediate'});
   }
 
-  getProfile(): Observable<IClient> {
-    return this.http.get(`${this.apiUrl}/settings/profile`).pipe(
-      map((data: any) => data.billingDetails as IClient),
-      tap(billingDetails => this.userStore.profile.set(billingDetails))
-    );
-  }
+  // getProfile(): Observable<IClient> {
+  //   return this.http.get(`${this.apiUrl}/settings/profile`).pipe(
+  //     map((data: any) => data.billingDetails as IClient),
+  //     tap(billingDetails => this.userStore.profile.set(billingDetails))
+  //   );
+  // }
 
   updateCurrentClient(clientData: IClient): Observable<any> {
     return this.http.put(`${this.apiUrl}/client/me`, clientData);
